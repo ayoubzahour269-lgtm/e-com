@@ -39,7 +39,7 @@
         "eyebrow": "🔥 وصفة مغربية أصيلة — طبيعي 100%",
         "title": "رجّعي شعرك كثيف وطويل — وودّعي التساقط مع كل تمشيطة",
         "subtitle": "زيت المشاط الأحمر يغذّي الجذور من العمق، يوقف التساقط ويحفّز شعر جديد. باك 3 قنينات = علاج كامل لثلاثة أشهر.",
-        "image_asset": "mechat-hero-v2.webp",
+        "image_asset": "mechat-hero.webp",
         "video_asset": "mechat-hero-video.mp4",
         "badge": "خصم 25%",
         "cta_label": "اطلبي الآن — الدفع عند الاستلام"
@@ -481,7 +481,7 @@
         "ben3": {
           "type": "benefit",
           "settings": {
-            "image_asset": "mechat-hair-result.webp",
+            "image_asset": "mechat-reveal.webp",
             "emoji": "💇‍♀️",
             "title": "كثافة وطول",
             "text": "مع الاستعمال المنتظم يزداد شعرك كثافة وطول ويرجع له حيويته"
@@ -525,19 +525,30 @@
         "row2": {
           "type": "row",
           "settings": {
-            "image_asset": "mechat-ingredients.webp",
-            "video_asset": "mechat-hair-video.mp4",
-            "badge": "تغذية عميقة",
-            "title": "أعشاب تغذّي البصيلة من الجذر",
-            "text": "<p>المشاط والكركديه والحناء تنشّط الدورة الدموية في فروة الرأس وتوصل الغذاء للبصيلة مباشرة — فيتوقف التساقط تدريجيًا ويبدأ شعر جديد أقوى في النمو. مرتين إلى ثلاث مرات بالأسبوع تكفي.</p>"
+            "image_asset": "mechat-ritual.webp",
+            "video_asset": "mechat-ritual-video.mp4",
+            "badge": "الطقس",
+            "title": "لحظة لكِ وحدك",
+            "text": "<p>دلكي فروة رأسك بحركات دائرية صغيرة، واتركي دفء الحمام يفتح المسام. دقائق من الهدوء تكفي ليتغلغل الزيت حتى الجذور — هذا وقتك، لا أحد يشاركك فيه.</p>"
+          }
+        },
+        "row3": {
+          "type": "row",
+          "settings": {
+            "image_asset": "mechat-reveal.webp",
+            "video_asset": "mechat-reveal-video.mp4",
+            "badge": "النتيجة",
+            "title": "شعر يستحق الانتظار",
+            "text": "<p>النعومة تحسين فيها من أول غسلة. ومع كل أسبوع، الجذور أقوى، الفراغات تمتلئ، واللمعة ترجع — حتى تصير تمشيطة الصباح لحظة تفتخرين فيها بشعرك.</p>"
           }
         }
       },
       "block_order": [
-        "row2"
+        "row2",
+        "row3"
       ],
       "settings": {
-        "heading": "كيف يشتغل؟",
+        "heading": "طقس المشاط — مرتين في الأسبوع",
         "bg_color": "#ffffff"
       }
     },
@@ -547,25 +558,25 @@
         "s1": {
           "type": "step",
           "settings": {
-            "image_asset": "mechat-bottle-clean.webp",
-            "title": "دلّكي فروة الرأس",
-            "text": "كمية صغيرة ودلكي بأطراف الأصابع 5 دقائق"
+            "image_asset": "mechat-pour.webp",
+            "title": "صبّي كمية صغيرة",
+            "text": "في راحة يدك — تكفي ملعقة صغيرة لكل استعمال"
           }
         },
         "s2": {
           "type": "step",
           "settings": {
-            "image_asset": "mechat-oil-macro.webp",
-            "title": "اتركيه يتغلغل",
-            "text": "ساعة على الأقل — أو ليلة كاملة لنتيجة أعمق"
+            "image_asset": "mechat-ritual.webp",
+            "title": "دلكي فروة الرأس",
+            "text": "بأطراف الأصابع، حركات دائرية لمدة 5 دقائق"
           }
         },
         "s3": {
           "type": "step",
           "settings": {
             "image_asset": "mechat-hair-result.webp",
-            "title": "اغسلي وكرري",
-            "text": "شامبو خفيف، مرتين إلى ثلاث مرات بالأسبوع"
+            "title": "اتركيه واغسلي",
+            "text": "ساعة على الأقل ثم شامبو خفيف — مرتين بالأسبوع"
           }
         }
       },

@@ -1,0 +1,43 @@
+{% comment %} CTA final — bannière avec bouton qui remonte au formulaire {% endcomment %}
+<div class="lp-cta" dir="rtl">
+  <div class="lp-cta__container">
+    <h2 class="lp-cta__heading">{{ section.settings.heading }}</h2>
+    {% if section.settings.subheading != blank %}
+      <p class="lp-cta__sub">{{ section.settings.subheading }}</p>
+    {% endif %}
+    <button class="lp-cta__btn" onclick="(document.querySelector('easysell-form, [id*=easysell], product-form, form[action*=\'/cart/add\']')||document.body).scrollIntoView({behavior:'smooth'})">
+      {{ section.settings.button_label }}
+    </button>
+    {% if section.settings.note != blank %}
+      <p class="lp-cta__note">{{ section.settings.note }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .lp-cta { background: {{ section.settings.bg_color }}; padding: 44px 16px; }
+  .lp-cta__container { max-width: 640px; margin: 0 auto; text-align: center; }
+  .lp-cta__heading { color: {{ section.settings.text_color }}; font-size: 1.5rem; font-weight: 800; margin: 0 0 8px; }
+  .lp-cta__sub { color: {{ section.settings.text_color }}; opacity: .85; margin: 0 0 20px; font-size: 0.95rem; }
+  .lp-cta__btn { background: {{ section.settings.button_bg }}; color: {{ section.settings.button_text }}; font-size: 1.1rem; font-weight: 800; border: none; border-radius: 999px; padding: 16px 44px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.18); transition: transform .15s; animation: lp-pulse 2s infinite; }
+  .lp-cta__btn:hover { transform: scale(1.04); }
+  .lp-cta__note { color: {{ section.settings.text_color }}; opacity: .75; font-size: 0.8rem; margin: 14px 0 0; }
+  @keyframes lp-pulse { 0%,100% { box-shadow: 0 4px 16px rgba(0,0,0,0.18); } 50% { box-shadow: 0 4px 26px rgba(0,0,0,0.32); } }
+</style>
+
+{% schema %}
+{
+  "name": "LP — دعوة أخيرة للطلب",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "العنوان", "default": "اطلبيه الآن قبل نفاد الكمية" },
+    { "type": "text", "id": "subheading", "label": "العنوان الفرعي", "default": "الدفع عند الاستلام · توصيل مجاني لكل مدن المملكة" },
+    { "type": "text", "id": "button_label", "label": "نص الزر", "default": "اطلبي الآن — الدفع عند الاستلام" },
+    { "type": "text", "id": "note", "label": "ملاحظة تحت الزر", "default": "متبقي كمية محدودة من المخزون" },
+    { "type": "color", "id": "bg_color", "label": "لون الخلفية", "default": "#0e7a4a" },
+    { "type": "color", "id": "text_color", "label": "لون النص", "default": "#ffffff" },
+    { "type": "color", "id": "button_bg", "label": "لون الزر", "default": "#ffffff" },
+    { "type": "color", "id": "button_text", "label": "لون نص الزر", "default": "#0e7a4a" }
+  ],
+  "presets": [ { "name": "LP — دعوة أخيرة للطلب" } ]
+}
+{% endschema %}

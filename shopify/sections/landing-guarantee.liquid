@@ -5,9 +5,9 @@
     <h2 class="lpg__heading">{{ section.settings.heading }}</h2>
     <p class="lpg__text">{{ section.settings.text }}</p>
     <div class="lpg__grid">
-      <div class="lpg__item lpx-reveal"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9a557" stroke-width="1.7"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10h.01M18 14h.01"/></svg></span><b>الدفع عند الاستلام</b><small>ما تدفع ريال قبل ما تستلم وتعاين</small></div>
-      <div class="lpg__item lpx-reveal" data-delay="120"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9a557" stroke-width="1.7"><rect x="1" y="6" width="14" height="11" rx="1.5"/><path d="M15 10h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.8"/><circle cx="18.5" cy="18" r="1.8"/></svg></span><b>توصيل مجاني وسريع</b><small>2-5 أيام عمل لجميع مدن المملكة</small></div>
-      <div class="lpg__item lpx-reveal" data-delay="240"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9a557" stroke-width="1.7"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></span><b>ضمان الاستبدال</b><small>أي مشكلة في المنتج نبدله لك</small></div>
+      <div class="lpg__item lpx-reveal"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9a557" stroke-width="1.7"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10h.01M18 14h.01"/></svg></span><b>الدفع عند الاستلام</b><small>{{ section.settings.card1 | default: "ما تدفع ريال قبل ما تستلم وتعاين" }}</small></div>
+      <div class="lpg__item lpx-reveal" data-delay="120"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9a557" stroke-width="1.7"><rect x="1" y="6" width="14" height="11" rx="1.5"/><path d="M15 10h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.8"/><circle cx="18.5" cy="18" r="1.8"/></svg></span><b>توصيل مجاني وسريع</b><small>{{ section.settings.card2 | default: "2-5 أيام عمل لجميع مدن المملكة" }}</small></div>
+      <div class="lpg__item lpx-reveal" data-delay="240"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c9a557" stroke-width="1.7"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></span><b>ضمان الاستبدال</b><small>{{ section.settings.card3 | default: "أي مشكلة في المنتج نبدله لك" }}</small></div>
     </div>
   </div>
 </div>
@@ -32,6 +32,9 @@
   "name": "LP — الضمان",
   "settings": [
     { "type": "text", "id": "heading", "label": "العنوان", "default": "اطلب وأنت مرتاح — المخاطرة علينا" },
+    { "type": "text", "id": "card1", "label": "بطاقة 1" },
+    { "type": "text", "id": "card2", "label": "بطاقة 2" },
+    { "type": "text", "id": "card3", "label": "بطاقة 3" },
     { "type": "textarea", "id": "text", "label": "النص", "default": "عاين المنتج عند الاستلام قبل ما تدفع. إذا ما عجبك أو فيه أي مشكلة، تواصل معنا ونبدله لك بدون نقاش." }
   ],
   "presets": [ { "name": "LP — الضمان" } ]

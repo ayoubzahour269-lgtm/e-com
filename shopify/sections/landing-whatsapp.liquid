@@ -1,0 +1,17 @@
+{% comment %} Bouton WhatsApp flottant {% endcomment %}
+{% if section.settings.number != blank %}
+<a class="lpx-wa" href="https://wa.me/{{ section.settings.number | remove: '+' | remove: ' ' }}?text={{ section.settings.message | url_encode }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 32 32"><path d="M16 3C9.4 3 4 8.3 4 14.9c0 2.6.8 5 2.3 7L4 29l7.3-2.2c1.9 1 3.9 1.5 4.7 1.5 6.6 0 12-5.3 12-11.9S22.6 3 16 3zm5.9 16.9c-.3.8-1.6 1.5-2.3 1.6-.6.1-1.3.2-3.8-.8-3.2-1.3-5.2-4.5-5.4-4.7-.2-.2-1.3-1.7-1.3-3.2s.8-2.3 1.1-2.6c.3-.3.6-.4.8-.4h.6c.2 0 .5-.1.7.5s.8 2 .9 2.2c.1.2.1.4 0 .6-.1.2-.2.4-.4.6l-.6.7c-.2.2-.4.4-.2.8.2.4 1 1.7 2.2 2.7 1.5 1.3 2.8 1.7 3.2 1.9.4.2.6.2.9-.1.2-.3 1-1.2 1.3-1.6.3-.4.5-.3.9-.2.4.1 2.3 1.1 2.7 1.3.4.2.6.3.7.5.1.1.1.9-.2 1.7z"/></svg>
+</a>
+{% endif %}
+
+{% schema %}
+{
+  "name": "LP — واتساب",
+  "settings": [
+    { "type": "text", "id": "number", "label": "رقم واتساب (بصيغة دولية)", "info": "مثال: 9665XXXXXXXX — اتركه فارغ لإخفاء الزر" },
+    { "type": "text", "id": "message", "label": "الرسالة الجاهزة", "default": "أبغى أستفسر عن دعامة الركبة" }
+  ],
+  "presets": [ { "name": "LP — واتساب" } ]
+}
+{% endschema %}

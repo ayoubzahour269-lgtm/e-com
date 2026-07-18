@@ -1,0 +1,82 @@
+{% comment %} Image + texte en alternance — pour démo, avant/après, texture {% endcomment %}
+<div class="lp-media" dir="rtl">
+  <div class="lp-media__container">
+    {% if section.settings.heading != blank %}
+      <h2 class="lp-media__heading">{{ section.settings.heading }}</h2>
+      <div class="lpx-divider" style="margin-bottom:32px"><span class="d"></span></div>
+    {% endif %}
+    {% for block in section.blocks %}
+      <div class="lp-media__row lpx-reveal {% cycle 'lp-media__row--normal', 'lp-media__row--reverse' %}" {{ block.shopify_attributes }}>
+        <div class="lp-media__imgwrap">
+          {% if block.settings.video_asset != blank %}
+            <video class="lp-media__img" autoplay muted loop playsinline
+              {% if block.settings.image_asset != blank %}poster="{{ block.settings.image_asset | asset_url }}"{% endif %}>
+              <source src="{{ block.settings.video_asset | asset_url }}" type="video/mp4">
+            </video>
+          {% elsif block.settings.image != blank %}
+            <img class="lp-media__img" src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="600" height="450">
+          {% elsif block.settings.image_asset != blank %}
+            <img class="lp-media__img" src="{{ block.settings.image_asset | asset_url }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+          {% else %}
+            <div class="lp-media__placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+          {% endif %}
+          {% if block.settings.badge != blank %}
+            <span class="lp-media__badge">{{ block.settings.badge }}</span>
+          {% endif %}
+        </div>
+        <div class="lp-media__content">
+          <h3 class="lp-media__title">{{ block.settings.title }}</h3>
+          <div class="lp-media__text">{{ block.settings.text }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .lp-media { background: {{ section.settings.bg_color }}; padding: 40px 16px; }
+  .lp-media__container { max-width: 960px; margin: 0 auto; }
+  .lp-media__heading { text-align: center; font-size: 1.6rem; font-weight: 800; margin: 0 0 32px; }
+  .lp-media__row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; margin-bottom: 40px; }
+  .lp-media__row:last-child { margin-bottom: 0; }
+  .lp-media__row--reverse .lp-media__imgwrap { order: 2; }
+  .lp-media__imgwrap { position: relative; }
+  .lp-media__img { width: 100%; height: auto; border-radius: 16px; display: block; }
+  .lp-media__placeholder { border-radius: 16px; overflow: hidden; background: #eee; aspect-ratio: 4/3; }
+  .lp-media__badge { position: absolute; top: 12px; right: 12px; background: #e11d48; color: #fff; font-size: 0.8rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+  .lp-media__title { font-size: 1.25rem; font-weight: 800; margin: 0 0 10px; }
+  .lp-media__text { font-size: 0.95rem; line-height: 1.8; color: #444; }
+  @media (max-width: 749px) {
+    .lp-media__row { grid-template-columns: 1fr; gap: 14px; margin-bottom: 32px; }
+    .lp-media__row--reverse .lp-media__imgwrap { order: 0; }
+    .lp-media__heading { font-size: 1.3rem; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "LP — صورة ونص",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "عنوان القسم" },
+    { "type": "color", "id": "bg_color", "label": "لون الخلفية", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "صف صورة + نص",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "الصورة" },
+        { "type": "text", "id": "image_asset", "label": "أو اسم ملف من assets" },
+        { "type": "text", "id": "video_asset", "label": "فيديو من assets (له الأولوية)" },
+        { "type": "text", "id": "badge", "label": "شارة على الصورة (اختياري)" },
+        { "type": "text", "id": "title", "label": "العنوان", "default": "النتيجة من أول استخدام" },
+        { "type": "richtext", "id": "text", "label": "النص", "default": "<p>اكتب هنا وصف النتيجة أو الميزة.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    { "name": "LP — صورة ونص", "blocks": [ { "type": "row" }, { "type": "row" } ] }
+  ]
+}
+{% endschema %}

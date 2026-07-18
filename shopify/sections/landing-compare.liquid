@@ -1,0 +1,65 @@
+{% comment %} Tableau comparatif — دعامتنا vs العادية {% endcomment %}
+<div class="lpc" dir="rtl">
+  <div class="lpc__container">
+    <div class="lpx-secnum">— المقارنة —</div>
+    <h2 class="lpc__heading">{{ section.settings.heading }}</h2>
+    <div class="lpx-divider"><span class="d"></span></div>
+    <div class="lpc__table lpx-reveal">
+      <div class="lpc__row lpc__row--head">
+        <div class="lpc__feature"></div>
+        <div class="lpc__ours">{{ section.settings.ours_label }}</div>
+        <div class="lpc__theirs">{{ section.settings.theirs_label }}</div>
+      </div>
+      {% for block in section.blocks %}
+        <div class="lpc__row" {{ block.shopify_attributes }}>
+          <div class="lpc__feature">{{ block.settings.feature }}</div>
+          <div class="lpc__ours">{% if block.settings.ours %}<span class="lpc__yes">✓</span>{% else %}<span class="lpc__no">✗</span>{% endif %}</div>
+          <div class="lpc__theirs">{% if block.settings.theirs %}<span class="lpc__yes">✓</span>{% else %}<span class="lpc__no">✗</span>{% endif %}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .lpc{ background:#fff; padding:52px 16px; }
+  .lpc__container{ max-width:760px; margin-inline:auto; text-align:center; }
+  .lpc__heading{ font-size:1.65rem; font-weight:900; margin:0 0 12px; color:var(--lpx-ink); }
+  .lpc__table{ border-radius:20px; overflow:hidden; box-shadow:var(--lpx-shadow); border:1px solid #eee; }
+  .lpc__row{ display:grid; grid-template-columns:1.6fr 1fr 1fr; align-items:center; background:#fff; }
+  .lpc__row:nth-child(even){ background:#faf7f2; }
+  .lpc__row--head{ background:var(--lpx-dark) !important; color:#fff; }
+  .lpc__row--head .lpc__ours{ color:#e9cf96; font-family:'Cairo',sans-serif; font-weight:800; padding:14px 6px; background:rgba(201,165,87,.15); }
+  .lpc__row--head .lpc__theirs{ color:#98a4b1; font-weight:700; padding:14px 6px; }
+  .lpc__feature{ text-align:right; padding:13px 18px; font-weight:600; font-size:.92rem; color:#333; }
+  .lpc__ours{ background:rgba(201,165,87,.07); align-self:stretch; display:flex; align-items:center; justify-content:center; }
+  .lpc__theirs{ display:flex; align-items:center; justify-content:center; }
+  .lpc__yes{ width:26px; height:26px; border-radius:50%; display:grid; place-items:center;
+    background:linear-gradient(135deg,#dcb96a,#c9a557); color:#2b1f06; font-weight:900; font-size:.85rem; }
+  .lpc__no{ color:#c3c9d1; font-size:1.1rem; font-weight:700; }
+  @media(max-width:749px){ .lpc__heading{ font-size:1.3rem } .lpc__feature{ font-size:.82rem; padding:12px 12px } }
+</style>
+
+{% schema %}
+{
+  "name": "LP — مقارنة",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "العنوان", "default": "ليش دعامتنا وليس غيرها؟" },
+    { "type": "text", "id": "ours_label", "label": "عمودنا", "default": "دعامتنا" },
+    { "type": "text", "id": "theirs_label", "label": "عمود المنافس", "default": "الدعامات العادية" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "ميزة",
+      "settings": [
+        { "type": "text", "id": "feature", "label": "الميزة", "default": "نظام نوابض داعم" },
+        { "type": "checkbox", "id": "ours", "label": "متوفرة عندنا", "default": true },
+        { "type": "checkbox", "id": "theirs", "label": "متوفرة عندهم", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 7,
+  "presets": [ { "name": "LP — مقارنة", "blocks": [ { "type": "row" }, { "type": "row" }, { "type": "row" } ] } ]
+}
+{% endschema %}

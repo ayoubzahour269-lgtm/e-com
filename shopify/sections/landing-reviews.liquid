@@ -1,0 +1,78 @@
+{% comment %} Avis clients — cartes avec étoiles, nom, ville, photo optionnelle {% endcomment %}
+<div class="lp-reviews" dir="rtl">
+  <div class="lp-reviews__container">
+    {% if section.settings.heading != blank %}
+      <h2 class="lp-reviews__heading">{{ section.settings.heading }}</h2>
+      <div class="lpx-divider"><span class="d"></span></div>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p class="lp-reviews__sub">{{ section.settings.subheading }}</p>
+    {% endif %}
+    <div class="lp-reviews__grid">
+      {% for block in section.blocks %}
+        <div class="lp-reviews__card lpx-reveal" data-delay="{{ forloop.index0 | times: 120 }}" {{ block.shopify_attributes }}>
+          <div class="lp-reviews__stars">
+            {% assign rating = block.settings.stars | default: 5 %}
+            {% for i in (1..rating) %}★{% endfor %}
+          </div>
+          {% if block.settings.image != blank %}
+            <img class="lp-reviews__img" src="{{ block.settings.image | image_url: width: 600 }}" alt="صورة من العميل" loading="lazy" width="300" height="300">
+          {% elsif block.settings.image_asset != blank %}
+            <img class="lp-reviews__img" src="{{ block.settings.image_asset | asset_url }}" alt="صورة من العميل" loading="lazy">
+          {% endif %}
+          <p class="lp-reviews__text">“{{ block.settings.text }}”</p>
+          <div class="lp-reviews__author">
+            <span class="lp-reviews__name">{{ block.settings.name }}</span>
+            {% if block.settings.city != blank %}<span class="lp-reviews__city">· {{ block.settings.city }}</span>{% endif %}
+            <span class="lp-reviews__verified">✓ عميلة موثّقة</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .lp-reviews { background: {{ section.settings.bg_color }}; padding: 40px 16px; }
+  .lp-reviews__container { max-width: 960px; margin: 0 auto; text-align: center; }
+  .lp-reviews__heading { font-size: 1.6rem; font-weight: 800; margin: 0 0 6px; }
+  .lp-reviews__sub { color: #666; margin: 0 0 26px; }
+  .lp-reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .lp-reviews__card { background: #fff; border-radius: 14px; padding: 18px 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); text-align: right; }
+  .lp-reviews__stars { color: #f59e0b; font-size: 1rem; letter-spacing: 2px; margin-bottom: 8px; }
+  .lp-reviews__img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+  .lp-reviews__text { font-size: 0.9rem; line-height: 1.7; color: #333; margin: 0 0 10px; }
+  .lp-reviews__author { font-size: 0.8rem; color: #777; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .lp-reviews__name { font-weight: 700; color: #333; }
+  .lp-reviews__verified { color: #a3823c; font-weight: 600; margin-inline-start: auto; }
+  @media (max-width: 749px) { .lp-reviews__grid { grid-template-columns: 1fr; } .lp-reviews__heading { font-size: 1.3rem; } }
+</style>
+
+{% schema %}
+{
+  "name": "LP — آراء العميلات",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "العنوان", "default": "آراء عميلاتنا" },
+    { "type": "text", "id": "subheading", "label": "العنوان الفرعي", "default": "تقييم ٤.٨ من ٥ — من مئات الطلبات" },
+    { "type": "color", "id": "bg_color", "label": "لون الخلفية", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "رأي",
+      "settings": [
+        { "type": "range", "id": "stars", "label": "النجوم", "min": 3, "max": 5, "step": 1, "default": 5 },
+        { "type": "image_picker", "id": "image", "label": "صورة (اختياري)" },
+        { "type": "text", "id": "image_asset", "label": "أو اسم ملف من assets" },
+        { "type": "textarea", "id": "text", "label": "نص الرأي", "default": "منتج ممتاز، وصلني بسرعة والنتيجة واضحة." },
+        { "type": "text", "id": "name", "label": "الاسم", "default": "أم عبدالله" },
+        { "type": "text", "id": "city", "label": "المدينة", "default": "الرياض" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    { "name": "LP — آراء العميلات", "blocks": [ { "type": "review" }, { "type": "review" }, { "type": "review" } ] }
+  ]
+}
+{% endschema %}

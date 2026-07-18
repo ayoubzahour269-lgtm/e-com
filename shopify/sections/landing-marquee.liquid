@@ -1,0 +1,48 @@
+{% comment %} Ticker or défilant en boucle {% endcomment %}
+<div class="lpm" dir="ltr">
+  <div class="lpm__track">
+    {% for i in (1..4) %}
+      <span class="lpm__group" dir="rtl">
+        {% for block in section.blocks %}
+          <span class="lpm__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+          <span class="lpm__diamond">◆</span>
+        {% endfor %}
+      </span>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .lpm{ background:linear-gradient(90deg,#dcb96a,#c9a557 50%,#b8923f); overflow:hidden; padding:11px 0; }
+  .lpm__track{ display:flex; width:max-content; animation:lpm-scroll 26s linear infinite; }
+  .lpm__group{ display:flex; align-items:center; flex:none; }
+  .lpm__item{ font-family:'Cairo',sans-serif; font-weight:800; font-size:.9rem; color:#2b1f06; white-space:nowrap; padding-inline:18px; }
+  .lpm__diamond{ color:rgba(43,31,6,.4); font-size:.6rem; }
+  @keyframes lpm-scroll{ from{ transform:translateX(0) } to{ transform:translateX(-25%) } }
+</style>
+
+{% schema %}
+{
+  "name": "LP — شريط متحرك",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "عبارة",
+      "settings": [ { "type": "text", "id": "text", "label": "النص", "default": "الدفع عند الاستلام 💵" } ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "LP — شريط متحرك",
+      "blocks": [
+        { "type": "item", "settings": { "text": "الدفع عند الاستلام 💵" } },
+        { "type": "item", "settings": { "text": "توصيل مجاني لجميع مدن المملكة 🚚" } },
+        { "type": "item", "settings": { "text": "ضمان الاستبدال 🔄" } },
+        { "type": "item", "settings": { "text": "دعم فوري للركبة 🦵" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{% comment %} FAQ accordéon — details/summary natif {% endcomment %}
+<div class="lp-faq" dir="rtl">
+  <div class="lp-faq__container">
+    {% if section.settings.heading != blank %}
+      <h2 class="lp-faq__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% for block in section.blocks %}
+      <details class="lp-faq__item" {{ block.shopify_attributes }} {% if forloop.first and section.settings.open_first %}open{% endif %}>
+        <summary class="lp-faq__q">{{ block.settings.question }}<span class="lp-faq__chev">⌄</span></summary>
+        <div class="lp-faq__a">{{ block.settings.answer }}</div>
+      </details>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .lp-faq { background: {{ section.settings.bg_color }}; padding: 40px 16px; }
+  .lp-faq__container { max-width: 720px; margin: 0 auto; }
+  .lp-faq__heading { text-align: center; font-size: 1.6rem; font-weight: 800; margin: 0 0 22px; }
+  .lp-faq__item { background: #fff; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 1px 8px rgba(0,0,0,0.05); overflow: hidden; }
+  .lp-faq__q { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; font-weight: 700; font-size: 0.95rem; cursor: pointer; list-style: none; }
+  .lp-faq__q::-webkit-details-marker { display: none; }
+  .lp-faq__chev { transition: transform .2s; font-size: 1.1rem; color: #999; }
+  .lp-faq__item[open] .lp-faq__chev { transform: rotate(180deg); }
+  .lp-faq__a { padding: 0 18px 16px; font-size: 0.9rem; line-height: 1.8; color: #555; }
+  @media (max-width: 749px) { .lp-faq__heading { font-size: 1.3rem; } }
+</style>
+
+{% schema %}
+{
+  "name": "LP — الأسئلة الشائعة",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "العنوان", "default": "الأسئلة الشائعة" },
+    { "type": "checkbox", "id": "open_first", "label": "فتح أول سؤال تلقائيًا", "default": true },
+    { "type": "color", "id": "bg_color", "label": "لون الخلفية", "default": "#f7f5f2" }
+  ],
+  "blocks": [
+    {
+      "type": "qa",
+      "name": "سؤال وجواب",
+      "settings": [
+        { "type": "text", "id": "question", "label": "السؤال", "default": "كيف أدفع؟" },
+        { "type": "richtext", "id": "answer", "label": "الجواب", "default": "<p>الدفع عند الاستلام — تدفعين كاش للمندوب لما يوصلك الطلب.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "LP — الأسئلة الشائعة",
+      "blocks": [
+        { "type": "qa", "settings": { "question": "كيف أدفع؟", "answer": "<p>الدفع عند الاستلام — تدفعين كاش أو شبكة للمندوب عند التوصيل.</p>" } },
+        { "type": "qa", "settings": { "question": "متى يوصل الطلب؟", "answer": "<p>التوصيل خلال ٢ إلى ٥ أيام عمل لجميع مدن المملكة.</p>" } },
+        { "type": "qa", "settings": { "question": "هل التوصيل مجاني؟", "answer": "<p>نعم، التوصيل مجاني ١٠٠٪ على جميع الطلبات.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

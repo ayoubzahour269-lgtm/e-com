@@ -50,6 +50,12 @@
     @keyframes lpx-glow{ 0%,100%{ opacity:.55;} 50%{ opacity:.95;} }
     @keyframes lpx-pulse{ 0%,100%{ box-shadow:0 14px 30px -10px rgba(184,146,63,.55);} 50%{ box-shadow:0 16px 36px -8px rgba(184,146,63,.75);} }
 
+    /* Section divider — gold hairline with diamond */
+    .lpx-divider{ display:flex; align-items:center; justify-content:center; gap:10px; margin:10px auto 22px; }
+    .lpx-divider::before, .lpx-divider::after{ content:''; width:56px; height:1px; background:linear-gradient(90deg, transparent, var(--lpx-gold,#c9a557)); }
+    .lpx-divider::after{ background:linear-gradient(90deg, var(--lpx-gold,#c9a557), transparent); }
+    .lpx-divider .d{ width:7px; height:7px; background:var(--lpx-gold,#c9a557); transform:rotate(45deg); }
+
     /* Accessibility floor */
     :where(a,button,input,select,summary):focus-visible{ outline:3px solid var(--lpx-gold); outline-offset:2px; border-radius:6px; }
     @media (prefers-reduced-motion: reduce){

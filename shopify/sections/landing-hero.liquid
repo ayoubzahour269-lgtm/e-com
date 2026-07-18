@@ -11,10 +11,10 @@
         {% endfor %}
       </ul>
       <div class="lph__pricing lpx-reveal" data-delay="600">
-        {% assign _p = product.price | money_without_currency | remove: '.00' | remove: ',00' %}<span class="lph__price">{{ _p }} ر.س</span>
+        {% assign _p = product.price | divided_by: 100 %}<span class="lph__price">{{ _p }} ر.س</span>
         {% if product.compare_at_price > product.price %}
-          {% assign _c = product.compare_at_price | money_without_currency | remove: '.00' | remove: ',00' %}<s class="lph__was">{{ _c }} ر.س</s>
-          {% assign saved = product.compare_at_price | minus: product.price %}{% assign _s = saved | money_without_currency | remove: '.00' | remove: ',00' %}
+          {% assign _c = product.compare_at_price | divided_by: 100 %}<s class="lph__was">{{ _c }} ر.س</s>
+          {% assign saved = product.compare_at_price | minus: product.price %}{% assign _s = saved | divided_by: 100 %}
           <span class="lph__save">وفّري {{ _s }} ر.س</span>
         {% endif %}
       </div>

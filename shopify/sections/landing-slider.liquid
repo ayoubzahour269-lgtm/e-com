@@ -1,0 +1,73 @@
+{% comment %} Slider interactif قبل/بعد — glisser pour comparer {% endcomment %}
+<div class="lsl" dir="rtl">
+  <div class="lsl__container">
+    <div class="lpx-secnum">— شوف الفرق بنفسك —</div>
+    <h2 class="lsl__heading">{{ section.settings.heading }}</h2>
+    <div class="lpx-divider"><span class="d"></span></div>
+    <p class="lsl__hint">{{ section.settings.hint }}</p>
+
+    <div class="lsl__frame lpx-reveal" dir="ltr" id="lsl-{{ section.id }}">
+      <img class="lsl__img lsl__img--after" src="{{ section.settings.after_asset | asset_url }}" alt="بعد" loading="lazy">
+      <div class="lsl__beforewrap">
+        <img class="lsl__img" src="{{ section.settings.before_asset | asset_url }}" alt="قبل" loading="lazy">
+      </div>
+      <div class="lsl__handle">
+        <div class="lsl__handlebar"></div>
+        <div class="lsl__knob"><span>◆</span></div>
+        <div class="lsl__handlebar"></div>
+      </div>
+      <span class="lsl__tag lsl__tag--before">قبل</span>
+      <span class="lsl__tag lsl__tag--after">بعد</span>
+      <input class="lsl__range" type="range" min="0" max="100" value="50" aria-label="مقارنة قبل وبعد">
+    </div>
+  </div>
+</div>
+
+<style>
+  .lsl{ background:var(--lpx-sand); padding:50px 16px; }
+  .lsl__container{ max-width:640px; margin-inline:auto; text-align:center; }
+  .lsl__heading{ font-size:1.65rem; font-weight:900; margin:0 0 12px; color:var(--lpx-ink); }
+  .lsl__hint{ color:var(--lpx-muted); font-size:.9rem; margin:0 0 20px; }
+  .lsl__frame{ position:relative; border-radius:22px; overflow:hidden; box-shadow:var(--lpx-shadow);
+    border:3px solid rgba(201,165,87,.55); aspect-ratio:3/4; touch-action:pan-y; }
+  .lsl__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .lsl__beforewrap{ position:absolute; inset:0; overflow:hidden;
+    clip-path:inset(0 0 0 var(--pos,50%)); }
+  .lsl__beforewrap .lsl__img{ position:absolute; inset:0; }
+  .lsl__handle{ position:absolute; top:0; bottom:0; left:var(--pos,50%); transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; pointer-events:none; }
+  .lsl__handlebar{ flex:1; width:3px; background:linear-gradient(180deg,#e9cf96,#c9a557); }
+  .lsl__knob{ width:46px; height:46px; border-radius:50%; background:#10161d;
+    border:2.5px solid #c9a557; display:grid; place-items:center; color:#e9cf96; font-size:.9rem;
+    box-shadow:0 8px 22px -6px rgba(0,0,0,.5); }
+  .lsl__tag{ position:absolute; top:14px; font-family:'Cairo',sans-serif; font-weight:800; font-size:.85rem;
+    padding:6px 18px; border-radius:999px; }
+  .lsl__tag--before{ right:14px; background:rgba(16,22,29,.85); color:#fff; }
+  .lsl__tag--after{ left:14px; background:linear-gradient(135deg,#dcb96a,#c9a557); color:#2b1f06; }
+  .lsl__range{ position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:ew-resize; margin:0; }
+  @media(max-width:749px){ .lsl__heading{ font-size:1.3rem; } }
+</style>
+
+<script>
+  (function(){
+    var frame = document.getElementById('lsl-{{ section.id }}');
+    if (!frame) return;
+    var range = frame.querySelector('.lsl__range');
+    function set(v){ frame.style.setProperty('--pos', v + '%'); }
+    range.addEventListener('input', function(){ set(this.value); });
+    set(50);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LP — سلايدر قبل/بعد",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "العنوان", "default": "نفس الرجل. نفس الدرج. الفرق؟ الدعامة." },
+    { "type": "text", "id": "hint", "label": "التلميح", "default": "اسحب المؤشر يمين ويسار وشوف الفرق 👇" },
+    { "type": "text", "id": "before_asset", "label": "ملف صورة قبل (assets)", "default": "knee-slider-before.jpg" },
+    { "type": "text", "id": "after_asset", "label": "ملف صورة بعد (assets)", "default": "knee-g-after.jpg" }
+  ],
+  "presets": [ { "name": "LP — سلايدر قبل/بعد" } ]
+}
+{% endschema %}

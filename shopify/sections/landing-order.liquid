@@ -5,16 +5,17 @@
     <p class="lpor__sub lpx-reveal">{{ section.settings.subheading }}</p>
 
     <div class="lpor__card lpx-reveal" data-delay="120">
+      {% if section.settings.ribbon != blank %}<div class="lpor__ribbon">{{ section.settings.ribbon }}</div>{% endif %}
       <div class="lpor__product">
         <div class="lpor__name">{{ section.settings.product_label | default: product.title }}</div>
         <div class="lpor__prices">
-          {% assign _p = product.price | money_without_currency | remove: '.00' | remove: ',00' %}
+          {% assign _p = product.price | divided_by: 100 %}
           <span class="lpor__price">{{ _p }} <small>ر.س</small></span>
           {% if product.compare_at_price > product.price %}
-            {% assign _c = product.compare_at_price | money_without_currency | remove: '.00' | remove: ',00' %}
+            {% assign _c = product.compare_at_price | divided_by: 100 %}
             <s class="lpor__was">{{ _c }} ر.س</s>
             {% assign saved = product.compare_at_price | minus: product.price %}
-            {% assign _s = saved | money_without_currency | remove: '.00' | remove: ',00' %}
+            {% assign _s = saved | divided_by: 100 %}
             <span class="lpor__save">وفّري {{ _s }} ر.س</span>
           {% endif %}
         </div>
@@ -26,6 +27,7 @@
 
       <form method="post" action="/cart/add" id="lpor-fallback" class="lpor__fallback" style="display:none">
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="return_to" value="/checkout">
         <div class="lpor__qtyrow">
           <span>الكمية</span>
           <div class="lpor__qty">
@@ -46,16 +48,14 @@
 
 <script>
   (function(){
-    // إذا لم يظهر نموذج EasySell خلال ثوانٍ، أظهر النموذج الاحتياطي
-    var tries = 0;
-    var t = setInterval(function(){
-      var anchor = document.getElementById('easysell-form-here');
-      var fb = document.getElementById('lpor-fallback');
-      if (!anchor || !fb) return clearInterval(t);
-      var es = anchor.children.length > 0 || document.querySelector('easysell-form, .easysell-form, [class*="easysell"] form');
-      if (es) { fb.style.display = 'none'; clearInterval(t); }
-      else if (++tries > 6) { fb.style.display = 'block'; clearInterval(t); }
-    }, 500);
+    var anchor = document.getElementById('easysell-form-here');
+    var fb = document.getElementById('lpor-fallback');
+    if (!anchor || !fb) return;
+    function hasES(){ return anchor.children.length > 0 || document.querySelector('easysell-form, .easysell-form, [class*="easysell"] form'); }
+    function sync(){ fb.style.display = hasES() ? 'none' : fb.style.display; }
+    if ('MutationObserver' in window) new MutationObserver(sync).observe(anchor, { childList: true, subtree: true });
+    setTimeout(function(){ if (!hasES()) fb.style.display = 'block'; }, 3500);
+    setInterval(sync, 2000);
   })();
 </script>
 
@@ -66,6 +66,8 @@
   .lpor__sub{ color:#7a675f; margin:0 0 24px; line-height:1.9; }
   .lpor__card{ background:#fff; border-radius:22px; padding:26px 22px 24px; text-align:start;
     border-top:5px solid var(--lpx-gold,#c9a557); box-shadow:0 24px 60px -28px rgba(36,21,18,.25); }
+  .lpor__ribbon{ background:linear-gradient(135deg,#dcb96a,#c9a557); color:#2b1f06; font-weight:800; font-size:.85rem;
+    text-align:center; border-radius:10px; padding:7px 12px; margin-bottom:14px; }
   .lpor__name{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.08rem; color:#241512; margin-bottom:6px; }
   .lpor__prices{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
   .lpor__price{ font-family:'Cairo',sans-serif; font-weight:900; font-size:2rem; color:#8E1B1E; }
@@ -95,6 +97,7 @@
     { "type": "text", "id": "heading", "label": "العنوان", "default": "أكملي طلبك الآن" },
     { "type": "text", "id": "subheading", "label": "تحت العنوان", "default": "املئي معلوماتك وسنتصل بك لتأكيد الطلب — بدون أي دفع مسبق" },
     { "type": "text", "id": "product_label", "label": "اسم المنتج المعروض" },
+    { "type": "text", "id": "ribbon", "label": "شريط أعلى البطاقة" },
     { "type": "text", "id": "note", "label": "ملاحظة تحت السعر", "default": "شامل التوصيل — الدفع كاش أو شبكة عند الاستلام" }
   ],
   "presets": [ { "name": "LP — الطلب" } ]

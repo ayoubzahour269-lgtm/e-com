@@ -20,7 +20,7 @@
       --lpx-muted:#b9c2cd;
       --lpx-star:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);
     }
-    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' -%}
+    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' -%}
     :root{
       --lpx-dark:#1c0d0e;
       --lpx-hero-bg:linear-gradient(180deg,#2a1113 0%,#200e10 55%,#150a0b 100%);
@@ -56,6 +56,58 @@
     .lpx-divider::after{ background:linear-gradient(90deg, var(--lpx-gold,#c9a557), transparent); }
     .lpx-divider .d{ width:7px; height:7px; background:var(--lpx-gold,#c9a557); transform:rotate(45deg); }
 
+
+    /* ═══ Mechat elevation — full-bleed cinematic hero, bigger type, more air (this page only) ═══ */
+    .lpx-mechat .lph{ padding:0; }
+    .lpx-mechat .lph::before{ display:none; }
+    .lpx-mechat .lph__container{ display:flex; flex-direction:column; justify-content:flex-end; align-items:center;
+      min-height:96svh; max-width:none; padding:0 0 58px; position:relative; }
+    .lpx-mechat .lph__media{ position:absolute; inset:0; z-index:0; }
+    .lpx-mechat .lph__media::before{ display:none; }
+    .lpx-mechat .lph__media::after{ content:''; position:absolute; inset:0; z-index:1;
+      background:linear-gradient(180deg, rgba(21,10,11,.12) 0%, rgba(21,10,11,.34) 48%, rgba(21,10,11,.95) 100%); }
+    .lpx-mechat .lph__imgframe{ position:absolute; inset:0; border:none; border-radius:0; box-shadow:none; animation:none; overflow:hidden; }
+    .lpx-mechat .lph__imgframe video, .lpx-mechat .lph__imgframe img{ width:100%; height:100%; object-fit:cover; }
+    .lpx-mechat .lph__badge{ z-index:2; top:max(16px, env(safe-area-inset-top)); }
+    .lpx-mechat .lph__social{ display:none; }
+    .lpx-mechat .lph__content{ box-sizing:border-box; position:relative; z-index:2; width:100%; max-width:680px; padding-inline:22px;
+      text-align:center; display:flex; flex-direction:column; align-items:center; }
+    .lpx-mechat .lph__eyebrow{ backdrop-filter:blur(6px); }
+    .lpx-mechat .lph__title{ font-family:'Cairo',sans-serif; font-size:clamp(1.95rem, 6.4vw, 3.3rem);
+      line-height:1.35; margin-bottom:12px; text-shadow:0 2px 26px rgba(0,0,0,.5); }
+    .lpx-mechat .lph__sub{ font-size:clamp(1rem, 3vw, 1.15rem); max-width:34rem; }
+    .lpx-mechat .lph__bullets{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px 12px; }
+    .lpx-mechat .lph__bullets li{ font-size:.9rem; background:rgba(255,255,255,.07);
+      border:1px solid rgba(236,217,160,.28); border-radius:999px; padding:7px 14px; backdrop-filter:blur(5px); }
+    .lpx-mechat .lph__check{ width:18px; height:18px; font-size:.62rem; }
+    .lpx-mechat .lph__pricing{ justify-content:center; margin:18px 0 14px; }
+    .lpx-mechat .lph__price{ font-size:2.5rem; }
+    .lpx-mechat .lph__cta{ max-width:460px; font-size:1.12rem; padding:17px 30px; border-radius:16px; }
+    .lpx-mechat .lph__chips{ justify-content:center; }
+    .lpx-mechat .lph__wave{ display:none; }
+
+    /* Section rhythm: more air, bigger headings */
+    .lpx-mechat .lpp, .lpx-mechat .lp-benefits, .lpx-mechat .lp-media, .lpx-mechat .lp-steps,
+    .lpx-mechat .lp-reviews, .lpx-mechat .lpc, .lpx-mechat .lpg, .lpx-mechat .lpor,
+    .lpx-mechat .lp-faq, .lpx-mechat .lsl{ padding-block:clamp(64px, 10vw, 104px); }
+    .lpx-mechat .lp-cta{ padding-block:clamp(76px, 11vw, 122px); }
+    .lpx-mechat .lps{ padding-block:46px; }
+    .lpx-mechat .lps__num{ font-size:clamp(1.9rem, 6vw, 2.6rem); }
+    .lpx-mechat .lps__label{ font-size:.92rem; }
+    .lpx-mechat .lpp__heading, .lpx-mechat .lp-benefits__heading, .lpx-mechat .lp-media__heading,
+    .lpx-mechat .lp-steps__heading, .lpx-mechat .lp-reviews__heading, .lpx-mechat .lpc__heading,
+    .lpx-mechat .lpg__heading, .lpx-mechat .lpor__heading, .lpx-mechat .lp-faq__heading,
+    .lpx-mechat .lsl__heading, .lpx-mechat .lp-cta__heading{
+      font-family:'Cairo',sans-serif; font-size:clamp(1.7rem, 5.2vw, 2.45rem); line-height:1.4; }
+
+    /* Ritual media rows: cinematic stacked layout */
+    .lpx-mechat .lp-media__row{ grid-template-columns:1fr; gap:20px; max-width:760px;
+      margin-inline:auto; margin-bottom:72px; text-align:center; }
+    .lpx-mechat .lp-media__row:last-child{ margin-bottom:0; }
+    .lpx-mechat .lp-media__img, .lpx-mechat .lp-media__imgwrap video{ width:100%; border-radius:22px; display:block; }
+    .lpx-mechat .lp-media__title{ font-family:'Cairo',sans-serif; font-size:clamp(1.3rem, 4.2vw, 1.75rem); }
+    .lpx-mechat .lp-media__text{ font-size:1rem; max-width:36rem; margin-inline:auto; }
+
     /* Accessibility floor */
     :where(a,button,input,select,summary):focus-visible{ outline:3px solid var(--lpx-gold); outline-offset:2px; border-radius:6px; }
     @media (prefers-reduced-motion: reduce){
@@ -67,7 +119,7 @@
   </style>
   {{ content_for_header }}
 </head>
-<body>
+<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' %}lpx-mechat{% endif %}">
   {{ content_for_layout }}
   <script>
     (function(){

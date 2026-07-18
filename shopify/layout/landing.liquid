@@ -77,6 +77,27 @@
         });
       }, { threshold: .06, rootMargin: '0px 0px -4% 0px' });
       els.forEach(function(e){ io.observe(e); });
+
+      // Stats count-up (progressive enhancement)
+      var nums = document.querySelectorAll('[data-count]');
+      if (nums.length) {
+        var nio = new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if (!en.isIntersecting) return;
+            nio.unobserve(en.target);
+            var el = en.target, target = parseFloat(el.getAttribute('data-count'));
+            if (isNaN(target)) return;
+            var dec = (String(el.getAttribute('data-count')).split('.')[1] || '').length;
+            var t0 = performance.now();
+            (function step(t){
+              var k = Math.min(1, (t - t0) / 1100);
+              el.textContent = (target * (1 - Math.pow(1 - k, 3))).toFixed(dec);
+              if (k < 1) requestAnimationFrame(step); else el.textContent = el.getAttribute('data-count');
+            })(t0);
+          });
+        }, { threshold: .5 });
+        nums.forEach(function(n){ nio.observe(n); });
+      }
     })();
   </script>
 </body>

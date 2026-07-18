@@ -5,7 +5,7 @@
       <div class="lps__item lpx-reveal" data-delay="{{ forloop.index0 | times: 110 }}" {{ block.shopify_attributes }}>
         <div class="lps__num">
           {% if block.settings.prefix != blank %}<span class="lps__fix">{{ block.settings.prefix }}</span>{% endif %}
-          <span data-count="{{ block.settings.number }}">0</span>
+          <span data-count="{{ block.settings.number }}">{{ block.settings.number }}</span>
           {% if block.settings.suffix != blank %}<span class="lps__fix">{{ block.settings.suffix }}</span>{% endif %}
         </div>
         <div class="lps__label">{{ block.settings.label }}</div>

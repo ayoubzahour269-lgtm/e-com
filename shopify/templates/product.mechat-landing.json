@@ -42,7 +42,8 @@
         "image_asset": "mechat-hero.webp",
         "video_asset": "mechat-hero-video.mp4",
         "badge": "خصم 25%",
-        "cta_label": "اطلبي الآن — الدفع عند الاستلام"
+        "cta_label": "اطلبي الآن — الدفع عند الاستلام",
+        "social_text": "وصفة مغربية أصيلة · توصيل لجميع مدن المملكة"
       }
     },
     "lp_stats": {
@@ -99,25 +100,25 @@
         "m1": {
           "type": "item",
           "settings": {
-            "text": "الدفع عند الاستلام 💵"
+            "text": "الدفع عند الاستلام"
           }
         },
         "m2": {
           "type": "item",
           "settings": {
-            "text": "توصيل مجاني لجميع مدن المملكة 🚚"
+            "text": "توصيل مجاني لجميع مدن المملكة"
           }
         },
         "m3": {
           "type": "item",
           "settings": {
-            "text": "طبيعي 100% 🌿"
+            "text": "طبيعي 100%"
           }
         },
         "m4": {
           "type": "item",
           "settings": {
-            "text": "وصفة مغربية أصيلة ✨"
+            "text": "وصفة مغربية أصيلة"
           }
         }
       },
@@ -135,28 +136,28 @@
         "p1": {
           "type": "pain",
           "settings": {
-            "icon": "🪮",
+            "icon": "",
             "text": "كل تمشيطة تخلّف خصلة شعر كاملة في المشط"
           }
         },
         "p2": {
           "type": "pain",
           "settings": {
-            "icon": "🛏️",
+            "icon": "",
             "text": "الوسادة صارت مليانة شعر كل صباح"
           }
         },
         "p3": {
           "type": "pain",
           "settings": {
-            "icon": "🎀",
+            "icon": "",
             "text": "ربطة شعرك صارت أرفع من قبل بكثير"
           }
         },
         "p4": {
           "type": "pain",
           "settings": {
-            "icon": "😔",
+            "icon": "",
             "text": "فراغات بدت تبان وتحرجك قدام الكل"
           }
         }
@@ -170,291 +171,6 @@
       "settings": {
         "heading": "شعرك صار يوقفك عن إطلالتك؟",
         "subheading": "إذا تعرفين وحدة من هذي المواقف، هذا الزيت مصمم لك"
-      }
-    },
-    "main": {
-      "type": "product-information",
-      "blocks": {
-        "media-gallery": {
-          "type": "_product-media-gallery",
-          "static": true,
-          "settings": {
-            "media_presentation": "carousel",
-            "media_columns": "two",
-            "image_gap": 4,
-            "large_first_image": true,
-            "icons_style": "arrow",
-            "slideshow_controls_style": "counter",
-            "slideshow_mobile_controls_style": "dots",
-            "thumbnail_position": "bottom",
-            "thumbnail_width": 44,
-            "thumbnail_radius": 8,
-            "aspect_ratio": "1/1",
-            "constrain_to_viewport": true,
-            "media_fit": "cover",
-            "media_radius": 12,
-            "extend_media": false,
-            "zoom": true,
-            "video_loop": true,
-            "hide_variants": true,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "product-details": {
-          "type": "_product-details",
-          "static": true,
-          "settings": {
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "details_position": "flex-start",
-            "gap": 16,
-            "sticky_details_desktop": true,
-            "background_media": "none",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "padding-block-start": 24,
-            "padding-block-end": 24,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "title_grp": {
-              "type": "group",
-              "name": "Header",
-              "settings": {
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 10,
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "background_media": "none",
-                "background_color": "",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_color": "",
-                "border_radius": 0,
-                "open_in_new_tab": false,
-                "placeholder": "",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "title": {
-                  "type": "text",
-                  "name": "Product title",
-                  "settings": {
-                    "text": "<h1>{{ closest.product.title }}</h1>",
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "right",
-                    "type_preset": "h4",
-                    "font": "var(--font-primary--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "subtitle": {
-                  "type": "text",
-                  "name": "Subtitle",
-                  "settings": {
-                    "text": "<p>علاج كامل لثلاثة أشهر: ٣ قنينات من زيت المشاط الأحمر الطبيعي — يغذّي الجذور، يوقف التساقط ويرجّع الكثافة واللمعان.</p>",
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "right",
-                    "type_preset": "paragraph",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "price": {
-                  "type": "price",
-                  "settings": {
-                    "show_sale_price_first": true,
-                    "show_installments": false,
-                    "show_tax_info": false,
-                    "type_preset": "h5",
-                    "width": "100%",
-                    "alignment": "right",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "text_color": "",
-                    "padding-block-start": 4,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "title",
-                "subtitle",
-                "price"
-              ]
-            },
-            "buy_buttons": {
-              "type": "buy-buttons",
-              "settings": {
-                "stacking": true,
-                "text_color": "",
-                "show_pickup_availability": false,
-                "gift_card_form": false,
-                "recipient_button_style": "default",
-                "recipient_button_background": "{{ settings.color_palette.background }}",
-                "recipient_button_text": "{{ settings.color_palette.foreground }}",
-                "recipient_button_border": "{{ settings.color_palette.foreground }}",
-                "selected_recipient_button_style": "default",
-                "selected_recipient_button_background": "{{ settings.color_palette.foreground }}",
-                "selected_recipient_button_text": "{{ settings.color_palette.background }}",
-                "selected_recipient_button_border": "{{ settings.color_palette.foreground }}",
-                "input_style": "default",
-                "input_background_color": "{{ settings.color_palette.background }}",
-                "input_text_color": "{{ settings.color_palette.foreground }}",
-                "input_border_color": "{{ settings.color_palette.foreground }}",
-                "border_width": 1,
-                "border_radius": 12,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "quantity": {
-                  "type": "quantity",
-                  "static": true,
-                  "settings": {
-                    "input_style": "default",
-                    "input_background_color": "{{ settings.color_palette.background }}",
-                    "input_text_color": "{{ settings.color_palette.foreground }}",
-                    "input_border_color": "{{ settings.color_palette.foreground }}",
-                    "border_width": 1,
-                    "border_radius": 12
-                  },
-                  "blocks": {}
-                },
-                "add-to-cart": {
-                  "type": "add-to-cart",
-                  "static": true,
-                  "settings": {
-                    "style_class": "button",
-                    "custom_button_background": "{{ settings.color_palette.foreground }}",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}"
-                  },
-                  "blocks": {}
-                },
-                "accelerated-checkout": {
-                  "type": "accelerated-checkout",
-                  "static": true,
-                  "settings": {},
-                  "blocks": {}
-                }
-              },
-              "block_order": []
-            },
-            "trust_chips": {
-              "type": "text",
-              "name": "Trust chips",
-              "settings": {
-                "text": "<p>💵 الدفع عند الاستلام &nbsp;·&nbsp; 🚚 توصيل مجاني &nbsp;·&nbsp; 🔄 ضمان الاستبدال</p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "0.85rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "title_grp",
-            "buy_buttons",
-            "trust_chips"
-          ]
-        }
-      },
-      "settings": {
-        "content_width": "content-center-aligned",
-        "desktop_media_position": "left",
-        "equal_columns": false,
-        "limit_details_width": false,
-        "gap": 40,
-        "enable_sticky_add_to_cart": true,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 0,
-        "padding-block-end": 0
       }
     },
     "lp_benefits": {
@@ -760,7 +476,7 @@
         "of1": {
           "type": "offer",
           "settings": {
-            "qty_label": "3️⃣",
+            "qty_label": "٣",
             "title": "باك 3 قنينات — 750 مل",
             "price": "139 ر.س",
             "old_price": "185 ر.س",
@@ -809,6 +525,15 @@
         "number": "",
         "message": "أبغى أستفسر عن زيت المشاط الأحمر"
       }
+    },
+    "order": {
+      "type": "landing-order",
+      "settings": {
+        "heading": "أكملي طلبك الآن",
+        "subheading": "املئي معلوماتك وسنتصل بك لتأكيد الطلب — بدون أي دفع مسبق",
+        "product_label": "باك 3 قنينات زيت المشاط الأحمر — 750 مل",
+        "note": "شامل التوصيل — الدفع كاش أو شبكة عند الاستلام"
+      }
     }
   },
   "order": [
@@ -823,7 +548,7 @@
     "lp_reviews",
     "lp_compare",
     "lp_offers",
-    "main",
+    "order",
     "lp_guarantee",
     "lp_faq",
     "lp_cta",

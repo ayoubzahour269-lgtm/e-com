@@ -1,0 +1,57 @@
+{% comment %} Barre CTA sticky mobile — prix + bouton or, style RizqBio {% endcomment %}
+<div class="lp-sticky" dir="rtl" id="lp-sticky-bar">
+  <div class="lp-sticky__price">
+    {% assign _p = product.price | money_without_currency | remove: '.00' | remove: ',00' %}<span class="lp-sticky__now">{{ _p }} ر.س</span>
+    {% if product.compare_at_price > product.price %}{% assign _c = product.compare_at_price | money_without_currency | remove: '.00' | remove: ',00' %}<s class="lp-sticky__was">{{ _c }} ر.س</s>{% endif %}
+  </div>
+  <button class="lp-sticky__btn" onclick="(document.querySelector('easysell-form,[id*=easysell],product-form,form[action*=\'/cart/add\']')||document.body).scrollIntoView({behavior:'smooth'})">
+    {{ section.settings.button_label }}
+  </button>
+</div>
+
+<style>
+  .lp-sticky{
+    position:fixed; bottom:0; inset-inline:0; z-index:70;
+    display:none; align-items:center; justify-content:space-between; gap:12px;
+    background:rgba(16,22,29,.96); backdrop-filter:blur(10px);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px -12px rgba(0,0,0,.4);
+  }
+  .lp-sticky__price{ color:#fff; font-weight:800; font-size:1.05rem; display:flex; align-items:baseline; gap:8px; }
+  .lp-sticky__was{ color:#8f9aa6; font-size:.82rem; font-weight:500; }
+  .lp-sticky__btn{
+    flex:1; max-width:280px;
+    font-family:'Cairo',sans-serif; font-weight:800; font-size:1rem;
+    background:linear-gradient(135deg,#dcb96a,#c9a557 55%,#b8923f);
+    color:#2b1f06; border:none; border-radius:999px; padding:12px 18px; cursor:pointer;
+    box-shadow:0 10px 24px -8px rgba(184,146,63,.6);
+  }
+   }
+  .lp-sticky{ transform:translateY(110%); transition:transform .3s ease; }
+  .lp-sticky.lp-sticky--on{ transform:none; }
+  @media(max-width:989px){ .lp-sticky{ display:flex } body{ padding-bottom:74px } }
+</style>
+
+<script>
+  (function(){
+    var bar = document.getElementById('lp-sticky-bar');
+    if (!bar) return;
+    var order = document.getElementById('lp-order');
+    var nearOrder = false;
+    if (order && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function(e){ nearOrder = e[0].isIntersecting; upd(); }, {threshold:.05}).observe(order);
+    }
+    function upd(){ bar.classList.toggle('lp-sticky--on', window.scrollY > 550 && !nearOrder); }
+    addEventListener('scroll', upd, {passive:true}); upd();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "LP — شريط الطلب الثابت",
+  "settings": [
+    { "type": "text", "id": "button_label", "label": "نص الزر", "default": "اطلب الآن — الدفع عند الاستلام" }
+  ],
+  "presets": [ { "name": "LP — شريط الطلب الثابت" } ]
+}
+{% endschema %}

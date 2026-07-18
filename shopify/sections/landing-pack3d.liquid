@@ -1,26 +1,37 @@
-{% comment %} Vitrine 3D du pack — tilt interactif + reflet doré {% endcomment %}
+{% comment %} Vitrine du pack — disposition split luxe, tilt interactif, produit non retouché {% endcomment %}
 <div class="lp3d" dir="rtl">
   <div class="lp3d__container">
-    <h2 class="lp3d__heading lpx-reveal">{{ section.settings.heading }}</h2>
-    <p class="lp3d__sub lpx-reveal">{{ section.settings.subheading }}</p>
+    <div class="lp3d__grid">
 
-    <div class="lp3d__stage lpx-reveal" data-delay="120">
-      <div class="lp3d__tilt" id="lp3d-tilt">
-        {% if section.settings.image_asset != blank %}
-          <img src="{{ section.settings.image_asset | asset_url }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="900" height="900">
-        {% endif %}
-        <span class="lp3d__glare"></span>
+      <div class="lp3d__body">
+        <h2 class="lp3d__heading lpx-reveal">{{ section.settings.heading }}</h2>
+        <p class="lp3d__sub lpx-reveal" data-delay="80">{{ section.settings.subheading }}</p>
       </div>
-      <div class="lp3d__shadow"></div>
-    </div>
 
-    <div class="lp3d__chips lpx-reveal" data-delay="220">
-      {% for block in section.blocks %}
-        <div class="lp3d__chip" {{ block.shopify_attributes }}>
-          <b>{{ block.settings.value }}</b>
-          <span>{{ block.settings.label }}</span>
+      <div class="lp3d__media lpx-reveal" data-delay="120">
+        <div class="lp3d__stage">
+          <div class="lp3d__tilt" id="lp3d-tilt">
+            {% if section.settings.image_asset != blank %}
+              <img src="{{ section.settings.image_asset | asset_url }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="768" height="1376">
+            {% endif %}
+            <span class="lp3d__glare"></span>
+          </div>
+          <div class="lp3d__shadow"></div>
         </div>
-      {% endfor %}
+        {% if section.settings.caption != blank %}
+          <p class="lp3d__caption">{{ section.settings.caption }}</p>
+        {% endif %}
+      </div>
+
+      <div class="lp3d__chips lpx-reveal" data-delay="200">
+        {% for block in section.blocks %}
+          <div class="lp3d__chip" {{ block.shopify_attributes }}>
+            <b>{{ block.settings.value }}</b>
+            <span>{{ block.settings.label }}</span>
+          </div>
+        {% endfor %}
+      </div>
+
     </div>
   </div>
 </div>
@@ -33,59 +44,78 @@
     function apply(rx, ry, glx, gly){
       tilt.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
       var g = tilt.querySelector('.lp3d__glare');
-      if (g) g.style.background = 'radial-gradient(circle at ' + glx + '% ' + gly + '%, rgba(255,240,200,.34), rgba(255,240,200,0) 55%)';
+      if (g) g.style.background = 'radial-gradient(circle at ' + glx + '% ' + gly + '%, rgba(255,240,200,.3), rgba(255,240,200,0) 55%)';
     }
     function onMove(x, y){
       idle = false;
       var r = tilt.getBoundingClientRect();
       var px = (x - r.left) / r.width, py = (y - r.top) / r.height;
-      apply((py - .5) * -14, (px - .5) * 16, px * 100, py * 100);
+      apply((py - .5) * -12, (px - .5) * 14, px * 100, py * 100);
     }
     tilt.addEventListener('mousemove', function(e){ onMove(e.clientX, e.clientY); });
     tilt.addEventListener('touchmove', function(e){ var t = e.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
     function rest(){ idle = true; }
     tilt.addEventListener('mouseleave', rest);
     tilt.addEventListener('touchend', rest);
-    // ambient float when idle
     var t0 = performance.now();
     (function loop(now){
       if (idle) {
         var k = (now - t0) / 1000;
-        apply(Math.sin(k * .7) * 4, Math.cos(k * .5) * 6, 50 + Math.cos(k * .5) * 24, 42 + Math.sin(k * .7) * 14);
+        apply(Math.sin(k * .7) * 3, Math.cos(k * .5) * 5, 50 + Math.cos(k * .5) * 24, 42 + Math.sin(k * .7) * 14);
       }
       raf = requestAnimationFrame(loop);
     })(t0);
     document.addEventListener('visibilitychange', function(){
       if (document.hidden) cancelAnimationFrame(raf);
-      else raf = requestAnimationFrame(function l(n){ if (idle){ var k=(n-t0)/1000; apply(Math.sin(k*.7)*4, Math.cos(k*.5)*6, 50+Math.cos(k*.5)*24, 42+Math.sin(k*.7)*14);} raf=requestAnimationFrame(l); });
+      else raf = requestAnimationFrame(function l(n){ if (idle){ var k=(n-t0)/1000; apply(Math.sin(k*.7)*3, Math.cos(k*.5)*5, 50+Math.cos(k*.5)*24, 42+Math.sin(k*.7)*14);} raf=requestAnimationFrame(l); });
     });
   })();
 </script>
 
 <style>
   .lp3d{ background:var(--lpx-dark,#150a0b); background-image:var(--lpx-star); background-size:26px 26px;
-    color:#fff; padding-block:clamp(68px, 10vw, 110px); overflow:clip; }
-  .lp3d__container{ max-width:760px; margin-inline:auto; padding-inline:20px; text-align:center; }
-  .lp3d__heading{ font-family:'Cairo',sans-serif; font-size:clamp(1.7rem, 5.2vw, 2.5rem); font-weight:900;
+    color:#fff; padding-block:clamp(64px, 9vw, 100px); overflow:clip; }
+  .lp3d__container{ max-width:1100px; margin-inline:auto; padding-inline:20px; }
+  .lp3d__grid{ display:grid; grid-template-areas:'body' 'media' 'chips'; gap:0; text-align:center; }
+  .lp3d__body{ grid-area:body; }
+  .lp3d__media{ grid-area:media; }
+  .lp3d__chips{ grid-area:chips; }
+  .lp3d__heading{ font-family:'Cairo',sans-serif; font-size:clamp(1.7rem, 5.2vw, 2.45rem); font-weight:900;
     margin:0 0 10px; color:#fff; line-height:1.4; }
   .lp3d__heading em{ font-style:normal; background:linear-gradient(100deg,#f4e3ae 10%,#c9a227 45%,#f7e9bd 70%,#b8923f 95%);
     -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .lp3d__sub{ color:var(--lpx-muted,#d3bcb6); margin:0 auto 34px; max-width:32rem; line-height:1.9; }
-  .lp3d__stage{ position:relative; max-width:480px; margin-inline:auto; }
-  .lp3d__tilt{ position:relative; border-radius:26px; overflow:hidden; transform:perspective(900px);
+  .lp3d__sub{ color:var(--lpx-muted,#d3bcb6); margin:0 auto 30px; max-width:34rem; line-height:1.9; }
+  .lp3d__stage{ position:relative; max-width:420px; margin-inline:auto; }
+  .lp3d__tilt{ position:relative; border-radius:24px; overflow:hidden; transform:perspective(900px);
     transition:transform .12s ease-out; will-change:transform;
-    box-shadow:0 40px 90px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(236,217,160,.18); }
-  .lp3d__tilt img{ width:100%; display:block; }
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.72), 0 0 0 1px rgba(236,217,160,.22); }
+  .lp3d__tilt img{ width:100%; height:auto; display:block; }
   .lp3d__glare{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen; }
-  .lp3d__shadow{ width:70%; height:26px; margin:18px auto 0; border-radius:50%;
+  .lp3d__shadow{ width:66%; height:24px; margin:16px auto 0; border-radius:50%;
     background:radial-gradient(closest-side, rgba(0,0,0,.55), transparent 75%); filter:blur(6px); }
-  .lp3d__chips{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:34px; }
+  .lp3d__caption{ color:var(--lpx-muted,#d3bcb6); font-size:.85rem; margin:14px auto 0; max-width:26rem; }
+  .lp3d__chips{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:30px; }
   .lp3d__chip{ background:rgba(255,255,255,.05); border:1px solid rgba(236,217,160,.3); border-radius:16px;
-    padding:14px 22px; min-width:104px; backdrop-filter:blur(6px); }
+    padding:14px 20px; min-width:100px; backdrop-filter:blur(6px); }
   .lp3d__chip b{ display:block; font-family:'Cairo',sans-serif; font-size:1.35rem; font-weight:900;
     background:linear-gradient(120deg,#f4e3ae,#c9a227 55%,#e9cf96);
     -webkit-background-clip:text; background-clip:text; color:transparent; }
   .lp3d__chip span{ color:var(--lpx-muted,#d3bcb6); font-size:.82rem; font-weight:600; }
+
+  @media (min-width: 900px){
+    .lpx-mechat .lp3d__container{ max-width:1100px; }
+    .lpx-mechat .lp3d__grid{ grid-template-columns:minmax(0,1fr) 460px; grid-template-areas:'body media' 'chips media';
+      column-gap:64px; align-items:center; text-align:start; }
+    .lpx-mechat .lp3d__stage{ max-width:460px; margin-inline:0; }
+    .lpx-mechat .lp3d__heading{ font-size:2.4rem; }
+    .lpx-mechat .lp3d__sub{ margin-inline:0; max-width:30rem; font-size:1.08rem; }
+    .lpx-mechat .lp3d__caption{ margin-inline:0; text-align:center; max-width:460px; }
+    .lpx-mechat .lp3d__chips{ justify-content:flex-start; align-self:start; gap:14px; margin-top:6px;
+      display:grid; grid-template-columns:repeat(2, minmax(150px, 190px)); }
+    .lpx-mechat .lp3d__chip{ padding:18px 24px; text-align:center; }
+    .lpx-mechat .lp3d__chip b{ font-size:1.6rem; }
+    .lpx-mechat .lp3d__chip span{ font-size:.92rem; }
+  }
   @media (prefers-reduced-motion: reduce){
     .lp3d__tilt{ transform:none !important; transition:none; }
     .lp3d__glare{ display:none; }
@@ -98,7 +128,8 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "العنوان", "default": "عبوة العلاج الكاملة" },
     { "type": "textarea", "id": "subheading", "label": "تحت العنوان" },
-    { "type": "text", "id": "image_asset", "label": "صورة الباك من assets" }
+    { "type": "text", "id": "image_asset", "label": "صورة الباك من assets" },
+    { "type": "text", "id": "caption", "label": "تعليق تحت الصورة" }
   ],
   "blocks": [
     { "type": "chip", "name": "رقم", "settings": [

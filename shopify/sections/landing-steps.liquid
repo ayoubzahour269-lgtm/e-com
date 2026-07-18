@@ -31,7 +31,7 @@
   .lp-steps__grid { display: grid; grid-template-columns: repeat({{ section.blocks.size | at_most: 4 }}, 1fr); gap: 20px; }
   .lp-steps__card { position: relative; background: #fff; border-radius: 14px; padding: 26px 14px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
   .lp-steps__number { position: absolute; top: -14px; right: 50%; transform: translateX(50%); width: 32px; height: 32px; border-radius: 50%; background: {{ section.settings.accent_color }}; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-  .lp-steps__img { width: 100%; max-width: 220px; border-radius: 10px; margin: 6px auto 10px; display: block; }
+  .lp-steps__img { width: 100%; height: auto; max-width: 220px; border-radius: 10px; margin: 6px auto 10px; display: block; }
   .lp-steps__title { font-size: 1rem; font-weight: 700; margin: 0 0 6px; }
   .lp-steps__text { font-size: 0.86rem; color: #555; margin: 0; line-height: 1.6; }
   @media (min-width: 750px) { .lp-steps__grid > div:nth-child(2) { transform: translateY(14px); } }

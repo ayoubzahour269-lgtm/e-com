@@ -39,8 +39,8 @@
         "eyebrow": "وصفة مغربية أصيلة — طبيعية 100%",
         "title": "ثلاث قوارير… <em>وتسعون يومًا</em> تفصلك عن شعرٍ أكثف وأطول",
         "subtitle": "زيت المشاط الأحمر يغذّي الجذور من العمق، فيقلّ التساقط ويعود لشعرك امتلاؤه ولمعانه. عبوة العلاج الكاملة: ثلاث قوارير × 250 مل.",
-        "image_asset": "mechat-pour.webp",
-        "video_asset": "mechat-hero-video.mp4",
+        "image_asset": "mechat-pack-podium.webp",
+        "video_asset": "mechat-hero-video2.mp4",
         "badge": "علاج 3 أشهر · خصم 25%",
         "cta_label": "اطلبي الآن — الدفع عند الاستلام",
         "social_text": ""
@@ -206,7 +206,7 @@
         "ben4": {
           "type": "benefit",
           "settings": {
-            "image_asset": "mechat-pack3.webp",
+            "image_asset": "mechat-shine2.webp",
             "emoji": "",
             "title": "لمعان حريري",
             "text": "نعومة ولمعان صحيّان من الاستعمالات الأولى، بلا ثقل ولا ملمس دهني"
@@ -231,8 +231,8 @@
       "settings": {
         "heading": "الفرق الذي تصنعه العناية الصحيحة",
         "hint": "اسحبي المؤشر يمينًا ويسارًا لرؤية الفرق",
-        "before_asset": "mechat-hair-dull.webp",
-        "after_asset": "mechat-hair-result.webp"
+        "before_asset": "mechat-ba-before.webp",
+        "after_asset": "mechat-ba-after.webp"
       }
     },
     "lp_media": {
@@ -285,7 +285,7 @@
         "s1": {
           "type": "step",
           "settings": {
-            "image_asset": "mechat-pour.webp",
+            "image_asset": "mechat-pour-real.webp",
             "title": "اسكبي قليلًا من الزيت",
             "text": "ملء راحة اليد يكفي لكل استعمال"
           }
@@ -568,7 +568,8 @@
       "settings": {
         "heading": "عبوة العلاج الكاملة — <em>تسعون يومًا</em> من العناية",
         "subheading": "ثلاث قوارير من زيت المشاط الأحمر، كل قارورة تكفي شهرًا كاملًا من طقسك الأسبوعي. حرّكي العبوة بإصبعك وشاهديها تستجيب.",
-        "image_asset": "mechat-pack-float.webp"
+        "image_asset": "mechat-hero-luxe.webp",
+        "caption": "المنتج كما يصلك تمامًا — بلا تعديل ولا رتوش"
       }
     },
     "lp_offers": {

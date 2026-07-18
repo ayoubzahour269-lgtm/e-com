@@ -1,0 +1,12 @@
+{
+  "layout": "landing",
+  "sections": {
+    "main": {
+      "type": "mechat-landing",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

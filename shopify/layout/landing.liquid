@@ -20,7 +20,7 @@
       --lpx-muted:#b9c2cd;
       --lpx-star:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);
     }
-    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' -%}
+    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' -%}
     :root{
       --lpx-dark:#1c0d0e;
       --lpx-hero-bg:linear-gradient(180deg,#2a1113 0%,#200e10 55%,#150a0b 100%);
@@ -108,6 +108,64 @@
     .lpx-mechat .lp-media__title{ font-family:'Cairo',sans-serif; font-size:clamp(1.3rem, 4.2vw, 1.75rem); }
     .lpx-mechat .lp-media__text{ font-size:1rem; max-width:36rem; margin-inline:auto; }
 
+    /* ═══ WOW layer — orchestrated motion, light and texture (mechat only) ═══ */
+    /* Scroll progress thread */
+    .lpx-mechat .lpx-progress{ position:fixed; top:0; inset-inline:0; height:3px; z-index:99;
+      background:linear-gradient(90deg,#dcb96a,#c9a227,#dcb96a); transform-origin:right;
+      transform:scaleX(0); }
+    /* Hero: slow Ken Burns + golden dust + scroll cue */
+    .lpx-mechat .lph__imgframe video, .lpx-mechat .lph__imgframe img{
+      animation:lpx-kenburns 14s ease-out forwards; }
+    @keyframes lpx-kenburns{ from{ transform:scale(1.12);} to{ transform:scale(1);} }
+    .lpx-mechat .lph__media .lpx-dust{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    .lpx-mechat .lpx-dust i{ position:absolute; bottom:-4%; border-radius:50%;
+      background:radial-gradient(circle, rgba(236,217,160,.85), rgba(236,217,160,0) 70%);
+      animation:lpx-rise linear infinite; opacity:0; }
+    @keyframes lpx-rise{ 0%{ transform:translateY(0) translateX(0); opacity:0; }
+      12%{ opacity:.7; } 85%{ opacity:.25; }
+      100%{ transform:translateY(-92vh) translateX(4vw); opacity:0; } }
+    .lpx-mechat .lph__container::after{ content:''; position:absolute; bottom:16px; inset-inline:0;
+      margin-inline:auto; width:1px; height:34px; z-index:2;
+      background:linear-gradient(180deg, rgba(236,217,160,0), #ecd9a0);
+      animation:lpx-cue 2.2s ease-in-out infinite; }
+    @keyframes lpx-cue{ 0%,100%{ transform:translateY(0); opacity:.35;} 50%{ transform:translateY(8px); opacity:1;} }
+    /* Gold gradient accents in headline + numerals */
+    .lpx-mechat .lph__title em{ font-style:normal; background:linear-gradient(100deg,#f4e3ae 10%,#c9a227 45%,#f7e9bd 70%,#b8923f 95%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      background-size:220% 100%; animation:lpx-goldflow 6s ease-in-out infinite; }
+    @keyframes lpx-goldflow{ 0%,100%{ background-position:0% 0;} 50%{ background-position:100% 0;} }
+    .lpx-mechat .lps__num{ background:linear-gradient(120deg,#f4e3ae,#c9a227 55%,#e9cf96);
+      -webkit-background-clip:text; background-clip:text; color:transparent; }
+    /* Film grain on dark sections */
+    .lpx-mechat .lph__media::after{
+      background:linear-gradient(180deg, rgba(21,10,11,.12) 0%, rgba(21,10,11,.34) 48%, rgba(21,10,11,.95) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E"); }
+    /* Image reveals: blur -> sharp */
+    .lpx-mechat .lp-media__imgwrap, .lpx-mechat .lp-benefits__card, .lpx-mechat .lsl__frame{ will-change:transform; }
+    .lpx-mechat .lpx-reveal{ filter:blur(0); }
+    .lpx-mechat .lp-media__row.lpx-reveal, .lpx-mechat .lp-benefits__card.lpx-reveal{
+      transform:translateY(30px) scale(.985); }
+    .lpx-mechat .lp-media__row.lpx-reveal.lpx-on, .lpx-mechat .lp-benefits__card.lpx-reveal.lpx-on{
+      transform:none; }
+    /* Order card halo */
+    .lpx-mechat .lpor{ overflow:clip; }
+    .lpx-mechat .lpor__card{ position:relative; }
+    .lpx-mechat .lpor__card::before{ content:''; position:absolute; inset:-38px; z-index:-1; border-radius:40px;
+      background:radial-gradient(closest-side, rgba(201,162,39,.22), transparent 75%); filter:blur(6px); }
+    /* Price glow in hero */
+    .lpx-mechat .lph__price{ text-shadow:0 0 34px rgba(236,217,160,.45); }
+    /* Reviews: calligraphic quote mark */
+    .lpx-mechat .lp-reviews [class*="card"]{ position:relative; }
+    .lpx-mechat .lp-reviews [class*="card"]::before{ content:'”'; position:absolute; top:2px; inset-inline-start:14px;
+      font-family:'Cairo',sans-serif; font-size:4.2rem; line-height:1; color:rgba(201,162,39,.18); pointer-events:none; }
+    /* Sticky bar: glass + gold hairline */
+    .lpx-mechat .lp-sticky{ background:rgba(24,11,12,.82); backdrop-filter:blur(14px) saturate(1.2);
+      border-top:1px solid rgba(236,217,160,.35); }
+    /* Marquee: slower, luxe */
+    .lpx-mechat .lpm__track{ animation-duration:38s !important; }
+    /* FAQ smoothness */
+    .lpx-mechat .lp-faq [class*="item"], .lpx-mechat details{ transition:background .25s ease; }
+
     /* Accessibility floor */
     :where(a,button,input,select,summary):focus-visible{ outline:3px solid var(--lpx-gold); outline-offset:2px; border-radius:6px; }
     @media (prefers-reduced-motion: reduce){
@@ -119,7 +177,7 @@
   </style>
   {{ content_for_header }}
 </head>
-<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' %}lpx-mechat{% endif %}">
+<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' %}lpx-mechat{% endif %}">
   {{ content_for_layout }}
   <script>
     (function(){
@@ -155,6 +213,40 @@
           });
         }, { threshold: .5 });
         nums.forEach(function(n){ nio.observe(n); });
+      }
+
+      // WOW: progress thread + golden dust + soft parallax (mechat only)
+      if (document.body.classList.contains('lpx-mechat')) {
+        var bar = document.createElement('div'); bar.className = 'lpx-progress'; document.body.appendChild(bar);
+        var media = document.querySelector('.lph__media');
+        if (media && !reduce) {
+          var dust = document.createElement('div'); dust.className = 'lpx-dust';
+          for (var i = 0; i < 9; i++) {
+            var d = document.createElement('i');
+            var sz = 2 + (i % 4);
+            d.style.width = d.style.height = sz + 'px';
+            d.style.insetInlineStart = (6 + i * 10.5) + '%';
+            d.style.animationDuration = (7 + (i % 5) * 2.4) + 's';
+            d.style.animationDelay = (i * 1.15) + 's';
+            dust.appendChild(d);
+          }
+          media.appendChild(dust);
+        }
+        var plx = Array.prototype.slice.call(document.querySelectorAll('.lp-media__imgwrap video, .lp-media__imgwrap img'));
+        var ticking = false;
+        function frame(){
+          ticking = false;
+          var doc = document.documentElement;
+          var max = doc.scrollHeight - innerHeight;
+          bar.style.transform = 'scaleX(' + (max > 0 ? scrollY / max : 0) + ')';
+          if (!reduce) plx.forEach(function(el){
+            var r = el.getBoundingClientRect();
+            var c = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+            el.style.transform = 'translate3d(0,' + (c * 26).toFixed(1) + 'px,0) scale(1.1)';
+          });
+        }
+        addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
+        frame();
       }
     })();
   </script>

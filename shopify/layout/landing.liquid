@@ -20,7 +20,7 @@
       --lpx-muted:#b9c2cd;
       --lpx-star:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);
     }
-    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' or template.suffix == 'mechat6' -%}
+    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' or template.suffix == 'mechat6' or template.suffix == 'mechat7' -%}
     :root{
       --lpx-dark:#1c0d0e;
       --lpx-hero-bg:linear-gradient(180deg,#2a1113 0%,#200e10 55%,#150a0b 100%);
@@ -166,6 +166,47 @@
     /* FAQ smoothness */
     .lpx-mechat .lp-faq [class*="item"], .lpx-mechat details{ transition:background .25s ease; }
 
+    /* ═══ Continuous dark-luxe cinema (mechat only) ═══ */
+    .lpx-mechat .lpp, .lpx-mechat .lsl, .lpx-mechat .lp-steps, .lpx-mechat .lp-faq{ background:#1c0d0e; }
+    .lpx-mechat .lp-benefits, .lpx-mechat .lp-reviews, .lpx-mechat .lpc, .lpx-mechat .lpg, .lpx-mechat .lpor{
+      background:#221013; background-image:var(--lpx-star); background-size:26px 26px; }
+    .lpx-mechat .lpp__heading, .lpx-mechat .lp-benefits__heading, .lpx-mechat .lp-steps__heading,
+    .lpx-mechat .lp-reviews__heading, .lpx-mechat .lpc__heading, .lpx-mechat .lpg__heading,
+    .lpx-mechat .lp-faq__heading, .lpx-mechat .lsl__heading, .lpx-mechat .lpor__heading{ color:#fff; }
+    .lpx-mechat .lpp__sub, .lpx-mechat .lp-benefits__sub, .lpx-mechat .lp-reviews__sub,
+    .lpx-mechat .lpg__text, .lpx-mechat .lpor__sub, .lpx-mechat .lsl__hint{ color:#d3bcb6; }
+    /* Cards become dark jewel surfaces with gold hairlines */
+    .lpx-mechat .lpp__card, .lpx-mechat .lp-benefits__card, .lpx-mechat .lp-steps__card,
+    .lpx-mechat .lp-reviews__card, .lpx-mechat .lpg__item, .lpx-mechat .lp-faq__item{
+      background:#2a1315; border:1px solid rgba(236,217,160,.2); box-shadow:0 18px 44px -22px rgba(0,0,0,.6); }
+    .lpx-mechat .lpp__card{ border-top:1px solid rgba(236,217,160,.2); }
+    .lpx-mechat .lpp__card p, .lpx-mechat .lp-faq__a{ color:#e9dcd4; }
+    .lpx-mechat .lp-benefits__title, .lpx-mechat .lp-steps__title, .lpx-mechat .lp-faq__q,
+    .lpx-mechat .lp-reviews__name{ color:#fff; }
+    .lpx-mechat .lp-benefits__text, .lpx-mechat .lp-steps__text, .lpx-mechat .lp-reviews__text,
+    .lpx-mechat .lp-reviews__author, .lpx-mechat .lpg__item small{ color:#cdb6ad; }
+    .lpx-mechat .lpg__item b{ color:#fff; }
+    .lpx-mechat .lpp__arrowline{ background:linear-gradient(135deg,#dcb96a,#c9a557); color:#2b1f06; }
+    /* Compare table on dark */
+    .lpx-mechat .lpc__table{ background:#2a1315; border:1px solid rgba(236,217,160,.2); }
+    .lpx-mechat .lpc__row{ border-color:rgba(236,217,160,.12); }
+    .lpx-mechat .lpc__feature{ color:#e9dcd4; }
+    .lpx-mechat .lpc__row{ background:#2a1315; }
+    .lpx-mechat .lpc__row:nth-child(even){ background:#241114; }
+    .lpx-mechat .lpc__row--head{ background:#150a0b !important; }
+    .lpx-mechat .lpc__no{ color:#6e5a54; }
+    .lpx-mechat .lpc__ours{ background:rgba(201,162,39,.1); }
+    .lpx-mechat .lpc__theirs{ color:#8f7a72; }
+    /* Order: white jewel card on dark stage */
+    .lpx-mechat .lpor__heading{ color:#fff; }
+    .lpx-mechat .lpor__card{ box-shadow:0 30px 80px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(236,217,160,.25); }
+    .lpx-mechat .lpor__card::before{ background:radial-gradient(closest-side, rgba(201,162,39,.3), transparent 75%); }
+    .lpx-mechat .lpor__chips{ color:#d3bcb6; }
+    /* Steps number chips gold */
+    .lpx-mechat .lp-steps__number{ background:linear-gradient(135deg,#dcb96a,#c9a557); color:#2b1f06; }
+    /* Slider frame gold border */
+    .lpx-mechat .lsl__frame{ border:1px solid rgba(236,217,160,.3); }
+
     /* Accessibility floor */
     :where(a,button,input,select,summary):focus-visible{ outline:3px solid var(--lpx-gold); outline-offset:2px; border-radius:6px; }
     @media (prefers-reduced-motion: reduce){
@@ -177,7 +218,7 @@
   </style>
   {{ content_for_header }}
 </head>
-<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' or template.suffix == 'mechat6' %}lpx-mechat{% endif %}">
+<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' or template.suffix == 'mechat6' or template.suffix == 'mechat7' %}lpx-mechat{% endif %}">
   {{ content_for_layout }}
   <script>
     (function(){

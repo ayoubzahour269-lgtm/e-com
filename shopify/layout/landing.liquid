@@ -20,7 +20,7 @@
       --lpx-muted:#b9c2cd;
       --lpx-star:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);
     }
-    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' -%}
+    {%- if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' or template.suffix == 'mechat6' -%}
     :root{
       --lpx-dark:#1c0d0e;
       --lpx-hero-bg:linear-gradient(180deg,#2a1113 0%,#200e10 55%,#150a0b 100%);
@@ -177,7 +177,7 @@
   </style>
   {{ content_for_header }}
 </head>
-<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' %}lpx-mechat{% endif %}">
+<body class="{% if template.suffix == 'mechat-landing' or template.suffix == 'mechat' or template.suffix == 'mechat2' or template.suffix == 'mechat3' or template.suffix == 'mechat4' or template.suffix == 'mechat5' or template.suffix == 'mechat6' %}lpx-mechat{% endif %}">
   {{ content_for_layout }}
   <script>
     (function(){

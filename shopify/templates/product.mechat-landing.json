@@ -506,7 +506,7 @@
         "message": "أبغى أستفسر عن زيت المشاط الأحمر"
       }
     },
-    "order": {
+    "lp_order": {
       "type": "landing-order",
       "settings": {
         "heading": "أكملي طلبك الآن",
@@ -529,7 +529,7 @@
     "lp_reviews",
     "lp_compare",
     "lp_guarantee",
-    "order",
+    "lp_order",
     "lp_faq",
     "lp_cta",
     "lp_sticky",

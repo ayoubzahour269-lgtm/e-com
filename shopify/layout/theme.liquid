@@ -9,7 +9,7 @@
     <!-- mechat-v3 -->
     {% comment %} mechat-landing auto-view: redirects only this product's default page to the landing template. Becomes inert once the template is assigned in admin. Remove me anytime. {% endcomment %}
     {%- if template contains 'product' and product.variants.first.sku == 'SA04050100M300' -%}
-      <script>(function(){var u=new URL(location.href);if(!u.searchParams.get('view')){u.searchParams.set('view','mechat-landing');location.replace(u.toString());}})();</script>
+      <script>(function(){var u=new URL(location.href);if(!u.searchParams.get('view')){u.searchParams.set('view','mechat');location.replace(u.toString());}})();</script>
     {%- endif -%}
     {%- if settings.favicon != blank -%}
       <link

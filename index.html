@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>زيت المشاط الأحمر الأصلي — لتكثيف وتطويل الشعر | طبيعي 100%</title>
+<meta name="description" content="زيت المشاط الأحمر المغربي الأصلي: يغذي الجذور، يوقف التساقط ويحفز نمو شعر أكثف وأطول. طبيعي 100% — الدفع عند الاستلام والتوصيل لجميع المدن.">
+<link rel="preload" as="image" href="assets/hero-product-fixed.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --c-bg:#FAF6F1;          /* warm cream */
+  --c-surface:#FFFFFF;
+  --c-ink:#2A1A16;         /* dark warm brown */
+  --c-ink-soft:#6B564E;
+  --c-accent:#8E1B1E;      /* garnet red — CTA & brand only */
+  --c-accent-deep:#6E1214;
+  --c-gold:#C9A227;
+  --c-green:#4A6741;
+  --f-display:'El Messiri',serif;
+  --f-body:'Tajawal',sans-serif;
+  --radius:18px;
+  --shadow:0 10px 30px rgba(42,26,22,.10);
+  --space:clamp(3.5rem,8vw,6.5rem);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-body);color:var(--c-ink);background:var(--c-bg);font-size:16px;line-height:1.8;overflow-x:hidden}
+img,video{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--f-display);line-height:1.35}
+h2{font-size:clamp(1.6rem,4.5vw,2.4rem);text-align:center;margin-bottom:.6rem}
+.sub{color:var(--c-ink-soft);text-align:center;max-width:34rem;margin:0 auto 2.2rem;font-size:1.05rem}
+section{position:relative}
+.wrap{max-width:1100px;margin-inline:auto;padding-inline:1.25rem}
+
+/* ============ REVEAL ANIMATION ============ */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.rv.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+  video{display:none}
+  .hero{background:#1c0d0b url('assets/oil-macro.webp') center/cover}
+}
+
+/* ============ CTA BUTTON ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  background:linear-gradient(180deg,#A32226,var(--c-accent) 55%,var(--c-accent-deep));
+  color:#fff;font-family:var(--f-body);font-weight:700;font-size:1.12rem;
+  padding:1rem 2.4rem;border:none;border-radius:999px;cursor:pointer;text-decoration:none;
+  box-shadow:0 8px 22px rgba(142,27,30,.35), inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .18s ease, box-shadow .18s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(142,27,30,.45), inset 0 1px 0 rgba(255,255,255,.25)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-note{font-size:.85rem;color:var(--c-ink-soft);margin-top:.55rem;text-align:center}
+.hero .btn-note{color:rgba(255,255,255,.85)}
+
+/* ============ HERO ============ */
+.hero{min-height:100svh;display:flex;align-items:center;color:#fff;isolation:isolate;padding-block:4.5rem 6rem}
+.hero-media{position:absolute;inset:0;z-index:-2;overflow:hidden;background:#1c0d0b}
+.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(200deg,rgba(28,10,9,.30) 0%,rgba(28,10,9,.62) 55%,rgba(28,10,9,.88) 100%)}
+.hero-grid{display:grid;gap:2rem;align-items:center;width:100%}
+.hero-copy{text-align:center}
+.badge-natural{display:inline-flex;align-items:center;gap:.45rem;background:rgba(201,162,39,.16);
+  border:1px solid rgba(201,162,39,.55);color:#F2DA8C;border-radius:999px;
+  padding:.32rem 1rem;font-size:.9rem;font-weight:500;margin-bottom:1.1rem}
+.hero h1{font-size:clamp(1.9rem,6vw,3.1rem);margin-bottom:.9rem;text-wrap:balance}
+.hero h1 em{font-style:normal;color:#F2B4B0}
+.hero .lead{color:rgba(255,255,255,.9);max-width:33rem;margin:0 auto 1.4rem;font-size:1.08rem}
+.stars{color:var(--c-gold);letter-spacing:2px;font-size:1.05rem}
+.rating{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1.5rem;font-size:.95rem;color:rgba(255,255,255,.85)}
+.price-tag{display:flex;align-items:baseline;justify-content:center;gap:.8rem;margin-bottom:1.6rem}
+.price-now{font-family:var(--f-display);font-size:2.3rem;font-weight:700;color:#fff}
+.price-now small{font-size:1.1rem}
+.price-old{color:rgba(255,255,255,.55);text-decoration:line-through;font-size:1.15rem}
+.price-save{background:var(--c-gold);color:#3c2f05;font-weight:700;font-size:.82rem;border-radius:6px;padding:.15rem .55rem}
+.hero-shot{width:min(78vw,340px);margin-inline:auto;filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));border-radius:var(--radius)}
+@media(min-width:900px){
+  .hero-grid{grid-template-columns:1.1fr .9fr}
+  .hero-copy{text-align:start}
+  .hero .lead,.hero-copy .rating,.hero-copy .price-tag{margin-inline:0;justify-content:flex-start}
+  .hero-shot{width:min(34vw,400px)}
+}
+
+/* ============ WAVE DIVIDER (signature — echoes the label ribbon) ============ */
+.wave{display:block;width:100%;height:70px;margin-top:-69px;position:relative;z-index:2;pointer-events:none}
+.wave.flip{transform:scaleY(-1);margin-top:0;margin-bottom:-69px}
+
+/* ============ TRUST BAR ============ */
+.trust{background:var(--c-accent);color:#fff;padding:1.15rem 0;position:relative;z-index:3}
+.trust ul{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem 2.4rem;list-style:none;font-size:.95rem;font-weight:500}
+.trust li{display:flex;align-items:center;gap:.5rem}
+.trust svg{flex:none}
+
+/* ============ PROBLEM ============ */
+.problem{padding-block:var(--space)}
+.problem-box{max-width:44rem;margin-inline:auto;text-align:center}
+.problem-box p{font-size:1.12rem;color:var(--c-ink-soft);margin-bottom:1rem}
+.problem-box .pivot{font-family:var(--f-display);font-size:1.35rem;color:var(--c-accent);font-weight:700}
+
+/* ============ BENEFITS ============ */
+.benefits{background:var(--c-surface);padding-block:var(--space)}
+.b-row{display:grid;gap:1.6rem;align-items:center;margin-bottom:clamp(2.5rem,6vw,4.5rem)}
+.b-row:last-child{margin-bottom:0}
+.b-row img{border-radius:var(--radius);box-shadow:var(--shadow);aspect-ratio:4/3;object-fit:cover;width:100%}
+.b-num{font-family:var(--f-display);color:var(--c-gold);font-weight:700;font-size:.95rem;letter-spacing:1px;margin-bottom:.3rem}
+.b-row h3{font-size:1.45rem;margin-bottom:.5rem}
+.b-row p{color:var(--c-ink-soft)}
+@media(min-width:768px){
+  .b-row{grid-template-columns:1fr 1fr;gap:3.5rem}
+  .b-row:nth-child(even) .b-media{order:2}
+}
+
+/* ============ VIDEO BANNER ============ */
+.vbanner{position:relative;min-height:72svh;display:flex;align-items:flex-end;color:#fff;isolation:isolate;overflow:hidden}
+.vbanner video,.vbanner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.vbanner::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(28,10,9,.85) 0%,rgba(28,10,9,.15) 55%)}
+.vbanner .wrap{padding-block:3.5rem;text-align:center;width:100%}
+.vbanner h2{color:#fff}
+.vbanner p{color:rgba(255,255,255,.88);max-width:30rem;margin:0 auto 1.4rem}
+
+/* ============ INGREDIENTS ============ */
+.ingredients{padding-block:var(--space)}
+.ing-grid{display:grid;gap:2rem;align-items:center}
+.ing-grid img{border-radius:var(--radius);box-shadow:var(--shadow)}
+.ing-list{list-style:none;display:grid;gap:1.1rem}
+.ing-list li{display:flex;gap:.9rem;align-items:flex-start}
+.ing-dot{flex:none;width:42px;height:42px;border-radius:50%;background:#F3E6DA;display:flex;align-items:center;justify-content:center;color:var(--c-accent)}
+.ing-list b{display:block;font-size:1.05rem}
+.ing-list span{color:var(--c-ink-soft);font-size:.95rem}
+@media(min-width:768px){.ing-grid{grid-template-columns:1fr 1fr;gap:3.5rem}}
+
+/* ============ STEPS ============ */
+.steps{background:var(--c-surface);padding-block:var(--space)}
+.steps-grid{display:grid;gap:1.5rem;counter-reset:step}
+.step{background:var(--c-bg);border-radius:var(--radius);padding:1.8rem;text-align:center}
+.step-n{width:52px;height:52px;margin:0 auto .9rem;border-radius:50%;background:var(--c-accent);color:#fff;
+  font-family:var(--f-display);font-size:1.4rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step h3{font-size:1.15rem;margin-bottom:.35rem}
+.step p{color:var(--c-ink-soft);font-size:.95rem}
+@media(min-width:768px){.steps-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ============ REVIEWS ============ */
+.reviews{padding-block:var(--space)}
+.rev-grid{display:grid;gap:1.4rem}
+.rev-card{background:var(--c-surface);border-radius:var(--radius);padding:1.6rem;box-shadow:var(--shadow)}
+.rev-card .stars{font-size:.95rem;margin-bottom:.6rem;display:block}
+.rev-card p{font-size:.98rem;margin-bottom:1rem}
+.rev-card p b{color:var(--c-accent)}
+.rev-who{display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--c-ink-soft)}
+.rev-av{width:38px;height:38px;border-radius:50%;background:#F3E6DA;color:var(--c-accent);font-weight:700;
+  display:flex;align-items:center;justify-content:center;font-size:1rem}
+.rev-verified{color:var(--c-green);font-size:.8rem;display:flex;align-items:center;gap:.25rem}
+@media(min-width:768px){.rev-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ============ OFFER + FORM ============ */
+.offer{background:linear-gradient(180deg,#FFFFFF 0%,#FAF3EC 100%);padding-block:var(--space)}
+.offer-grid{display:grid;gap:2.5rem;align-items:start}
+@media(min-width:900px){.offer-grid{grid-template-columns:1fr 1fr;gap:3.5rem}}
+.offer-media{position:sticky;top:1.5rem}
+.offer-media img{border-radius:var(--radius);box-shadow:var(--shadow)}
+.form-card{background:var(--c-surface);border-radius:calc(var(--radius) + 6px);box-shadow:0 18px 45px rgba(42,26,22,.14);padding:1.8rem;border-top:5px solid var(--c-accent)}
+.form-card h3{font-size:1.35rem;text-align:center;margin-bottom:.3rem}
+.form-card .form-sub{text-align:center;color:var(--c-ink-soft);font-size:.92rem;margin-bottom:1.4rem}
+.bundles{display:grid;gap:.8rem;margin-bottom:1.5rem}
+.bundle{position:relative;display:flex;align-items:center;gap:.9rem;border:2px solid #EADFD5;border-radius:14px;padding:1rem;cursor:pointer;transition:border-color .15s,background .15s;background:#fff}
+.bundle input{accent-color:var(--c-accent);width:20px;height:20px;flex:none}
+.bundle .b-label b{display:block;font-size:1.02rem}
+.bundle .b-label span{font-size:.85rem;color:var(--c-ink-soft)}
+.bundle .b-price{margin-inline-start:auto;text-align:center}
+.bundle .b-price b{color:var(--c-accent);font-size:1.15rem;display:block;white-space:nowrap}
+.bundle .b-price s{color:#B9A99E;font-size:.82rem}
+.bundle.popular{border-color:var(--c-gold)}
+.bundle .pop-tag{position:absolute;top:-11px;inset-inline-start:14px;background:var(--c-gold);color:#3c2f05;font-size:.72rem;font-weight:700;padding:.1rem .6rem;border-radius:6px}
+.bundle:has(input:checked){border-color:var(--c-accent);background:#FDF6F4}
+.field{margin-bottom:1rem}
+.field label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.35rem}
+.field input,.field select{width:100%;padding:.85rem 1rem;border:1.5px solid #E2D6CB;border-radius:12px;
+  font-family:var(--f-body);font-size:1rem;background:#FDFCFA;color:var(--c-ink)}
+.field input:focus,.field select:focus{outline:2px solid var(--c-accent);outline-offset:1px;border-color:var(--c-accent)}
+.field .err{display:none;color:#B3261E;font-size:.83rem;margin-top:.3rem}
+.field.invalid input{border-color:#B3261E}
+.field.invalid .err{display:block}
+.form-card .btn{width:100%;font-size:1.2rem;padding:1.05rem}
+.total-line{display:flex;justify-content:space-between;font-weight:700;font-size:1.05rem;margin-bottom:1.1rem;
+  background:#FAF3EC;border-radius:10px;padding:.7rem 1rem}
+.cod-badges{display:flex;justify-content:center;gap:1.4rem;margin-top:1rem;font-size:.83rem;color:var(--c-ink-soft);flex-wrap:wrap}
+.success{display:none;text-align:center;padding:2.5rem 1rem}
+.success.show{display:block}
+.success .ok{width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;background:#E6F2E6;color:var(--c-green);display:flex;align-items:center;justify-content:center}
+.success h3{margin-bottom:.5rem}
+.success p{color:var(--c-ink-soft)}
+
+/* ============ GUARANTEE STRIP ============ */
+.guarantee{display:flex;align-items:center;gap:1rem;background:#FBF7EC;border:1px solid #EBDFC2;border-radius:var(--radius);padding:1.1rem 1.3rem;margin-top:1.5rem}
+.guarantee svg{flex:none;color:var(--c-gold)}
+.guarantee p{font-size:.92rem;color:var(--c-ink-soft)}
+.guarantee b{color:var(--c-ink)}
+
+/* ============ FAQ ============ */
+.faq{background:var(--c-surface);padding-block:var(--space)}
+.faq-list{max-width:44rem;margin-inline:auto}
+.faq details{border-bottom:1px solid #EADFD5}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;
+  padding:1.15rem .2rem;font-weight:700;font-size:1.02rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:1.5rem;color:var(--c-accent);transition:transform .2s;line-height:1}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .a{padding:0 .2rem 1.2rem;color:var(--c-ink-soft);font-size:.97rem}
+
+/* ============ FINAL CTA ============ */
+.final{position:relative;padding-block:var(--space);color:#fff;isolation:isolate;text-align:center;overflow:hidden}
+.final>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.final::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(28,10,9,.82)}
+.final h2{color:#fff}
+.final p{color:rgba(255,255,255,.85);max-width:30rem;margin:0 auto 1.6rem}
+
+/* ============ FOOTER ============ */
+footer{background:#20120F;color:rgba(255,255,255,.55);text-align:center;padding:1.6rem 1rem;font-size:.82rem}
+footer a{color:rgba(255,255,255,.7)}
+
+/* ============ STICKY BAR + WHATSAPP ============ */
+.sticky-bar{position:fixed;bottom:0;inset-inline:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  box-shadow:0 -6px 20px rgba(42,26,22,.12);padding:.6rem .9rem calc(.6rem + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:.8rem;transform:translateY(110%);transition:transform .3s ease}
+.sticky-bar.show{transform:none}
+.sticky-info b{font-size:.92rem;display:block;line-height:1.3}
+.sticky-info span{color:var(--c-accent);font-weight:700;font-size:.95rem}
+.sticky-bar .btn{margin-inline-start:auto;padding:.7rem 1.5rem;font-size:1rem;flex:none}
+@media(min-width:900px){.sticky-bar{display:none}}
+.wa{position:fixed;bottom:calc(84px + env(safe-area-inset-bottom));inset-inline-start:1rem;z-index:49;width:54px;height:54px;
+  border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+@media(min-width:900px){.wa{bottom:1.2rem}}
+</style>
+</head>
+<body>
+
+<!-- ██ HERO ██ -->
+<header class="hero" id="top">
+  <div class="hero-media">
+    <!-- Poster fallback shows instantly; video fades in when loaded -->
+    <video autoplay muted loop playsinline preload="metadata" poster="assets/oil-macro.webp">
+      <source src="assets/hero-video.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="badge-natural">✦ طبيعي 100% · وصفة مغربية أصيلة</span>
+      <h1>استرجعي كثافة شعرك وطوله مع <em>زيت المشاط الأحمر</em> الأصلي</h1>
+      <p class="lead">تركيبة تقليدية من الأعشاب المغربية تغذي الجذور بعمق، توقف التساقط وتحفز نمو شعر جديد أقوى وأكثر لمعانًا — من الأسابيع الأولى.</p>
+      <div class="rating">
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <!-- ⚠️ ضعي تقييمكم الحقيقي هنا -->
+        <span>4.8/5 حسب تقييمات زبوناتنا</span>
+      </div>
+      <div class="price-tag">
+        <span class="price-now"><bdi>99</bdi> <small>درهم</small></span>
+        <span class="price-old"><bdi>149 درهم</bdi></span>
+        <span class="price-save">وفّري 33%</span>
+      </div>
+      <a class="btn" href="#commande">اطلبي الآن — الدفع عند الاستلام</a>
+      <p class="btn-note">توصيل 24–48 ساعة لجميع المدن · بدون دفع مسبق</p>
+    </div>
+    <div class="b-media rv">
+      <img class="hero-shot" src="assets/hero-product-fixed.webp" alt="قنينة زيت المشاط الأحمر للشعر 250 مل" width="896" height="1152">
+    </div>
+  </div>
+</header>
+
+<!-- ██ TRUST BAR ██ -->
+<div class="trust">
+  <div class="wrap">
+    <ul>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M2 11h20"/></svg> الدفع عند الاستلام</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="12" rx="1"/><path d="M16 10h4l3 3v5h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="19" cy="18" r="2"/></svg> توصيل سريع 24–48 ساعة</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> منتج طبيعي 100%</li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0z"/><path d="M8 12l3 3 5-6"/></svg> فحص المنتج قبل الدفع</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ██ PROBLEM → PROMISE ██ -->
+<section class="problem">
+  <div class="wrap problem-box rv">
+    <p>شعر يتساقط مع كل تمشيطة… فراغات بدأت تبان… وجربتِ زيوتًا كثيرة بدون نتيجة تذكر؟</p>
+    <p>المشكل ليس في شعرك — بل في جذور لا تصلها التغذية الكافية.</p>
+    <p class="pivot">زيت المشاط الأحمر يغذي الجذور من العمق، فيتوقف التساقط وينمو الشعر من جديد.</p>
+  </div>
+</section>
+
+<!-- ██ BENEFITS ██ -->
+<section class="benefits">
+  <div class="wrap">
+    <h2 class="rv">لماذا تعشقه آلاف المغربيات؟</h2>
+    <p class="sub rv">أربعة أشياء يفعلها زيت المشاط لشعرك، بدون مواد كيميائية.</p>
+
+    <div class="b-row rv">
+      <div class="b-media"><img src="assets/oil-macro.webp" alt="قوام زيت المشاط الأحمر الغني" loading="lazy" width="1200" height="685"></div>
+      <div>
+        <div class="b-num">01</div>
+        <h3>يوقف التساقط من أول أسابيع</h3>
+        <p>تركيبته الغنية تقوي بصيلات الشعر وتثبتها، فيقل التساقط تدريجيًا وتلاحظين الفرق في المشط والوسادة.</p>
+      </div>
+    </div>
+
+    <div class="b-row rv">
+      <div class="b-media"><img src="assets/ingredients.webp" alt="أعشاب طبيعية: كركديه وحناء وقشور الجوز" loading="lazy" width="900" height="900"></div>
+      <div>
+        <div class="b-num">02</div>
+        <h3>يحفز نمو شعر جديد</h3>
+        <p>الأعشاب المغربية التقليدية تنشط الدورة الدموية في فروة الرأس، فتستيقظ البصيلات الخاملة ويبدأ شعر جديد في الظهور.</p>
+      </div>
+    </div>
+
+    <div class="b-row rv">
+      <div class="b-media"><img src="assets/hair-result.webp" alt="شعر طويل كثيف ولامع" loading="lazy" width="800" height="1096"></div>
+      <div>
+        <div class="b-num">03</div>
+        <h3>كثافة وطول ملحوظان</h3>
+        <p>مع الاستعمال المنتظم مرتين إلى ثلاث مرات في الأسبوع، يزداد شعرك كثافة وطولًا ويستعيد حيويته الطبيعية.</p>
+      </div>
+    </div>
+
+    <div class="b-row rv">
+      <div class="b-media"><img src="assets/hand-bottle-fixed.webp" alt="قنينة زيت المشاط في اليد" loading="lazy" width="800" height="1028"></div>
+      <div>
+        <div class="b-num">04</div>
+        <h3>لمعان ونعومة من أول استعمال</h3>
+        <p>يغلف الشعرة بطبقة مغذية تمنحها نعومة حريرية ولمعانًا صحيًا، بدون ثقل ولا ملمس دهني مزعج.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ██ VIDEO BANNER ██ -->
+<section class="vbanner">
+  <video autoplay muted loop playsinline preload="none" poster="assets/hair-result.webp">
+    <source src="assets/hair-video.mp4" type="video/mp4">
+  </video>
+  <div class="wrap rv">
+    <h2>شعر يتكلم عنك قبل أن تتكلمي</h2>
+    <p>هذا هو الشعر الذي تستحقينه: كثيف، لامع، وحي. ابدئي رحلتك اليوم.</p>
+    <a class="btn" href="#commande">أريد شعرًا أكثف — اطلبي الآن</a>
+  </div>
+</section>
+
+<!-- ██ INGREDIENTS ██ -->
+<section class="ingredients">
+  <div class="wrap">
+    <h2 class="rv">وصفة الجدات… بتركيز اليوم</h2>
+    <p class="sub rv">كل قنينة تحتوي على خلاصة أعشاب مغربية أصيلة، بدون بارابين وبدون سيليكون.</p>
+    <div class="ing-grid">
+      <img class="rv" src="assets/ingredients.webp" alt="مكونات زيت المشاط الطبيعية" loading="lazy" width="900" height="900">
+      <ul class="ing-list rv">
+        <li><span class="ing-dot">✿</span><div><b>المشاط (قشور الجوز)</b><span>السر التقليدي لتقوية الجذور وإيقاف التساقط.</span></div></li>
+        <li><span class="ing-dot">✿</span><div><b>الكركديه الأحمر</b><span>غني بمضادات الأكسدة، يحفز نمو الشعر ويمنحه لونه الدافئ.</span></div></li>
+        <li><span class="ing-dot">✿</span><div><b>الحناء الطبيعية</b><span>تغلف الشعرة وتحميها وتزيدها كثافة ولمعانًا.</span></div></li>
+        <li><span class="ing-dot">✿</span><div><b>زيوت نباتية مغذية</b><span>ترطب فروة الرأس وتغذي الشعر من الجذور حتى الأطراف.</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ██ HOW TO USE ██ -->
+<section class="steps">
+  <div class="wrap">
+    <h2 class="rv">3 خطوات بسيطة، مرتين في الأسبوع</h2>
+    <p class="sub rv">روتين لا يأخذ منك أكثر من دقائق.</p>
+    <div class="steps-grid">
+      <div class="step rv"><div class="step-n">1</div><h3>دلكي</h3><p>ضعي كمية صغيرة على فروة الرأس ودلكي بأطراف الأصابع 5 دقائق.</p></div>
+      <div class="step rv"><div class="step-n">2</div><h3>اتركيه يتغلغل</h3><p>اتركي الزيت ساعة على الأقل — أو ليلة كاملة لنتيجة أعمق.</p></div>
+      <div class="step rv"><div class="step-n">3</div><h3>اغسلي</h3><p>اغسلي شعرك بشامبو خفيف. كرري العملية 2–3 مرات أسبوعيًا.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ██ REVIEWS ██ -->
+<!-- ⚠️ نماذج توضيحية — عوّضيها بتقييمات حقيقية من زبوناتك (مع إذنهن) قبل إطلاق الإعلانات -->
+<section class="reviews">
+  <div class="wrap">
+    <h2 class="rv">ماذا تقول زبوناتنا؟</h2>
+    <p class="sub rv">تجارب حقيقية من مغربيات جربن زيت المشاط الأحمر.</p>
+    <div class="rev-grid">
+      <div class="rev-card rv">
+        <span class="stars">★★★★★</span>
+        <p>«كنت كنخسر شعر بزاف مع كل تمشيطة. من بعد شهر ونصف، <b>التساقط نقص بشكل واضح</b> والشعر ولا فيه لمعة زوينة.»</p>
+        <div class="rev-who"><span class="rev-av">س</span><div>سعاد م. — الدار البيضاء<br><span class="rev-verified">✓ شراء مؤكد</span></div></div>
+      </div>
+      <div class="rev-card rv">
+        <span class="stars">★★★★★</span>
+        <p>«ريحته خفيفة وماشي ثقيل على الشعر. بنتي عندها شعر رقيق و<b>بان فيه شعر جديد صغير</b> من الشهر الثاني.»</p>
+        <div class="rev-who"><span class="rev-av">ف</span><div>فاطمة الزهراء — مراكش<br><span class="rev-verified">✓ شراء مؤكد</span></div></div>
+      </div>
+      <div class="rev-card rv">
+        <span class="stars">★★★★☆</span>
+        <p>«الطلب وصلني في يومين والدفع عند الاستلام. <b>النعومة كتحس بيها من أول غسلة</b>، والتكثيف بغا شوية ديال الصبر.»</p>
+        <div class="rev-who"><span class="rev-av">خ</span><div>خديجة ب. — طنجة<br><span class="rev-verified">✓ شراء مؤكد</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ██ OFFER + COD FORM ██ -->
+<section class="offer" id="commande">
+  <div class="wrap">
+    <h2 class="rv">اختاري عرضك واطلبي الآن</h2>
+    <p class="sub rv">كلما زادت المدة، زادت النتيجة — أغلب زبوناتنا يخترن عرض القنينتين.</p>
+    <div class="offer-grid">
+      <div class="offer-media rv">
+        <img src="assets/trio-bottles-fixed.webp" alt="عروض زيت المشاط الأحمر" width="900" height="1157">
+        <div class="guarantee">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-5"/></svg>
+          <p><b>ضمان الفحص عند التسليم:</b> عايني الطلب قبل ما تخلصي. وإلا ما عجبكش، ما تاخديهش.</p>
+        </div>
+      </div>
+
+      <div class="form-card rv">
+        <div id="form-wrap">
+          <h3>سجلي طلبك — الدفع عند الاستلام</h3>
+          <p class="form-sub">املئي المعلومات وسنتصل بك لتأكيد الطلب</p>
+
+          <!--
+            ▼▼ FORM WIRING — اختر طريقة الربط ▼▼
+            الخيار 1 (Google Sheets): أنشئ Apps Script Web App واستبدل FORM_ENDPOINT برابطه.
+            الخيار 2 (Shopify): اربط الفورم بتطبيق COD مثل Releasit / EasySell في متجرك.
+            الخيار 3 (خدمة فورم): Formspree/Basin — ضع رابط النقطة النهائية في FORM_ENDPOINT.
+            حاليًا الفورم يعرض حالة النجاح فقط بدون إرسال (وضع تجريبي).
+          -->
+          <form id="cod-form" novalidate>
+            <div class="bundles" role="radiogroup" aria-label="اختاري العرض">
+              <label class="bundle">
+                <input type="radio" name="bundle" value="1x-99" data-total="99" data-label="قنينة واحدة">
+                <span class="b-label"><b>قنينة واحدة</b><span>تجربة شهر</span></span>
+                <span class="b-price"><b>99 درهم</b></span>
+              </label>
+              <label class="bundle popular">
+                <span class="pop-tag">الأكثر طلبًا</span>
+                <input type="radio" name="bundle" value="2x-169" data-total="169" data-label="قنينتان" checked>
+                <span class="b-label"><b>قنينتان</b><span>علاج شهرين + توصيل مجاني</span></span>
+                <span class="b-price"><b>169 درهم</b><s>198 درهم</s></span>
+              </label>
+              <label class="bundle">
+                <input type="radio" name="bundle" value="3x-229" data-total="229" data-label="3 قنينات">
+                <span class="b-label"><b>3 قنينات</b><span>علاج كامل + توصيل مجاني</span></span>
+                <span class="b-price"><b>229 درهم</b><s>297 درهم</s></span>
+              </label>
+            </div>
+
+            <div class="total-line"><span>المجموع (مع التوصيل):</span><span id="total"><bdi>169</bdi> درهم</span></div>
+
+            <div class="field">
+              <label for="f-name">الاسم الكامل</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required>
+              <span class="err">من فضلك أدخلي اسمك الكامل</span>
+            </div>
+            <div class="field">
+              <label for="f-phone">رقم الهاتف</label>
+              <input id="f-phone" name="phone" type="tel" inputmode="numeric" dir="ltr" style="text-align:end" autocomplete="tel" placeholder="06 XX XX XX XX" required>
+              <span class="err">أدخلي رقمًا صحيحًا، مثال: 0612345678</span>
+            </div>
+            <div class="field">
+              <label for="f-city">المدينة</label>
+              <input id="f-city" name="city" type="text" autocomplete="address-level2" required>
+              <span class="err">من فضلك أدخلي مدينتك</span>
+            </div>
+            <div class="field">
+              <label for="f-address">العنوان</label>
+              <input id="f-address" name="address" type="text" autocomplete="street-address" required>
+              <span class="err">من فضلك أدخلي عنوان التوصيل</span>
+            </div>
+
+            <button class="btn" type="submit" id="submit-btn">أؤكد طلبي — الدفع عند الاستلام</button>
+            <p class="btn-note">بدون أي دفع الآن · سنتصل بك للتأكيد قبل الإرسال</p>
+            <div class="cod-badges">
+              <span>🚚 توصيل 24–48 ساعة</span><span>💵 الدفع عند الاستلام</span><span>📞 تأكيد هاتفي</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="success" id="success">
+          <div class="ok"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 12l5 5L20 6"/></svg></div>
+          <h3>تم استلام طلبك بنجاح 🎉</h3>
+          <p>شكرًا لثقتك! فريقنا سيتصل بك خلال 24 ساعة لتأكيد الطلب، والتوصيل خلال 24–48 ساعة بعد التأكيد.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ██ FAQ ██ -->
+<section class="faq">
+  <div class="wrap">
+    <h2 class="rv">أسئلة تطرحها كل زبونة قبل الطلب</h2>
+    <p class="sub rv">إذا بقي عندك سؤال، راسلينا على واتساب.</p>
+    <div class="faq-list rv">
+      <details>
+        <summary>متى سألاحظ النتيجة؟</summary>
+        <p class="a">النعومة واللمعان من أول استعمالات. أما نقص التساقط فيظهر عادة بعد 3 إلى 5 أسابيع من الاستعمال المنتظم، والكثافة والنمو الجديد بعد شهرين إلى ثلاثة. الشعر ينمو بمعدله الطبيعي — لهذا ننصح بعلاج شهرين على الأقل.</p>
+      </details>
+      <details>
+        <summary>هل يناسب جميع أنواع الشعر؟</summary>
+        <p class="a">نعم — الجاف، الدهني، المصبوغ والمعالج. تركيبته طبيعية 100% وخالية من البارابين والسيليكون. إذا كانت فروة رأسك حساسة جدًا، جربي كمية صغيرة خلف الأذن أولًا.</p>
+      </details>
+      <details>
+        <summary>هل يصبغ الشعر باللون الأحمر؟</summary>
+        <p class="a">لا. اللون الأحمر يأتي من الكركديه والأعشاب الطبيعية، وهو يمنح انعكاسات دافئة خفيفة على الشعر الفاتح فقط عند الاستعمال المكثف، ولا يغير لون الشعر الداكن.</p>
+      </details>
+      <details>
+        <summary>كيف يتم التوصيل والدفع؟</summary>
+        <p class="a">التوصيل لجميع المدن المغربية خلال 24–48 ساعة بعد تأكيد الطلب هاتفيًا. الدفع نقدًا عند الاستلام، ويمكنك معاينة الطرد قبل الدفع.</p>
+      </details>
+      <details>
+        <summary>ماذا لو لم يعجبني المنتج عند الاستلام؟</summary>
+        <p class="a">ببساطة لا تدفعي. يمكنك فحص المنتج عند التسليم، وإذا لم يعجبك ترفضين الاستلام بدون أي مصاريف.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ██ FINAL CTA ██ -->
+<section class="final">
+  <img src="assets/hair-result.webp" alt="" loading="lazy" aria-hidden="true">
+  <div class="wrap rv">
+    <h2>شهران من الآن، ستتمنين لو بدأتِ اليوم</h2>
+    <p>قنينة واحدة، جذور أقوى، شعر أكثف. بدون دفع مسبق وبدون مخاطرة — عايني قبل ما تخلصي.</p>
+    <a class="btn" href="#commande">اطلبي الآن — الدفع عند الاستلام</a>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="year">2026</span> زيت المشاط الأحمر · جميع الحقوق محفوظة</p>
+</footer>
+
+<!-- ██ STICKY MOBILE BAR ██ -->
+<div class="sticky-bar" id="sticky-bar">
+  <div class="sticky-info"><b>زيت المشاط الأحمر</b><span>99 درهم بدل 149</span></div>
+  <a class="btn" href="#commande">اطلبي الآن</a>
+</div>
+
+<!-- ██ WHATSAPP — ⚠️ عوّضي الرقم برقمك ██ -->
+<a class="wa" href="https://wa.me/212600000000" target="_blank" rel="noopener" aria-label="تواصلي معنا عبر واتساب">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5.1-1.3A10 10 0 1012 2zm0 1.8a8.2 8.2 0 11-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0112 3.8zm-3.1 4c-.2 0-.5 0-.7.3-.2.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.8 2.2.9 2.6.7 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-2-1.2 7.5 7.5 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5v-.5L9.5 8.2c-.2-.4-.4-.4-.6-.4z"/></svg>
+</a>
+
+<!-- ═══ TRACKING PLACEHOLDERS — ضع معرفاتك الحقيقية ═══
+<script>
+  // Meta Pixel: fbq('init','PIXEL_ID'); fbq('track','PageView');
+  // TikTok Pixel: ttq.load('PIXEL_ID');
+  // Snap Pixel: snaptr('init','PIXEL_ID');
+  // ملاحظة: حدث Purchase يُطلق عند نجاح الطلب فقط (انظر أسفل)، ويُنصح بمرآة CAPI من السيرفر.
+</script>
+═══════════════════════════════════════════ -->
+
+<script>
+// Scroll reveal (respects prefers-reduced-motion)
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!reduce && 'IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+  }), { threshold: .05, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.rv').forEach(el => el.classList.add('on'));
+}
+
+// Sticky bar: show after hero, hide when the form is visible
+const bar = document.getElementById('sticky-bar');
+const hero = document.querySelector('.hero');
+const formSec = document.getElementById('commande');
+let heroGone = false, formSeen = false;
+const upd = () => bar.classList.toggle('show', heroGone && !formSeen);
+new IntersectionObserver(([e]) => { heroGone = !e.isIntersecting; upd(); }, { threshold: .05 }).observe(hero);
+new IntersectionObserver(([e]) => { formSeen = e.isIntersecting; upd(); }, { threshold: .12 }).observe(formSec);
+
+// Bundle selector → total
+const totalEl = document.getElementById('total');
+document.querySelectorAll('input[name="bundle"]').forEach(r =>
+  r.addEventListener('change', () => { totalEl.innerHTML = `<bdi>${r.dataset.total}</bdi> درهم`; }));
+
+// COD form validation + submit
+const form = document.getElementById('cod-form');
+const phoneRe = /^0[5-7]\d{8}$/;
+let sending = false;
+form.addEventListener('submit', async ev => {
+  ev.preventDefault();
+  if (sending) return;
+  let ok = true;
+  const check = (id, test) => {
+    const f = document.getElementById(id);
+    const bad = !test(f.value.trim());
+    f.closest('.field').classList.toggle('invalid', bad);
+    if (bad) ok = false;
+  };
+  check('f-name', v => v.length >= 3);
+  check('f-phone', v => phoneRe.test(v.replace(/[\s-]/g, '')));
+  check('f-city', v => v.length >= 2);
+  check('f-address', v => v.length >= 5);
+  if (!ok) return;
+
+  sending = true;
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'جارٍ إرسال الطلب…'; btn.disabled = true;
+
+  const sel = document.querySelector('input[name="bundle"]:checked');
+  const payload = {
+    name: document.getElementById('f-name').value.trim(),
+    phone: document.getElementById('f-phone').value.replace(/[\s-]/g, ''),
+    city: document.getElementById('f-city').value.trim(),
+    address: document.getElementById('f-address').value.trim(),
+    bundle: sel.dataset.label, total: sel.dataset.total + ' MAD',
+    page: location.href, ts: new Date().toISOString()
+  };
+
+  /* ▼ اربط نقطة النهاية هنا (انظر التعليق أعلى الفورم) ▼ */
+  const FORM_ENDPOINT = ''; // مثال: 'https://script.google.com/macros/s/XXXX/exec'
+  try {
+    if (FORM_ENDPOINT) {
+      await fetch(FORM_ENDPOINT, { method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    } else {
+      console.log('DEMO MODE — order payload:', payload);
+    }
+    document.getElementById('form-wrap').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+    bar.classList.remove('show');
+    // Tracking: fire conversion on SUCCESS only
+    // fbq('track','Purchase',{value: parseInt(sel.dataset.total), currency:'MAD'});
+    // ttq.track('CompletePayment'); snaptr('track','PURCHASE');
+    if (window.dataLayer) dataLayer.push({ event: 'cod_order', ...payload });
+  } catch (e) {
+    btn.textContent = 'أؤكدي طلبي — الدفع عند الاستلام'; btn.disabled = false; sending = false;
+    alert('وقع خطأ، حاولي مرة أخرى أو راسلينا على واتساب');
+  }
+});
+
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

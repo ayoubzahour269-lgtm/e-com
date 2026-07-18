@@ -43,7 +43,7 @@
         "video_asset": "mechat-hero-video.mp4",
         "badge": "علاج 3 أشهر · خصم 25%",
         "cta_label": "اطلبي الآن — الدفع عند الاستلام",
-        "social_text": ""
+        "social_text": "وصفة مغربية أصيلة · توصيل لجميع مدن المملكة"
       }
     },
     "lp_stats": {
@@ -314,7 +314,7 @@
           "type": "review",
           "settings": {
             "stars": 5,
-            "image_asset": "",
+            "image_asset": "mechat-ugc1.webp",
             "text": "كان شعري يتساقط مع كل تسريحة بشكل يقلقني. بعد شهر ونصف قلّ التساقط بوضوح وعادت له لمعة جميلة، والطلب وصل الرياض سريعًا.",
             "name": "أم ريان",
             "city": "الرياض"
@@ -324,7 +324,7 @@
           "type": "review",
           "settings": {
             "stars": 5,
-            "image_asset": "",
+            "image_asset": "mechat-ugc2.webp",
             "text": "رائحته خفيفة ولا يثقل الشعر إطلاقًا. ابنتي شعرها خفيف وبدأ يظهر لها شعر جديد صغير منذ الشهر الثاني. سنطلب عبوة أخرى بالتأكيد.",
             "name": "نورة ع.",
             "city": "جدة"
@@ -334,7 +334,7 @@
           "type": "review",
           "settings": {
             "stars": 4,
-            "image_asset": "",
+            "image_asset": "mechat-ugc3.webp",
             "text": "النعومة تشعرين بها من أول غسلة بصراحة، أما التكثيف فيحتاج إلى شيء من الصبر. الدفع عند الاستلام مريح جدًا.",
             "name": "أم فهد",
             "city": "الدمام"
@@ -559,6 +559,42 @@
         "subheading": "ثلاث قوارير من زيت المشاط الأحمر، كل قارورة تكفي شهرًا كاملًا من طقسك الأسبوعي. حرّكي الباك بإصبعك.",
         "image_asset": "mechat-pack-float.webp"
       }
+    },
+    "lp_offers": {
+      "type": "landing-offers",
+      "blocks": {
+        "of1": {
+          "type": "offer",
+          "settings": {
+            "qty_label": "١",
+            "title": "عبوة واحدة — ثلاث قوارير (علاج 90 يومًا)",
+            "price": "139 ر.س",
+            "old_price": "185 ر.س",
+            "note": "توصيل مجاني",
+            "badge": "",
+            "featured": false
+          }
+        },
+        "of2": {
+          "type": "offer",
+          "settings": {
+            "qty_label": "٢",
+            "title": "عبوتان — ست قوارير (لكِ ولمن تحبين)",
+            "price": "259 ر.س",
+            "old_price": "370 ر.س",
+            "note": "وفّري 111 ر.س + توصيل مجاني",
+            "badge": "الأفضل قيمة",
+            "featured": true
+          }
+        }
+      },
+      "block_order": [
+        "of1",
+        "of2"
+      ],
+      "settings": {
+        "heading": "اختاري عرضك — القيمة تزداد مع الكمية"
+      }
     }
   },
   "order": [
@@ -573,6 +609,7 @@
     "lp_steps",
     "lp_reviews",
     "lp_compare",
+    "lp_offers",
     "lp_guarantee",
     "lp_order",
     "lp_faq",

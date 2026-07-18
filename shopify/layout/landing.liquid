@@ -4,14 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page_title }}</title>
-  <meta name="description" content="زيت المشاط الأحمر المغربي الأصلي: باك 3 قنينات — يوقف التساقط ويكثف الشعر. الدفع عند الاستلام والتوصيل لجميع مدن المملكة.">
+  <meta name="description" content="{{ page_description | default: shop.description | escape }}">
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&family=El+Messiri:wght@600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ═══ LPX base layer — shared by all landing-* sections ═══ */
+    :root{
+      --lpx-dark:#10161d;
+      --lpx-hero-bg:linear-gradient(180deg,#1b242e 0%,#151c26 55%,#10161d 100%);
+      --lpx-wave:#faf7f2;
+      --lpx-gold:#c9a557;
+      --lpx-gold-light:#e9cf96;
+      --lpx-muted:#b9c2cd;
+      --lpx-star:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);
+    }
+    {%- if template.suffix == 'mechat-landing' -%}
+    :root{
+      --lpx-dark:#1c0d0e;
+      --lpx-hero-bg:linear-gradient(180deg,#2a1113 0%,#200e10 55%,#150a0b 100%);
+      --lpx-wave:#fdf5ef;
+      --lpx-gold:#c9a227;
+      --lpx-gold-light:#ecd9a0;
+      --lpx-muted:#d3bcb6;
+      --lpx-star:radial-gradient(rgba(236,217,160,.06) 1px, transparent 1.4px);
+    }
+    {%- endif -%}
+
+    body{ margin:0; font-family:'Tajawal',sans-serif; }
+
+    /* Scroll reveal */
+    .lpx-reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.22,.7,.3,1), transform .7s cubic-bezier(.22,.7,.3,1); }
+    .lpx-reveal.lpx-on{ opacity:1; transform:none; }
+
+    /* CTA shimmer — one slow pass, not a strobe */
+    .lpx-shimmer{ position:relative; overflow:hidden; }
+    .lpx-shimmer::after{ content:''; position:absolute; inset:0; transform:translateX(-130%);
+      background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+      animation:lpx-shimmer 5.5s ease-in-out infinite; pointer-events:none; }
+    @keyframes lpx-shimmer{ 0%,72%{ transform:translateX(-130%);} 88%,100%{ transform:translateX(130%);} }
+
+    /* Gentle ambient motion */
+    @keyframes lpx-float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-7px);} }
+    @keyframes lpx-glow{ 0%,100%{ opacity:.55;} 50%{ opacity:.95;} }
+    @keyframes lpx-pulse{ 0%,100%{ box-shadow:0 14px 30px -10px rgba(184,146,63,.55);} 50%{ box-shadow:0 16px 36px -8px rgba(184,146,63,.75);} }
+
+    /* Accessibility floor */
+    :where(a,button,input,select,summary):focus-visible{ outline:3px solid var(--lpx-gold); outline-offset:2px; border-radius:6px; }
+    @media (prefers-reduced-motion: reduce){
+      .lpx-reveal{ opacity:1; transform:none; transition:none; }
+      .lpx-shimmer::after{ animation:none; }
+      *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+      html{ scroll-behavior:auto; }
+    }
+  </style>
   {{ content_for_header }}
 </head>
 <body>
   {{ content_for_layout }}
+  <script>
+    (function(){
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var els = document.querySelectorAll('.lpx-reveal');
+      if (reduce || !('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('lpx-on'); }); return; }
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (!en.isIntersecting) return;
+          var d = parseInt(en.target.getAttribute('data-delay') || '0', 10);
+          setTimeout(function(){ en.target.classList.add('lpx-on'); }, d);
+          io.unobserve(en.target);
+        });
+      }, { threshold: .06, rootMargin: '0px 0px -4% 0px' });
+      els.forEach(function(e){ io.observe(e); });
+    })();
+  </script>
 </body>
 </html>

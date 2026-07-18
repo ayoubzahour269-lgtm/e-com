@@ -1,0 +1,120 @@
+{% comment %} Hero vert profond style RizqBio — image produit + bullets + CTA {% endcomment %}
+<div class="lph" dir="rtl">
+  <div class="lph__container">
+    <div class="lph__content">
+      <div class="lph__eyebrow lpx-reveal">{{ section.settings.eyebrow }}</div>
+      <h1 class="lph__title lpx-reveal" data-delay="90">{{ section.settings.title }}</h1>
+      <p class="lph__sub lpx-reveal" data-delay="180">{{ section.settings.subtitle }}</p>
+      <ul class="lph__bullets">
+        {% for block in section.blocks %}
+          <li class="lpx-reveal" data-delay="{{ forloop.index0 | times: 90 | plus: 270 }}" {{ block.shopify_attributes }}><span class="lph__check">✓</span>{{ block.settings.text }}</li>
+        {% endfor %}
+      </ul>
+      <div class="lph__pricing lpx-reveal" data-delay="600">
+        <span class="lph__price">{{ product.price | money }}</span>
+        {% if product.compare_at_price > product.price %}
+          <s class="lph__was">{{ product.compare_at_price | money }}</s>
+          {% assign saved = product.compare_at_price | minus: product.price %}
+          <span class="lph__save">وفّر {{ saved | money }}</span>
+        {% endif %}
+      </div>
+      <button class="lph__cta lpx-shimmer lpx-reveal" data-delay="700" onclick="(document.querySelector('easysell-form,[id*=easysell],product-form,form[action*=\'/cart/add\']')||document.body).scrollIntoView({behavior:'smooth'})">
+        {{ section.settings.cta_label }} ←
+      </button>
+      <div class="lph__chips lpx-reveal" data-delay="800">
+        <span>💵 الدفع عند الاستلام</span>
+        <span>🚚 توصيل مجاني 2-5 أيام</span>
+        <span>🔄 ضمان الاستبدال</span>
+      </div>
+    </div>
+    <div class="lph__media">
+      <div class="lph__imgframe">
+        {% if section.settings.video_asset != blank %}
+          <video autoplay muted loop playsinline
+            {% if section.settings.image_asset != blank %}poster="{{ section.settings.image_asset | asset_url }}"{% endif %}
+            style="width:100%;display:block">
+            <source src="{{ section.settings.video_asset | asset_url }}" type="video/mp4">
+          </video>
+        {% elsif section.settings.image != blank %}
+          <img src="{{ section.settings.image | image_url: width: 900 }}" alt="{{ product.title | escape }}" loading="eager">
+        {% elsif section.settings.image_asset != blank %}
+          <img src="{{ section.settings.image_asset | asset_url }}" alt="{{ product.title | escape }}" loading="eager">
+        {% elsif product.featured_image %}
+          <img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.title | escape }}" loading="eager">
+        {% endif %}
+        {% if section.settings.badge != blank %}
+          <span class="lph__badge">{{ section.settings.badge }}</span>
+        {% endif %}
+      </div>
+      {% if section.settings.social_text != blank %}<div class="lph__social">{{ section.settings.social_text }}</div>{% endif %}
+    </div>
+  </div>
+  <div class="lph__wave"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0,50 C240,95 480,95 720,60 C960,25 1200,25 1440,55 L1440,90 L0,90 Z" style="fill:var(--lpx-wave,#faf7f2)"/></svg></div>
+</div>
+
+<style>
+  .lph{ position:relative; background:var(--lpx-hero-bg,linear-gradient(180deg,#1b242e 0%,#151c26 55%,#10161d 100%)); color:#fff; padding:40px 0 110px; }
+  .lph::before{ content:''; position:absolute; inset:0; background-image:var(--lpx-star); background-size:26px 26px; pointer-events:none; }
+  .lph__media{ position:relative; }
+  .lph__media::before{ content:''; position:absolute; inset:8% 4%; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(201,165,87,.32), transparent 70%);
+    filter:blur(30px); animation:lpx-glow 4s ease-in-out infinite; pointer-events:none; }
+  .lph__container{ max-width:1120px; margin-inline:auto; padding-inline:20px;
+    display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center; }
+  .lph__eyebrow{ display:inline-block; background:rgba(201,165,87,.18); border:1px solid rgba(201,165,87,.45);
+    color:#e9cf96; font-weight:800; font-size:.82rem; border-radius:999px; padding:6px 16px; margin-bottom:14px; }
+  .lph__title{ font-size:2.1rem; font-weight:900; line-height:1.4; margin:0 0 10px; color:#fff; }
+  .lph__sub{ font-size:1.02rem; color:#c3ccd6; margin:0 0 18px; line-height:1.9; }
+  .lph__bullets{ list-style:none; margin:0 0 20px; padding:0; display:grid; gap:9px; }
+  .lph__bullets li{ display:flex; align-items:center; gap:10px; font-weight:600; font-size:.98rem; }
+  .lph__check{ width:24px; height:24px; flex:none; border-radius:50%; display:grid; place-items:center;
+    background:linear-gradient(135deg,#dcb96a,#c9a557); color:#2b1f06; font-weight:900; font-size:.8rem; }
+  .lph__pricing{ display:flex; align-items:baseline; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+  .lph__price{ font-family:'Cairo',sans-serif; font-size:2rem; font-weight:900; color:var(--lpx-gold-light,#e9cf96); }
+  .lph__was{ color:#8f9aa6; font-size:1.05rem; }
+  .lph__save{ background:#d64545; color:#fff; font-size:.8rem; font-weight:800; padding:4px 12px; border-radius:999px; }
+  .lph__cta{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.15rem;
+    background:linear-gradient(135deg,#dcb96a,#c9a557 55%,#b8923f); color:#2b1f06;
+    border:none; border-radius:999px; padding:16px 42px; cursor:pointer; width:100%; max-width:420px;
+    box-shadow:0 14px 30px -10px rgba(184,146,63,.6); transition:transform .18s ease, box-shadow .18s ease; }
+  .lph__cta:hover{ transform:translateY(-2px); box-shadow:0 18px 36px -10px rgba(184,146,63,.7); }
+  .lph__cta:active{ transform:translateY(1px); }
+  .lph__chips{ display:flex; gap:14px; flex-wrap:wrap; margin-top:16px; font-size:.82rem; color:#c3ccd6; font-weight:600; }
+  .lph__imgframe{ position:relative; border-radius:22px; overflow:hidden; animation:lpx-float 9s ease-in-out infinite;
+    border:3px solid rgba(201,165,87,.55); box-shadow:0 30px 70px -25px rgba(0,0,0,.55); }
+  .lph__imgframe img{ width:100%; display:block; }
+  .lph__badge{ position:absolute; top:14px; right:14px; background:#d64545; color:#fff;
+    font-weight:800; font-size:.92rem; padding:7px 18px; border-radius:999px; box-shadow:0 8px 20px -6px rgba(0,0,0,.4); }
+  .lph__social{ text-align:center; margin-top:12px; color:#e9cf96; font-weight:700; font-size:.9rem; }
+  .lph__wave{ position:absolute; bottom:-1px; inset-inline:0; line-height:0; }
+  .lph__wave svg{ width:100%; height:70px; display:block; }
+  @media(max-width:889px){
+    .lph{ padding:26px 0 90px; }
+    .lph__container{ grid-template-columns:1fr; gap:26px; }
+    .lph__media{ order:-1; }
+    .lph__title{ font-size:1.5rem; }
+    .lph__cta{ max-width:none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "LP — هيرو",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "الشارة العلوية", "default": "الأكثر مبيعًا لآلام الركبة 🔥" },
+    { "type": "text", "id": "title", "label": "العنوان", "default": "ارجع تقوم وتمشي وتصلي — بدون ما توقفك ركبتك" },
+    { "type": "textarea", "id": "subtitle", "label": "العنوان الفرعي", "default": "دعامة نوابض قوية ترفع الحمل عن مفصل الركبة" },
+    { "type": "image_picker", "id": "image", "label": "الصورة" },
+    { "type": "text", "id": "image_asset", "label": "أو اسم ملف من assets" },
+    { "type": "text", "id": "video_asset", "label": "فيديو من assets (له الأولوية)" },
+    { "type": "text", "id": "badge", "label": "شارة على الصورة", "default": "خصم 38%" },
+    { "type": "text", "id": "cta_label", "label": "نص الزر", "default": "اطلب الآن — الدفع عند الاستلام" },
+    { "type": "text", "id": "social_text", "label": "سطر الثقة تحت الصورة", "default": "⭐ 4.8/5 — من مئات الطلبات في المملكة" }
+  ],
+  "blocks": [
+    { "type": "bullet", "name": "نقطة", "settings": [ { "type": "text", "id": "text", "label": "النص", "default": "دعم فوري للركبة" } ] }
+  ],
+  "max_blocks": 5,
+  "presets": [ { "name": "LP — هيرو" } ]
+}
+{% endschema %}

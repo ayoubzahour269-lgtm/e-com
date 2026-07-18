@@ -1,0 +1,50 @@
+{% comment %} Barre de stats — compteurs animés sur fond sombre à motif {% endcomment %}
+<div class="lps" dir="rtl">
+  <div class="lps__container">
+    {% for block in section.blocks %}
+      <div class="lps__item lpx-reveal" data-delay="{{ forloop.index0 | times: 110 }}" {{ block.shopify_attributes }}>
+        <div class="lps__num">
+          {% if block.settings.prefix != blank %}<span class="lps__fix">{{ block.settings.prefix }}</span>{% endif %}
+          <span data-count="{{ block.settings.number }}">0</span>
+          {% if block.settings.suffix != blank %}<span class="lps__fix">{{ block.settings.suffix }}</span>{% endif %}
+        </div>
+        <div class="lps__label">{{ block.settings.label }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .lps{ background:var(--lpx-dark); background-image:var(--lpx-star); background-size:26px 26px; padding:34px 16px; border-block:1px solid rgba(201,165,87,.25); }
+  @media(min-width:750px){ .lps__container>div:nth-child(even){ transform:translateY(7px); } }
+  .lps__container{ max-width:1020px; margin-inline:auto; display:grid;
+    grid-template-columns:repeat({{ section.blocks.size | at_most: 4 }},1fr); gap:14px; text-align:center; }
+  .lps__num{ font-family:'Cairo',sans-serif; font-weight:900; font-size:1.9rem; color:var(--lpx-gold-light,#e9cf96); line-height:1.3; }
+  .lps__fix{ font-size:1.2rem; }
+  .lps__label{ color:var(--lpx-muted,#b9c2cd); font-size:.85rem; font-weight:600; margin-top:2px; }
+  @media(max-width:749px){
+    .lps__container{ grid-template-columns:repeat(2,1fr); gap:20px 10px; }
+    .lps__num{ font-size:1.5rem; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "LP — أرقامنا",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "رقم",
+      "settings": [
+        { "type": "text", "id": "prefix", "label": "قبل الرقم", "default": "+" },
+        { "type": "text", "id": "number", "label": "الرقم", "default": "2800" },
+        { "type": "text", "id": "suffix", "label": "بعد الرقم" },
+        { "type": "text", "id": "label", "label": "الوصف", "default": "طلب ناجح" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [ { "name": "LP — أرقامنا", "blocks": [ { "type": "stat" }, { "type": "stat" }, { "type": "stat" }, { "type": "stat" } ] } ]
+}
+{% endschema %}

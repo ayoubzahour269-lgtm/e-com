@@ -1,0 +1,66 @@
+{% comment %} Étapes d'utilisation — 3-4 étapes numérotées avec images {% endcomment %}
+<div class="lp-steps" dir="rtl">
+  <div class="lp-steps__container">
+    {% if section.settings.heading != blank %}
+      <h2 class="lp-steps__heading">{{ section.settings.heading }}</h2>
+      <div class="lpx-divider" style="margin-bottom:30px"><span class="d"></span></div>
+    {% endif %}
+    <div class="lp-steps__grid">
+      {% for block in section.blocks %}
+        <div class="lp-steps__card lpx-reveal" data-delay="{{ forloop.index0 | times: 130 }}" {{ block.shopify_attributes }}>
+          <div class="lp-steps__number">{{ forloop.index }}</div>
+          {% if block.settings.image != blank %}
+            <img class="lp-steps__img" src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="300" height="300">
+          {% elsif block.settings.image_asset != blank %}
+            <img class="lp-steps__img" src="{{ block.settings.image_asset | asset_url }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+          {% endif %}
+          <h3 class="lp-steps__title">{{ block.settings.title }}</h3>
+          {% if block.settings.text != blank %}
+            <p class="lp-steps__text">{{ block.settings.text }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .lp-steps { background: {{ section.settings.bg_color }}; padding: 40px 16px; }
+  .lp-steps__container { max-width: 960px; margin: 0 auto; text-align: center; }
+  .lp-steps__heading { font-size: 1.6rem; font-weight: 800; margin: 0 0 28px; }
+  .lp-steps__grid { display: grid; grid-template-columns: repeat({{ section.blocks.size | at_most: 4 }}, 1fr); gap: 20px; }
+  .lp-steps__card { position: relative; background: #fff; border-radius: 14px; padding: 26px 14px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .lp-steps__number { position: absolute; top: -14px; right: 50%; transform: translateX(50%); width: 32px; height: 32px; border-radius: 50%; background: {{ section.settings.accent_color }}; color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .lp-steps__img { width: 100%; max-width: 220px; border-radius: 10px; margin: 6px auto 10px; display: block; }
+  .lp-steps__title { font-size: 1rem; font-weight: 700; margin: 0 0 6px; }
+  .lp-steps__text { font-size: 0.86rem; color: #555; margin: 0; line-height: 1.6; }
+  @media (min-width: 750px) { .lp-steps__grid > div:nth-child(2) { transform: translateY(14px); } }
+  @media (max-width: 749px) { .lp-steps__grid { grid-template-columns: 1fr; gap: 26px; } .lp-steps__heading { font-size: 1.3rem; } }
+</style>
+
+{% schema %}
+{
+  "name": "LP — خطوات الاستخدام",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "العنوان", "default": "طريقة الاستخدام" },
+    { "type": "color", "id": "bg_color", "label": "لون الخلفية", "default": "#f7f5f2" },
+    { "type": "color", "id": "accent_color", "label": "لون الأرقام", "default": "#0e7a4a" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "خطوة",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "الصورة" },
+        { "type": "text", "id": "image_asset", "label": "أو اسم ملف من assets" },
+        { "type": "text", "id": "title", "label": "العنوان", "default": "الخطوة" },
+        { "type": "textarea", "id": "text", "label": "الوصف" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    { "name": "LP — خطوات الاستخدام", "blocks": [ { "type": "step" }, { "type": "step" }, { "type": "step" } ] }
+  ]
+}
+{% endschema %}

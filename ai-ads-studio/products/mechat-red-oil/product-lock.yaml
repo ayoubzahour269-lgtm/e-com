@@ -1,0 +1,168 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// PRODUCT IDENTITY LOCK  —  ai-ads-studio product registry
+// Schema: product-lock/v2   (PRODUCT-AGNOSTIC — same schema for every future product)
+//
+// This file is the SINGLE SOURCE OF TRUTH for what the product physically IS.
+// Every image / video / 3D / banner the studio produces MUST reproduce this
+// exactly. The product is NEVER described-then-redrawn from text alone; it is
+// reference-conditioned on the real photos in ./references/ (see reference-manifest).
+//
+// AUTHORED FROM: the real packshots supplied by the owner (white bg + magenta
+// chroma-key cutout). These SUPERSEDE every render previously in /assets, which
+// had DRIFTED (wrong shape, wrong label, invented «الأحمر», moved seal). Those
+// renders are derivatives, NOT identity truth — see reference-manifest `forbidden`.
+//
+// Hex values below are eyeball-measured and marked `verify_by_sample: true`.
+// Skill 40 (product-identity-onboarding) MUST pixel-sample the canonical file and
+// tighten each to ΔE ≤ 3 before the first paid generation.
+// ─────────────────────────────────────────────────────────────────────────────
+meta:
+  slug: mechat-red-oil
+  marketing_name_ar: "زيت المشاط الأحمر للشعر"   # how ADS/landing copy may refer to it
+  on_label_name_ar: "زيت المشاط للشعر"            # what is PHYSICALLY PRINTED on the bottle
+  name_en: "Red Mechat Hair Oil"
+  sku: SA04050100M300
+  net_volume: "250 ml"                            # printed on label
+  category: hair-oil / cosmetic
+  schema_version: product-lock/v2
+  status: LOCKED
+  canonical_reference: references/01-front-white.png   # the ONE truth (owner-supplied)
+  # IMPORTANT naming nuance the fidelity gate enforces:
+  #   ad & landing COPY may say «المشاط الأحمر» (the red mechat) — that is marketing.
+  #   the physical LABEL must remain «زيت المشاط للشعر». NEVER paint «الأحمر» onto
+  #   the bottle. Marketing redness lives in overlays/voice, not on the vessel.
+
+vessel:
+  type: cylindrical PET bottle, tall & slim, round cross-section
+  body: straight smooth cylindrical walls (NO ribbing / NO facets on the body)
+  shoulder: gently rounded shoulder into a short neck
+  neck: short, clear; oil fill-line + headspace air-gap visible through it
+  base: flat, subtle heel radius
+  material: clear colourless transparent PET (oil colour reads through the wall)
+  proportions:                                    # ratios, resolution-independent
+    total_height_to_body_diameter: 2.35           # tall/slim — NOT square, NOT squat
+    cap_height_fraction_of_total: 0.18
+    label_panel_vertical_span: [0.40, 0.88]       # fraction of BODY height (bottom-anchored)
+    fill_level_fraction: 0.88                      # ~12% headspace — DO keep the air gap
+  # HARD: this is a CYLINDER. The square/rounded-rectangular bottle in the old
+  # /assets renders is a DIFFERENT, WRONG product. Never generate a square vessel.
+
+cap:
+  form: cylindrical screw cap, flat top
+  color: white (semi-matte)
+  detail: fine VERTICAL ribbing / knurling around the side
+  diameter_vs_body: slightly narrower than body, seated on the neck
+  height_fraction_of_total: 0.18
+  liner_visible: thin clear thread/neck band visible below the cap
+
+liquid:
+  identity: warm reddish-brown hair oil, translucent (mahogany / dark amber)
+  gradient: light warm amber at the thin backlit neck → deep brown-red in the mass
+  surface: visible meniscus + clean headspace at the shoulder
+  clarity: translucent, lightly viscous; gentle internal light transmission
+  # CORRECTION vs old renders: the real oil is BROWN-AMBER-RED, not bright ruby/garnet.
+  # Do not render a bright cranberry/ruby fluid.
+
+label:
+  substrate: single white wrap label, matte, rounded-corner rectangle on the front
+  background_color: white
+  elements_top_to_bottom:
+    - id: swoosh
+      desc: >-
+        dynamic RED ribbon/swoosh sweeping diagonally (higher at right, dipping
+        left), edged with a thin GOLD pinstripe; a second slimmer red curve
+        accompanies it. Occupies top ~22% of the label.
+    - id: natural_seal
+      position: left side, just under the swoosh
+      desc: circular scalloped GOLD badge
+      text_latin: "100% natural"
+      text_ar: "طبيعي"
+    - id: brand_lockup           # RTL, red — the hero
+      lines:
+        - { text_ar: "زيت",   weight: regular, size: small,  note: reads first (RTL, upper) }
+        - { text_ar: "المشاط", weight: bold,    size: XL,     note: HERO WORD, largest }
+        - { text_ar: "للشعر",  weight: medium,  size: medium, note: lower-left of المشاط }
+      forbidden_on_label: ["الأحمر"]   # NOT printed on the physical bottle
+    - id: benefits              # dark brown/near-black Arabic, right-lower cluster
+      lines_ar:
+        - "تركيبة طبيعية"
+        - "تقوي الشعر"
+        - "تغذيه وتكثيف الشعر"
+      note: transcribe EXACT printed glyphs from canonical at onboarding (may differ slightly)
+    - id: volume
+      text: "250 ml"
+      position: lower-left of label, dark text
+  wrap: label wraps the full cylinder; on the front the panel reads as above
+
+palette:                          # provisional — verify_by_sample against canonical
+  verify_by_sample: true
+  oil_highlight:  "#B4652A"
+  oil_mid:        "#7E2E14"
+  oil_deep:       "#3A1206"
+  cap_white:      "#F4F2EF"
+  label_white:    "#FFFFFF"
+  brand_red_text: "#C41A1A"       # «المشاط» and brand lockup
+  swoosh_maroon:  "#9A1B1E"
+  gold:           "#C7A233"       # seal + swoosh pinstripe
+  benefit_ink:    "#2A1A16"
+
+typography:
+  script: Arabic (RTL)
+  note: >-
+    label glyphs are part of the PRODUCT and are reproduced photographically via
+    reference-conditioning — they are NOT re-typeset by a model. Ad/overlay Arabic
+    (separate from the label) uses El Messiri (display) + Tajawal (text), added in
+    post by the typography-compositor, never generated inside the image model.
+
+# ── WHAT MAY NEVER CHANGE (hard fidelity contract) ──────────────────────────────
+do_not_alter:
+  - cylindrical tall/slim vessel shape & proportions (never square/squat)
+  - white vertically-ribbed screw cap
+  - clear PET wall + visible oil fill-line & headspace air-gap
+  - oil colour = warm reddish-brown amber (never bright ruby/garnet)
+  - label: white bg, diagonal red swoosh + gold pinstripe
+  - gold «100% natural / طبيعي» seal on the LEFT of the label
+  - brand lockup «زيت / المشاط / للشعر» in red — and NO «الأحمر» on the label
+  - the three benefit lines + «250 ml», exact printed Arabic glyphs
+  - relative size hierarchy & positions of all label elements
+  - do not add, remove, translate, or restyle any printed label element
+
+# ── WHAT THE STUDIO IS FREE TO CREATE AROUND THE PRODUCT (scene-only) ───────────
+allowed_variation:
+  - background / environment / set
+  - lighting mood, colour of light, time-of-day
+  - props (hibiscus, henna, oils, fabrics, hair, hands)
+  - camera angle & distance — WITHIN limits that keep the front label true & legible
+  - reflections, contact shadows, caustics, condensation
+  - grouping: a 3-pack = three IDENTICAL canonical bottles (never a re-labeled variant)
+
+# ── HOW THE PRODUCT ENTERS EVERY GENERATION (never text-to-image) ───────────────
+reference_conditioning:
+  default_route: R1-product-real-world-ai      # keep the real cutout, generate only the world
+  routes:
+    R1-product-real-world-ai:
+      use_when: any product-hero asset (image ad, banner, LP hero, packshot)
+      method: composite the real magenta-chroma cutout → AI background-replace + relight + shadow
+      source_ref: references/02-front-chroma-magenta.png
+      fidelity: MAXIMUM (product pixels are the real photo)
+    R2-reference-edit:
+      use_when: product must be re-posed/re-lit beyond compositing
+      method: image-to-image / edit / inpaint conditioned on canonical, label region preserved
+      source_ref: references/01-front-white.png
+      allowed_models_tag: [i2i, edit, inpaint, subject-lock]   # see config/kie-models.yaml
+    R3-image-to-video:
+      use_when: motion (video ad, LP microvideo, 3D-look rotation)
+      method: animate an APPROVED keyframe that already contains the real product
+      note: single-front only → limit to label-face-on micro-moves; full 360° needs more angles
+  forbidden:
+    - text-to-image generation of the product from a written description
+    - using any /assets render as an identity source (all have drifted)
+
+fidelity_gate:                    # enforced by skill 41 (product-fidelity-checker)
+  ship_threshold: 95              # 0–100; below → auto-reject & regenerate, no human check
+  hard_fail_any:                  # any one of these failing = instant reject regardless of score
+    - vessel shape wrong (e.g. square)
+    - label text altered / «الأحمر» painted on / benefit lines wrong
+    - seal missing or moved off the left
+    - oil rendered bright ruby instead of brown-amber
+  color_tolerance_deltaE: 3

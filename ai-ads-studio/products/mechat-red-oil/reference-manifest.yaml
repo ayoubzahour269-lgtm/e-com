@@ -1,0 +1,76 @@
+# Reference Manifest — Mechat Red Oil
+# Maps every real reference photo to the asset types / angles / routes that use it.
+# The format-router (skill 31) reads this to pick which reference feeds each generation.
+# Schema: reference-manifest/v2  (product-agnostic)
+
+product: mechat-red-oil
+canonical: 01-front-white          # the ONE identity truth
+
+# ── Reference slots ─────────────────────────────────────────────────────────────
+# status: present | AWAITING_UPLOAD | optional
+references:
+  - id: 01-front-white
+    file: references/01-front-white.png
+    kind: packshot / front / white-bg
+    status: AWAITING_UPLOAD          # owner supplied it in chat 2026-07-20; save the file here
+    role: canonical identity truth; source for R2 reference-edit
+    angle: front (0°)
+
+  - id: 02-front-chroma-magenta
+    file: references/02-front-chroma-magenta.png
+    kind: packshot / front / magenta chroma-key (cutout-ready)
+    status: AWAITING_UPLOAD          # owner supplied it in chat 2026-07-20; save the file here
+    role: PRIMARY for R1 product-real-world-ai (clean mask → composite into any scene)
+    angle: front (0°)
+    notes: ideal — subject isolates cleanly; use for the highest-fidelity, lowest-cost route
+
+  - id: 02-oil-color-macro
+    file: references/02-oil-color-macro.webp
+    kind: oil texture/colour macro
+    status: present
+    role: oil colour + viscosity reference ONLY (verify it matches brown-amber lock; ignore if it drifts)
+
+  # ── angle slots ready for full 360° 3D (drop files to activate) ──
+  - id: 10-back
+    file: references/10-back.png
+    kind: packshot / back
+    status: optional / AWAITING_UPLOAD
+    role: unlocks faithful back-facing shots
+    angle: back (180°)
+  - id: 11-profile-left
+    file: references/11-profile-left.png
+    status: optional / AWAITING_UPLOAD
+    angle: left (270°)
+  - id: 12-profile-right
+    file: references/12-profile-right.png
+    status: optional / AWAITING_UPLOAD
+    angle: right (90°)
+  - id: 13-top
+    file: references/13-top.png
+    status: optional / AWAITING_UPLOAD
+    role: unlocks top-down / cap detail
+    angle: top
+
+# ── Routing: which reference + route per asset family ───────────────────────────
+routing:
+  image-ad:        { route: R1, ref: 02-front-chroma-magenta }
+  banner:          { route: R1, ref: 02-front-chroma-magenta }
+  3d-render:       { route: R1, ref: 02-front-chroma-magenta, note: single-front → face-on; more angles → true turntable }
+  lp-hero-image:   { route: R1, ref: 02-front-chroma-magenta }
+  lp-section-image:{ route: R1, ref: 02-front-chroma-magenta }
+  lp-3d-banner:    { route: R3, ref: 01-front-white, note: label-face-on micro-rotation only until back/profile provided }
+  lp-microvideo:   { route: R3, ref: 02-front-chroma-magenta }
+  hero-video-ad:   { route: R3, ref: 02-front-chroma-magenta, note: animate approved keyframe; product never re-drawn per frame }
+
+# ── 360°/3D capability gate ─────────────────────────────────────────────────────
+rotation_capability:
+  current: face-on micro-move only          # single front reference
+  to_unlock_full_360: [10-back, 11-profile-left, 12-profile-right, 13-top]
+  rule: never invent hidden faces of the bottle; if an angle isn't referenced, don't turn to it
+
+# ── ACTION REQUIRED FROM OWNER ──────────────────────────────────────────────────
+todo_owner:
+  - Save the two chat-supplied real images into references/ as:
+      01-front-white.png            (white background packshot)
+      02-front-chroma-magenta.png   (magenta chroma-key cutout)
+  - (optional, unlocks 360°/3D) add 10-back / 11-profile-left / 12-profile-right / 13-top

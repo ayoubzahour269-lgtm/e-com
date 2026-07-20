@@ -1,0 +1,425 @@
+# =============================================================================
+# AI ADS STUDIO — GLOBAL STUDIO CONFIGURATION
+# config/studio.config.yaml
+# -----------------------------------------------------------------------------
+# Machine-readable global knobs, thresholds, and defaults for the whole studio.
+# This is DATA, not reasoning: skills, prompt-builders, and the quality gate read
+# these values; no prose logic lives here (ARCHITECTURE.md §2.1, Config layer).
+#
+# AUTHORITY: STUDIO-BIBLE.md is the single source of truth. Every value below
+# traces to a Bible section (cited inline as "Bible §N"). If this file ever
+# disagrees with the Bible, THE BIBLE WINS and this file is regenerated
+# (ARCHITECTURE.md §10). Changing config never changes reasoning logic.
+#
+# SIBLING CONFIG (each owns one concern — this file owns global defaults only):
+#   markets.yaml        → KSA/UAE/Oman/Egypt culture + language localization
+#   platforms.yaml      → Meta/TikTok/Snap specs, safe zones, hook windows
+#   model-adapters.yaml → Kie/Veo/Kling/Runway/PixVerse capability matrix
+#   brand/mechat-red-oil.brand.yaml → the flagship immutable product lock
+#
+# CONVENTIONS: professional agency voice; no placeholders, no TODO (Bible §2).
+# Any Arabic term carries Latin transliteration + English gloss on first use.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# studio — framework identity & governing principles (Bible §0)
+# -----------------------------------------------------------------------------
+studio:
+  name: "AI Ads Studio"                 # framework name (Bible §0)
+  version: "1.0.0"                      # semantic version of this configuration
+  last_updated: "2026-07-20"            # ISO date of the last edit to this file
+  source_of_truth: "STUDIO-BIBLE.md"    # the keystone; this file is subordinate to it
+
+  # One-line mandate (Bible §0). Kept here so any tool that loads config can echo intent.
+  purpose: >-
+    Produce cinematic, indistinguishable-from-real luxury beauty video ads for
+    Meta / TikTok / Snapchat across KSA · UAE · Oman · Egypt, spending the
+    minimum AI video-generation credits — ideally ONE generation per approved concept.
+
+  # The three non-negotiable priorities, in STRICT order (Bible §0). Every knob
+  # below serves these three, in this order. Realism outranks conversion, which
+  # outranks cost — a beautiful concept that betrays the AI is rejected.
+  priorities:
+    - "1-realism"      # no visible AI artifacts; must look filmed, not generated
+    - "2-conversion"   # every frame earns Scroll-Stop → Hook → Hold → CTR → CVR → ROAS
+    - "3-cost"         # Claude reasons/scores/QA-gates BEFORE any model call; one prompt → one generation
+
+  # Operating principle, verbatim (Bible §0). A gate on all spend.
+  operating_principle: >-
+    Reason like a $500k creative agency, spend like a startup. Never send a
+    prompt to a video model until every quality gate is green.
+
+
+# -----------------------------------------------------------------------------
+# defaults — global output defaults applied to every cut (Bible §5, §6.1)
+# All cuts are 9:16, 1080×1920+, 24–30 fps, sound-on design / sound-off legible.
+# -----------------------------------------------------------------------------
+defaults:
+
+  aspect_ratio: "9:16"                  # vertical full-bleed, all platforms (Bible §5)
+
+  # Clip length. 8 s is the single-generation primary cut (Bible §6.1). The
+  # allowed band 8–15 s is the Meta duration window (Bible §5). The 13 s
+  # "director's cut" is a 2-stitched-segment option used ONLY when budget allows
+  # (Bible §6.2) — otherwise ship the 8 s primary.
+  duration_seconds:
+    default: 8                          # the primary single-generation cut (Bible §6.1)
+    min: 8                              # never shorter than the primary cut
+    max: 15                             # upper bound of the platform duration window (Bible §5)
+    directors_cut: 13                   # optional 2-segment stitch (Bible §6.2); budget-gated
+
+  # Frame rate. 24 fps is the film cadence and reads as "filmed, not generated"
+  # (serves priority #1, Realism). 24–30 fps is the allowed band (Bible §5).
+  fps:
+    default: 24                         # cinematic film cadence (Realism-first)
+    min: 24                             # lower bound (Bible §5)
+    max: 30                             # upper bound (Bible §5)
+
+  # Resolution. 1080×1920 is the FLOOR ("1080×1920+", Bible §5). Always request
+  # the highest resolution the target model natively supports (model-adapters.yaml);
+  # never deliver below the floor.
+  resolution:
+    min_width: 1080                     # hard floor width  (Bible §5)
+    min_height: 1920                    # hard floor height (Bible §5)
+    policy: "prefer the highest resolution the target model natively supports; never below 1080x1920"
+
+  # Safe zones for platform UI chrome. Keep key content (product, face, CTA,
+  # overlays) inside these margins (Bible §5, §9).
+  safe_margins:
+    top_pct: 14                         # reserve top ~14% for platform UI (Bible §5)
+    bottom_pct: 20                      # reserve bottom ~20% for captions/CTA sticker (Bible §5)
+    keep_key_content_in_center: true    # hook subject + product + CTA stay center-safe (Bible §5)
+
+  # Sound strategy: designed sound-on for delight, but the story must read fully
+  # with sound OFF — overlays carry the narrative (Bible §5, §6.5).
+  sound:
+    design_sound_on: true               # oud/qanun luxe motif, ~70–85 BPM feel (Bible §6.5)
+    legible_sound_off: true             # overlays carry the story with audio muted (Bible §5)
+
+  # Localization default: elegant Modern Standard Arabic (فصحى, "fuṣḥā" =
+  # classical/standard Arabic) reads premium and pan-Gulf for the primary cut; a
+  # Khaleeji-leaning spoken VO variant is offered for TikTok/Snap (Bible §2, §5).
+  # RTL layout; never ship machine translation.
+  language:
+    primary: "ar-MSA"                   # elegant MSA (فصحى / fuṣḥā) — the default premium register
+    spoken_variant: "ar-Khaleeji"       # Gulf-spoken VO variant for TikTok/Snap (Bible §5)
+    direction: "rtl"                    # right-to-left Arabic (Bible §3 fonts)
+    forbid_machine_translation: true    # no awkward MT artifacts, ever (Bible §5)
+    forbid_darija_egyptian_slang_in_saudi_cut: true  # keep the primary Saudi cut in MSA (Bible §5)
+    require_translit_and_gloss_on_first_use: true    # every Arabic line: translit + English gloss (Bible §2)
+
+  # Compliance / taste defaults enforced on every cut (Bible §5 culture lock).
+  culture:
+    modest_aspirational_restrained: true    # elegant, tasteful, never provocative (Bible §5)
+    hair_is_the_hero: true                  # hair shown as luxurious texture/movement/macro (Bible §5)
+    provide_hijab_styled_hair_ab_pair: true # always document a modest / styled-hair A/B alternative (Bible §5)
+    forbid: ["alcohol cues", "immodesty", "religious imagery as decoration",
+             "fear-mongering about the body", "fake medical claims"]  # Bible §5
+
+
+# -----------------------------------------------------------------------------
+# target_markets — KSA primary, then UAE · Oman · Egypt (Bible §3, §5)
+# Deep culture/language/offer localization lives in markets.yaml; only the
+# global routing + priority live here. Non-KSA offer prices are NOT invented —
+# the Bible locks a price for KSA only (139 SAR). Other markets localize the
+# offer in markets.yaml; do not fabricate numbers here (Bible §3).
+# -----------------------------------------------------------------------------
+target_markets:
+  primary: "sa"                         # Saudi Arabia is the primary market (Bible §3)
+  # Deep localization dossiers (idiom, wardrobe, taboos, dialect-vs-MSA):
+  details_ref: "config/markets.yaml"    # market culture + language localization
+  culture_knowledge_ref: "knowledge/gulf-culture/"   # saudi / uae / oman / egypt
+  list:
+  - id: "sa"                            # Saudi Arabia — PRIMARY market (Bible §3)
+    name: "Saudi Arabia (KSA)"
+    primary: true                       # the default cut is authored for KSA first
+    currency: "SAR"                     # Saudi Riyal — the market with the locked price
+    offer_priced_here: true             # 139 SAR / 3-pack is the KSA-locked offer (Bible §3)
+    dialect_note: "primary cut in MSA; Khaleeji-spoken VO variant for TikTok/Snap"
+  - id: "ae"                            # United Arab Emirates (Bible §3)
+    name: "United Arab Emirates (UAE)"
+    primary: false
+    currency: "AED"                     # UAE Dirham
+    offer_priced_here: false            # localize offer in markets.yaml; do not invent a price
+    dialect_note: "MSA primary; Gulf-spoken variant available"
+  - id: "om"                            # Oman (Bible §3)
+    name: "Oman"
+    primary: false
+    currency: "OMR"                     # Omani Rial
+    offer_priced_here: false            # localize offer in markets.yaml; do not invent a price
+    dialect_note: "MSA primary; Gulf-spoken variant available"
+  - id: "eg"                            # Egypt (Bible §3)
+    name: "Egypt"
+    primary: false
+    currency: "EGP"                     # Egyptian Pound
+    offer_priced_here: false            # localize offer in markets.yaml; do not invent a price
+    dialect_note: "MSA primary; keep Egyptian slang OUT of the Saudi cut (Bible §5)"
+
+
+# -----------------------------------------------------------------------------
+# target_platforms — Meta · TikTok · Snapchat (Bible §5)
+# Full placement specs, safe zones, and native energy notes live in
+# platforms.yaml; the global list + hook windows live here. All are 9:16,
+# sound-on design / sound-off legible.
+# -----------------------------------------------------------------------------
+target_platforms:
+  specs_ref: "config/platforms.yaml"    # per-placement specs, safe zones, hook windows
+  list:
+  - id: "meta"                          # Facebook/Instagram Reels & Stories (Bible §5)
+    name: "Meta (Reels / Stories)"
+    hook_window_seconds: [0, 3]         # land the hook within 0–3 s (Bible §5)
+    cta: "CTA sticker + on-frame CTA"   # Bible §5
+  - id: "tiktok"                        # TikTok (Bible §5)
+    name: "TikTok"
+    hook_window_seconds: [0, 2]         # 0–2 s pattern interrupt; native/authentic energy (Bible §5)
+    cta: "captions on; trend-aware sound; strong 2-second reason to stay"  # Bible §5
+  - id: "snapchat"                      # Snapchat (Bible §5)
+    name: "Snapchat"
+    hook_window_seconds: [0, 1.5]       # 0–1.5 s stop; fast payoff (Bible §5)
+    cta: "Swipe-Up/CTA affordance; brand + offer legible in first & last second"  # Bible §5
+
+
+# -----------------------------------------------------------------------------
+# quality_gate — the hard gate that blocks any model call (Bible §7)
+# Score 10 axes 0–100. SHIP requires weighted total ≥ 95 AND no single axis < 90.
+# Below threshold → auto-improve and re-score; NEVER generate. Full rubric &
+# per-axis weights live in quality/scoring-rubric.md (weights are NOT duplicated
+# here to avoid drift). ARCHITECTURE.md §5 details the control loop.
+# -----------------------------------------------------------------------------
+quality_gate:
+  ship_threshold: 95                    # minimum weighted total to authorize a generation (Bible §7)
+  min_axis: 90                          # per-axis floor; ANY axis < 90 blocks, independently (Bible §7)
+  auto_improve: true                    # sub-threshold → route deficit to owning skill, regenerate, re-score (Bible §7)
+
+  # Safety cap on the auto-improve loop. The loop costs $0 (no model calls,
+  # model_cost: none — Bible §2/§7). If the set-point is still unmet after this
+  # many iterations, HALT for human review — the studio NEVER generates below the
+  # set-point (Bible §7). This is a runaway guard, not a licence to ship low.
+  max_improve_loops: 5
+  on_max_loops_exceeded: "halt_for_human_review"   # never generate a sub-threshold prompt (Bible §7)
+
+  # The 10 scoring axes, 0–100 each (Bible §7). Weights live in the rubric.
+  # Realism leads because it is priority #1 (Bible §0); the per-axis floor exists
+  # so a brilliant hook cannot buy back a broken label (ARCHITECTURE.md §5.1).
+  axes:
+    - "realism"                         # photoreal skin/hands/eyes/hair/oil/glass/light — priority #1
+    - "marketing_conversion"            # Scroll-Stop/Hook/Hold/CTR/CVR/ROAS
+    - "luxury_feel"                     # premium restraint & finish
+    - "storytelling"                    # continuous emotional spine
+    - "branding"                        # palette/type/tone/brand DNA
+    - "culture_localization"            # Gulf modesty + correct MSA
+    - "product_consistency"             # bottle/label/cap/liquid lock (Bible §4)
+    - "video_rhythm_retention"          # pacing & hold across the cut
+    - "hook_strength"                   # 0–3 s scroll-stop power
+    - "technical_prompt_soundness"      # prompt adherence & model feasibility
+
+  rubric_ref: "quality/scoring-rubric.md"          # authoritative weights + evidence rules
+  pre_gen_checklist_ref: "quality/"                # pre-flight checklist (blocks spend)
+  post_gen_checklist_ref: "quality/"               # post-gen per-beat scene-QA checklist
+
+
+# -----------------------------------------------------------------------------
+# cost_policy — single-generation economics (Bible §0/§6.1; ARCHITECTURE.md §4)
+# The paid resource is video-model credits. One approved concept = one
+# generation. Fix defects by re-rolling the FAILING BEAT with its cached locked
+# descriptors — never re-render the whole cut.
+#   Economic identity: paid_calls = ceil(defective_beats / beats_per_segment), target = 1.
+# -----------------------------------------------------------------------------
+cost_policy:
+  single_generation_preferred: true     # one optimized prompt → one generation (Bible §0)
+  target_generations_per_concept: 1     # the goal for a clean run (ARCHITECTURE.md §4.1)
+
+  allow_scene_regeneration: true         # re-roll a failing beat, not the video (Bible §0; ARCHITECTURE.md §4.2)
+  max_scene_rerolls: 2                    # surgical beat re-rolls allowed before escalation (cost discipline)
+
+  # Hard ceiling on paid draws per concept: 1 primary generation + up to
+  # max_scene_rerolls surgical beat re-rolls = 3. Beyond this, HALT for human
+  # review rather than burn credits — cost is bounded to defects, not attempts
+  # (ARCHITECTURE.md §4.2). The 13 s director's cut is a distinct, budget-gated
+  # 2-generation stitch (see directors_cut_generations).
+  max_generations_per_concept: 3
+  on_cap_exceeded: "halt_for_human_review"
+
+  directors_cut_generations: 2           # the optional 13 s cut is explicitly 2 stitched segments (Bible §6.2)
+
+  # Caching makes consistency deterministic AND removes recompute: a re-rolled
+  # beat is fed the byte-identical cached locked descriptors as the original, so
+  # the bottle never drifts (ARCHITECTURE.md §4.3).
+  cache_enabled: true
+  cache_convention_ref: "cache/"
+  cached_descriptors:                    # stable sub-strings cached by content hash (ARCHITECTURE.md §4.3)
+    - "product_lock_string"              # from Bible §4 / brand-lock.yaml — byte-identical across all beats
+    - "hero_environment_dna"             # arch/drape/hibiscus/palm/travertine set (Bible §4)
+    - "master_negatives_core"            # applied to every draw (Bible §6.6)
+    - "locked_overlays_and_vo"           # no re-translation / no MSA drift on re-roll (Bible §6.3/§6.4)
+
+  cost_history_ref: "memory/"            # cost-optimizer (skill 29) reads/writes campaign cost priors
+
+
+# -----------------------------------------------------------------------------
+# default_model — the render target (Bible §6.1; ARCHITECTURE.md §7.1)
+# The 8 s primary cut targets a Veo-3-class model; the flagship compiled prompt
+# is emitted in the Kie dialect. The compiler emits a model-agnostic prompt IR,
+# so swapping renderers is a config + dialect change, never a re-authoring of the
+# creative. Capability matrix (max duration, native res/fps, aspect handling,
+# text-in-frame reliability, transition support, cost-per-second) lives in
+# model-adapters.yaml — the cost-optimizer (29) reads it to choose a target.
+# -----------------------------------------------------------------------------
+default_model:
+  provider: "kie"                        # default render target; flagship prompt is the Kie dialect (Bible §6.1)
+  class: "veo3-class"                    # Veo-3-class capability tier for the 8 s primary cut (Bible §6.1)
+
+  # Ordered fallbacks if the default is unavailable or fails feasibility. Each
+  # must exist in the capability matrix; the cost-optimizer picks by cost/duration
+  # fit and the gate checks which axes the model can physically satisfy.
+  fallbacks:
+    - "veo"                              # Veo-3-class native
+    - "kling"
+    - "runway"
+    - "pixverse"
+
+  capability_matrix_ref: "config/model-adapters.yaml"   # per-model capabilities & cost-per-second
+  dialect_map_ref: "prompt-builders/model-dialect-map.md"  # how the IR renders into each model's syntax
+
+
+# -----------------------------------------------------------------------------
+# negatives — the master anti-artifact guardrail (Bible §6.6)
+# The master negative-prompt core is compiled by the negative-prompt-builder
+# (skill 24) and applied to EVERY draw, always (Bible §9 negatives lock). The
+# authoritative core string lives in prompt-builders/; it is not duplicated here
+# to avoid drift.
+# -----------------------------------------------------------------------------
+negatives:
+  apply_to_every_draw: true              # non-negotiable on every generation & re-roll (Bible §6.6/§9)
+  core_source_ref: "prompt-builders/"    # master negatives core lives here (compiled by skill 24)
+  bible_ref: "STUDIO-BIBLE.md#6.6"       # canonical text of the master negative core
+  # Summary of what the core forbids (authoritative text in prompt-builders / Bible §6.6):
+  # plastic/waxy skin, AI sheen, extra fingers/arms, malformed hands, warped face,
+  # uncanny eyes/dead stare, stiff mannequin motion, forced smile, morphing bottle,
+  # changing/warped label, altered logo, wrong Arabic, gibberish text, mismatched cap
+  # color, liquid color shift, floating objects, fake/detached shadows, flicker,
+  # frame jitter, temporal warping, oversaturation, HDR halos, CGI look, low-res/
+  # plastic hair, banding, watermark, subtitles burn-in.
+
+
+# -----------------------------------------------------------------------------
+# brand — pointer to the immutable product lock (Bible §3/§4)
+# The authoritative product identity lives in config/brand/. The digest below is
+# a convenience cross-reference for cost_policy & the gate; the brand file and the
+# Bible WIN on any discrepancy. Onboarding a product edits only the brand lock +
+# the Bible flagship section (ARCHITECTURE.md §7.2) — nothing else here changes.
+# -----------------------------------------------------------------------------
+brand:
+  active: "mechat-red-oil"               # the flagship product currently loaded
+  lock_ref: "config/brand/mechat-red-oil.brand.yaml"   # AUTHORITATIVE product lock
+  bible_product_ref: "STUDIO-BIBLE.md#3" # product source of truth
+  bible_lock_ref: "STUDIO-BIBLE.md#4"    # product consistency lock
+
+  # --- Convenience digest (identical to Bible §3/§4; brand file is authoritative) ---
+  product:
+    # زيت المشاط الأحمر الأصلي — "Zayt al-Mishāṭ al-Aḥmar" ("Original Red Mechat
+    # Oil"), a traditional Moroccan herbal hair oil (Bible §3).
+    name_ar: "زيت المشاط الأحمر الأصلي"
+    name_translit: "Zayt al-Mishāṭ al-Aḥmar"
+    name_gloss: "Original Red Mechat Oil"
+    category: "hair-oil"
+    positioning: "100% natural authentic Moroccan grandmothers' recipe (وصفة الجدات, waṣfat al-jaddāt, 'the grandmothers' recipe'); paraben- & silicone-free"
+
+    # The four locked ingredients — never more, never fewer (Bible §3).
+    ingredients:
+      - "walnut husk — المشاط / قشور الجوز (al-Mishāṭ / qushūr al-jawz, 'walnut husk'): strengthens roots, stops shedding"
+      - "red hibiscus — الكركديه الأحمر (al-karkadēh al-aḥmar, 'red hibiscus'): antioxidants, stimulates growth"
+      - "natural henna — الحناء الطبيعية (al-ḥinnāʾ al-ṭabīʿiyya, 'natural henna'): coats & protects the strand, adds density & shine"
+      - "nourishing plant oils — زيوت نباتية مغذية (zuyūt nabātiyya mughadhdhiya, 'nourishing plant oils'): hydrate scalp, nourish root→tip"
+
+    # The four functional benefits — claims must NEVER exceed these (Bible §3).
+    benefits:
+      - "stops hair loss from the first weeks"
+      - "stimulates new hair growth"
+      - "noticeable density & length with regular use 2–3×/week"
+      - "shine & softness from first use"
+
+  # --- Immutable bottle identity (Bible §4) — must never change across frames/regenerations ---
+  product_lock:
+    vessel: "clear/transparent rounded-rectangular PET bottle (~250 ml), soft rounded shoulders, short neck, squarish body — not a tall cylinder"
+    cap: "matte white ribbed screw cap, flat top — never gold, never black"
+    liquid: "translucent deep garnet / ruby-red oil, jewel-like, clear (not opaque), warm highlights — never shifts to orange, brown, or pink"
+    label: "white rounded-square front label with a red top band; garnet Arabic «زيت المشاط» (zayt al-mishāṭ, 'Mechat Oil') largest with «الأحمر للشعر» (al-aḥmar lil-shaʿr, 'the red, for hair') beneath; three tagline lines; gold circular «طبيعي 100٪» (ṭabīʿī 100%, '100% Natural') seal at the upper corner"
+    never: "change the logo, wording, label layout, cap color, proportions, or the liquid color; no extra text, no English brand name, no redesign"
+    hero_environment_dna: "warm cream Moorish/mihrab arch, deep garnet drape behind, a single red hibiscus flower, a palm frond, a pale stone/travertine podium, soft directional window light with long gentle shadows"
+
+  # --- Locked offer (Bible §3) — identical to the Bible; the KSA-priced offer ---
+  offer:
+    pack: "3 bottles (3 × 250 ml = 750 ml) — full ~3-month treatment"
+    price_sar: 139                       # current price in Saudi Riyal (Bible §3)
+    was_sar: 185                         # anchor price (−25%) (Bible §3)
+    discount_pct: 25
+    shipping: "free"                     # free shipping (Bible §3)
+    payment: "cod"                       # cash on delivery — الدفع عند الاستلام (ad-dafʿ ʿind al-istilām, 'payment on receipt')
+    inspect_before_pay: true             # فحص المنتج قبل الدفع (faḥṣ al-muntaj qabl al-dafʿ, 'inspect the product before paying')
+    delivery: "all KSA cities, 24–48 h / 1–4 business days after phone confirmation"
+    sku: "SA04050100M300"                # Bible §3
+    rating: "4.8/5"                      # verified-purchase reviews (Riyadh, Jeddah, Dammam) (Bible §3)
+    # CTA: «اطلبي الآن — الدفع عند الاستلام»
+    #  (uṭlubī al-ān — ad-dafʿ ʿind al-istilām, "Order now — Cash on delivery") (Bible §3)
+    cta_ar: "اطلبي الآن — الدفع عند الاستلام"
+    cta_translit: "uṭlubī al-ān — ad-dafʿ ʿind al-istilām"
+    cta_gloss: "Order now — Cash on delivery"
+
+  # --- Visual DNA from the LP tokens (Bible §3) ---
+  palette:
+    garnet_red: "#8E1B1E"                # brand / CTA
+    deep_garnet: "#6E1214"
+    warm_cream: "#FAF6F1"
+    surface_white: "#FFFFFF"
+    dark_warm_brown_ink: "#2A1A16"
+    soft_brown: "#6B564E"
+    gold: "#C9A227"
+    sage_green: "#4A6741"
+  fonts:
+    display: "El Messiri"                # headlines (Bible §3)
+    body: "Tajawal"                      # body (Bible §3)
+    direction: "rtl"
+  mood: "warm, luxe, Moroccan-heritage-meets-Gulf, natural, feminine, premium"
+
+
+# -----------------------------------------------------------------------------
+# flagship_creative — the locked winner every example elaborates (Bible §6)
+# Fixed at pipeline Stage 4; the concept ranked #1 must equal this (Bible §8).
+# -----------------------------------------------------------------------------
+flagship_creative:
+  # «القطرة التي تُعيد الحياة» (al-qaṭra allatī tuʿīd al-ḥayāt,
+  #  "The Drop That Brings Hair Back to Life")
+  concept_name_ar: "القطرة التي تُعيد الحياة"
+  concept_name_translit: "al-qaṭra allatī tuʿīd al-ḥayāt"
+  concept_name_gloss: "The Drop That Brings Hair Back to Life"
+  codename: "UNBROKEN THREAD"            # internal codename (Bible §6)
+  emotional_spine: "Pain → Heritage/Trust → Ritual/Self-care → Transformation → Pride → Action"
+  primary_trigger: "hope + restored femininity"   # Bible §6
+  secondary_trigger: "heritage trust"             # Bible §6
+  transition_engine: "a falling hair strand meets a falling garnet oil drop; before/after happens inside ONE continuous camera move, never a split screen (Bible §6)"
+  primary_cut_generations: 1             # the 8 s primary cut ships as ONE generation (Bible §6.1)
+  worked_reference_ref: "examples/mechat-red-oil/"  # golden reference files 00–13 (Bible §8)
+
+
+# -----------------------------------------------------------------------------
+# references — the rest of the framework this config coordinates with
+# (Bible §1 directory map; ARCHITECTURE.md §2.1 layer contracts)
+# -----------------------------------------------------------------------------
+references:
+  bible: "STUDIO-BIBLE.md"               # supreme source of truth (Bible §0)
+  architecture: "ARCHITECTURE.md"        # system design & data flow
+  pipeline: "PIPELINE.md"                # the 12-stage end-to-end run
+  markets: "config/markets.yaml"         # market culture + language localization
+  platforms: "config/platforms.yaml"     # Meta/TikTok/Snap specs & safe zones
+  model_adapters: "config/model-adapters.yaml"   # model capability matrix
+  brand_dir: "config/brand/"             # per-product immutable locks
+  skills_dir: "skills/"                  # the 30 reasoning skills (00–29), model_cost: none
+  knowledge_dir: "knowledge/"            # ad craft, cinematography, realism, culture, negatives
+  templates_dir: "templates/"            # fill-in artifacts (brief → ab-test)
+  prompt_builders_dir: "prompt-builders/"# prompt compiler + negatives core + dialect map
+  quality_dir: "quality/"                # 10-axis rubric + pre-/post-gen checklists
+  memory_dir: "memory/"                  # creative + campaign memory (priors, cost history)
+  cache_dir: "cache/"                    # prompt-cache convention (deterministic locks)
+  examples_dir: "examples/mechat-red-oil/"  # the fully worked flagship (00–13)

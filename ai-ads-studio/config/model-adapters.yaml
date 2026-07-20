@@ -1,0 +1,587 @@
+# =============================================================================
+# AI ADS STUDIO — VIDEO-MODEL CAPABILITY MATRIX & ADAPTER CONFIG
+# config/model-adapters.yaml
+# -----------------------------------------------------------------------------
+# Machine-readable capability matrix + adapter config for every video-generation
+# model the studio can render into: kie_veo3 (PRIMARY), kie_veo3_fast, kling,
+# runway_gen3, pixverse, and a generic adapter template for onboarding new
+# models. This is DATA, not reasoning: the cost-optimizer (skill 29) reads it to
+# CHOOSE a render target, the quality gate (skill 27) reads it to know which of
+# the 10 scoring axes a model can PHYSICALLY satisfy, and the prompt compiler
+# (skills 25/26 via prompt-builders/) reads it to DIALECT the one canonical
+# prompt IR into the chosen model's syntax (ARCHITECTURE.md §7.1 adapter pattern).
+#
+# AUTHORITY: STUDIO-BIBLE.md is the single source of truth. Every STUDIO-SIDE
+# number (duration, aspect, resolution floor, fps band, the single-generation
+# policy, the 2-segment stitch) traces to a Bible section, cited inline as
+# "Bible §N". If this file ever disagrees with the Bible, THE BIBLE WINS and this
+# file is regenerated (ARCHITECTURE.md §10). Config never changes reasoning logic.
+#
+# STUDIO NUMBERS vs MODEL SPECS — read this before editing:
+#   * STUDIO REQUIREMENTS (9:16, 1080×1920+ floor, 24–30 fps, 8 s single-gen,
+#     13–15 s = 2-segment stitch) come from the Bible and are FIXED here.
+#   * MODEL CAPABILITIES (a model's native clip length, native audio, native
+#     resolution, prompt dialect) are each ADAPTER'S DECLARED SPEC — external
+#     technical facts about the renderer, kept here so a model swap touches only
+#     this file + prompt-builders/model-dialect-map.md and NOTHING in skills
+#     00–24 (ARCHITECTURE.md §7.1). Authoritative syntax lives in the dialect map.
+#   * A model whose native output falls below a studio requirement is not
+#     disqualified; the row records the gap (e.g. upscale_to_floor_required) and
+#     the gate weighs the realism/consistency risk before authorizing it.
+#
+# SIBLING CONFIG (each owns one concern — this file owns the model matrix only):
+#   studio.config.yaml  → global knobs, thresholds, defaults; owns default_model
+#                          (provider: kie, class: veo3-class) + the fallback order
+#   markets.yaml        → KSA/UAE/Oman/Egypt culture + language localization
+#   platforms.yaml      → Meta/TikTok/Snap specs, safe zones, hook windows
+#   brand/mechat-red-oil.brand.yaml → the flagship immutable product lock
+#
+# CONVENTIONS (Bible §2): professional agency voice; dense, scannable, no
+# placeholders, no TODO, no "example only". Every Arabic string carries a Latin
+# transliteration and an English gloss on first use. RTL Arabic.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# model_adapters — identity of THIS file (Bible §1 directory map)
+# -----------------------------------------------------------------------------
+model_adapters:
+  name: "AI Ads Studio — Video-Model Capability Matrix & Adapter Config"
+  version: "1.0.0"                      # semantic version of this configuration
+  last_updated: "2026-07-20"            # ISO date of the last edit to this file
+  source_of_truth: "STUDIO-BIBLE.md"    # this file is subordinate to the Bible (Bible §0)
+
+  # Pipeline stages that consume this file (PIPELINE.md; ARCHITECTURE.md §7.1):
+  #   Stage 11 prompt compile (25/26) → dialect the ONE prompt IR into model syntax
+  #   Stage 12 quality gate (27/28)   → read which axes the target can satisfy
+  #   Stage 12 cost decision (29)     → pick the target by cost/duration/fit
+  consumed_by_stages: [11, 12]
+
+  # The render target for the flagship (Bible §6.1): the 8 s primary single-
+  # generation cut targets a Veo-3-class model on Kie AI, and the compiled
+  # flagship prompt is emitted in the Kie dialect. See `models.kie_veo3` and
+  # `selection_policy` below; the fallback order is owned by studio.config.yaml.
+  primary_target: "kie_veo3"            # Bible §6.1; == studio.config default_model (provider: kie, class: veo3-class)
+  dialect_map_ref: "prompt-builders/model-dialect-map.md"   # AUTHORITATIVE per-model prompt syntax (ARCHITECTURE.md §7.1)
+
+
+# -----------------------------------------------------------------------------
+# studio_requirements — the fixed studio-side spec EVERY adapter is measured
+# against (Bible §5, §6.1, §6.2). These are NOT model facts; they are the
+# delivery contract each renderer must be made to satisfy (natively or via a
+# documented post step). Owned numerically by studio.config.yaml / platforms.yaml
+# and reproduced here so the matrix is self-contained for the gate.
+# -----------------------------------------------------------------------------
+studio_requirements:
+  aspect_ratio: "9:16"                  # vertical full-bleed, every cut (Bible §5)
+  resolution_floor: "1080x1920"         # hard floor; deliver higher when native (Bible §5, "1080×1920+")
+  fps_band: { min: 24, max: 30, prefer: 24 }   # 24 fps film cadence reads "filmed, not generated" (Bible §5; realism-first)
+
+  # Duration policy (Bible §6.1 / §6.2). The 8 s primary is ONE generation; the
+  # 13 s director's cut is explicitly TWO stitched segments; 15 s is the platform
+  # upper bound (Bible §5). Any renderer whose native clip < 8 s cannot serve the
+  # 8 s primary in a single draw and is draft-only or a segment renderer.
+  primary_cut_seconds: 8                # single-generation primary cut (Bible §6.1)
+  single_generation_primary: true       # ONE optimized prompt → ONE generation (Bible §0, §6.1, §8)
+  extended_cut_seconds: 13              # optional "director's cut" (Bible §6.2)
+  extended_cut_max_seconds: 15          # platform duration ceiling (Bible §5)
+  extended_cut_segments: 2              # 13–15 s ships as a 2-segment stitch, NOT one long draw (Bible §6.2)
+
+  # Sound (Bible §6.5): designed sound-on (oud/qanun luxe motif, ~70–85 BPM feel)
+  # but fully legible sound-off — overlays carry the story (Bible §5). CRITICAL
+  # for adapter audio policy below: the locked feminine MSA voice-over (Bible §6.4)
+  # and the composed oud/qanun music (Bible §6.5) are AUTHORED and MIXED IN POST.
+  # A model's native audio is NEVER trusted to speak the Arabic VO (it garbles
+  # Arabic → a §6.6 negative: "wrong Arabic, gibberish text").
+  audio_authoring: "VO (Bible §6.4) + music (Bible §6.5) composed & mixed in post; native model audio used for ambient SFX texture only, dialogue suppressed"
+
+  # On-screen Arabic overlays (Bible §6.3) and the label wording (Bible §4) are
+  # NEVER left to the model to typeset — models garble RTL Arabic. Overlays are
+  # composited in post in El Messiri (display) / Tajawal (body), RTL (Bible §3).
+  # The label is rendered as part of the bottle but its legibility is a post-gen
+  # QA checkpoint and a §4.2 scene-re-roll trigger (Bible §6.6 "gibberish text").
+  onscreen_text_authoring: "Arabic overlays burned in post (El Messiri / Tajawal, RTL, Bible §3/§6.3); label wording is a post-gen QA checkpoint, not model-typeset"
+
+  # Applied to every draw and every scene re-roll, always (Bible §6.6, §9). The
+  # authoritative negative core string lives in prompt-builders/ (compiled by
+  # skill 24); each adapter only needs to know HOW to express it (see per-model
+  # `prompt_dialect.negatives`).
+  master_negatives_applied_every_draw: true   # Bible §6.6 / §9 negatives lock
+
+  # The immutable product identity carried byte-identical into every prompt,
+  # every beat, every re-roll (Bible §4; ARCHITECTURE.md §4.3 cache). Restated in
+  # brief so the matrix documents WHAT each adapter must hold stable:
+  #   زيت المشاط الأحمر (Zayt al-Mishāṭ al-Aḥmar, "Red Mechat Oil") — Bible §3.
+  product_lock_digest: "clear rounded-rectangular ~250 ml PET bottle, squarish body; matte white ribbed screw cap (never gold/black); translucent deep garnet/ruby-red oil, jewel-clear (never orange/brown/pink); white rounded-square label with red top band, «زيت المشاط» largest with «الأحمر للشعر» beneath + 3 tagline lines + gold «طبيعي 100٪» (ṭabīʿī 100%, '100% Natural') seal (Bible §4)"
+  product_lock_ref: "config/brand/mechat-red-oil.brand.yaml"   # AUTHORITATIVE lock (Bible §4)
+
+
+# -----------------------------------------------------------------------------
+# capability_axes — the schema of the matrix: what each per-model field means
+# and its legend. Every model block below fills EVERY axis (ARCHITECTURE.md §7.1
+# lists the adapter contract: max duration, native res/fps, aspect handling,
+# motion controls, text-in-frame reliability, transition support, cost-per-sec).
+# -----------------------------------------------------------------------------
+capability_axes:
+  studio_role:            "how the studio uses this model: primary | fallback-N | draft-only | segment-renderer | template"
+  max_clip_seconds:       "longest single native generation, in seconds (the renderer's own limit — NOT the studio cut length)"
+  native_fps:             "native frame rate(s) the model emits; must be conformed into the 24–30 band (Bible §5)"
+  aspect_ratios:          "aspect ratios the model can emit natively; the studio always REQUESTS 9:16 (Bible §5)"
+  resolution:             "native max resolution + whether it meets the 1080×1920 floor (Bible §5); upscale flag if not"
+  native_audio:           "yes | no — can the model generate synchronized audio in-clip (dialogue/SFX/music)"
+  supports_reference_image: "true | false — accepts an input image (first-frame / image-to-video / start+end frame) for conditioning"
+  supports_seed:          "true | false — accepts a fixed seed for deterministic, reproducible re-rolls (Bible §4.2 surgical re-roll)"
+  prompt_style:           "natural-language-paragraph | structured | keyword — the dialect family the model rewards"
+  text_in_frame_reliability: "the model's reliability at rendering legible in-frame text; Arabic RTL is universally weak → overlays post-composited"
+  motion_control:         "how camera/subject motion is specified (prose vs explicit controls) and physical-plausibility strength"
+  transition_support:     "how the §6.1 physical transitions (drop-morph, dive-into-pour, hair-wipe, light-bloom) are achieved on this model"
+  cost_tier:              "RELATIVE cost, 1 (cheapest) … 5 (most premium). Ordinal only — see cost_tier_legend. Not an absolute price."
+  latency_tier:           "RELATIVE wall-clock generation time: fast | moderate | slow"
+  strengths:              "what this model does best for luxury-beauty realism"
+  weaknesses:             "where it is weak or risky against the Bible §7 axes"
+  gate_axes_best:         "the Bible §7 scoring axes this model can most credibly satisfy (read by the gate, skill 27)"
+  prompt_dialect:         "how the prompt-builder (25/26) should DIALECT the canonical IR for this model; syntax in the dialect map"
+  dialect_ref:            "anchor into prompt-builders/model-dialect-map.md for the exact syntax"
+
+  # --- Legends ------------------------------------------------------------------
+  cost_tier_legend:
+    1: "budget — cheapest per second; draft/pre-viz economics (pixverse)"
+    2: "value — cheap Veo-class iteration or mid motion model (kie_veo3_fast)"
+    3: "standard — capable mid-tier (kling / runway_gen3)"
+    4: "premium — top realism + native audio; the single-generation primary (kie_veo3)"
+    5: "reserved — future flagship-plus tier (unused today)"
+  role_legend:
+    primary: "the default render target for the 8 s single-generation cut (Bible §6.1)"
+    fallback-N: "used in the studio.config fallback order if primary is unavailable/infeasible (N = rank)"
+    draft-only: "for $0-adjacent pre-viz / motion tests only — NEVER the shipped master (fails the realism floor)"
+    segment-renderer: "candidate for a single segment of the 2-segment 13–15 s stitch (Bible §6.2)"
+    template: "not a real model — the contract a new adapter must fill (ARCHITECTURE.md §7.1)"
+
+
+# =============================================================================
+# models — the capability matrix (one block per renderer)
+# =============================================================================
+models:
+
+  # ===========================================================================
+  # kie_veo3 — PRIMARY. Veo-3-class model hosted on Kie AI. The flagship 8 s
+  # single-generation cut targets THIS model and the compiled prompt is emitted
+  # in the Kie dialect (Bible §6.1; studio.config default_model). Its 8 s native
+  # clip is an exact fit for the 8 s primary cut — one draw, no stitch.
+  # ===========================================================================
+  kie_veo3:
+    id: "kie_veo3"
+    display_name: "Veo 3 (via Kie AI)"
+    provider: "kie"                     # Kie AI hosting (Bible §6.1)
+    model_class: "veo3-class"           # == studio.config default_model.class
+    studio_role: "primary"              # the default target (Bible §6.1)
+
+    # --- capability matrix ---
+    max_clip_seconds: 8                 # native 8 s clip — EXACT fit for the 8 s primary cut (Bible §6.1); no stitch needed
+    native_fps: 24                      # 24 fps film cadence — in-band and realism-first (Bible §5)
+    aspect_ratios: ["9:16", "16:9"]     # studio always requests 9:16 (Bible §5)
+    studio_aspect: "9:16"
+    resolution:
+      native_max: "1080p (1080×1920 at 9:16)"
+      meets_floor: true                 # ≥ 1080×1920 natively (Bible §5)
+      upscale_to_floor_required: false
+    native_audio: "yes"                 # native synchronized audio (dialogue/SFX/music) — the Veo-3-class headline capability
+    audio_policy: >-
+      Use native audio for ambient/foley TEXTURE ONLY (intimate breath, delicate
+      glassy tone on the falling strand, soft oil-drop tick + ripple, hair whoosh,
+      low bottle clink — the Bible §6.5 sound-design palette). SUPPRESS spoken
+      dialogue: the model garbles Arabic, and the studio VO is the LOCKED feminine
+      MSA read (Bible §6.4) composed and mixed in post with the oud/qanun music
+      (Bible §6.5). Never let native audio speak the overlays or VO (§6.6 "wrong
+      Arabic, gibberish text").
+    supports_reference_image: true      # image-to-video / first-frame conditioning
+    reference_image_use: "first-frame conditioning; used to seed Segment B from Segment A's last frame in the 13–15 s stitch (Bible §6.2)"
+    supports_seed: true                 # pin the seed so a surgical beat re-roll is deterministic (Bible §4.2; ARCHITECTURE.md §4.3)
+    prompt_style: "natural-language-paragraph"   # rewards ONE rich, continuous cinematic paragraph
+    text_in_frame_reliability: "low–moderate — acceptable for incidental Latin marks; UNRELIABLE for Arabic RTL. Overlays (Bible §6.3) burned in post; label wording (Bible §4) is a post-gen QA checkpoint"
+    motion_control: "prose-described camera + subject motion; strong physical plausibility for liquid, hair, cloth, and light — best-in-class for the oil-drop physics and hair movement (Bible §6.1)"
+    transition_support: "renders the four §6.1 physical transitions (drop-morph, dive-into-pour, hair-wipe, light-bloom) IN-CLIP as one unbroken 8 s camera move — the 'UNBROKEN THREAD' single-move before/after (Bible §6)"
+    cost_tier: 4                        # premium; justified because the one-generation policy means we pay once (Bible §0, §6.1)
+    latency_tier: "moderate"
+
+    strengths:
+      - "Photoreal skin/hands/eyes and natural human micro-motion (blink, breath, micro-smile) — carries the Realism axis, priority #1 (Bible §0, §6.1)."
+      - "Best liquid & hair physics of the matrix: the garnet oil drop, the pour, the ripple, the light-catching strands read as filmed (Bible §6.1)."
+      - "Native 8 s clip == the primary cut length exactly → true single generation, no stitch, lowest artifact surface (Bible §6.1)."
+      - "Native audio gives grounded on-set SFX texture (Bible §6.5) without a separate foley pass."
+      - "Holds one continuous camera move so before/after happens inside the shot, not a split screen — the core reason the flagship wins (Bible §6)."
+    weaknesses:
+      - "Cannot typeset legible Arabic — label + overlays must be handled per studio_requirements (Bible §4, §6.3)."
+      - "Highest cost tier per second; only defensible under the single-generation policy (Bible §0)."
+      - "8 s native ceiling means the 13–15 s cut MUST be a 2-segment stitch, never one draw (Bible §6.2)."
+    gate_axes_best: ["realism", "luxury_feel", "storytelling", "video_rhythm_retention", "product_consistency"]   # Bible §7 axes
+
+    prompt_dialect:
+      form: "ONE natural-language cinematic paragraph covering the full 8 s continuous move — subject, wardrobe, hero set, camera path, lighting, and the physics of oil/hair/light in flowing prose (no bullet lists, no shot numbers)."
+      product_lock: "paste the §4 product-lock descriptor VERBATIM from the cached lock string — clear rounded-rectangular ~250 ml bottle, matte white ribbed cap, translucent deep-garnet oil, white label with red top band + gold «طبيعي 100٪» seal — byte-identical to every other beat (ARCHITECTURE.md §4.3)."
+      camera_motion: "describe the continuous move in prose ('the camera follows the drop down, dives into the pour, sweeps with the hair, blooms into light'); Veo reads intent from rich description, not control tokens."
+      audio: "request ambient SFX texture only (per audio_policy); explicitly do NOT request spoken lines; VO + music are post."
+      onscreen_text: "do NOT ask the model to render Arabic overlays or extra label text; overlays are composited in post (studio_requirements.onscreen_text_authoring)."
+      negatives: "pass the Bible §6.6 master negative core through Kie's negative-prompt field (compiled by skill 24); never inline negatives into the positive paragraph."
+      duration_seed: "request 8 s; pin a fixed seed and cache it so a §4.2 surgical re-roll of a failing beat reproduces identical framing/lock."
+    dialect_ref: "prompt-builders/model-dialect-map.md#kie-veo3"
+
+  # ===========================================================================
+  # kie_veo3_fast — the fast/cheap Veo-3-class variant on Kie AI. Same family
+  # dialect as kie_veo3 at lower fidelity and cost. Studio use: $0-adjacent
+  # pre-viz and motion/timing checks DURING the free reasoning region — NOT the
+  # shipped master (it will not clear the realism floor as reliably). Also the
+  # first cost/latency fallback for iteration.
+  # ===========================================================================
+  kie_veo3_fast:
+    id: "kie_veo3_fast"
+    display_name: "Veo 3 Fast (via Kie AI)"
+    provider: "kie"
+    model_class: "veo3-class"
+    studio_role: "fallback-1 / draft-only"   # iteration + pre-viz; cost/latency fallback for the primary
+
+    # --- capability matrix ---
+    max_clip_seconds: 8                 # same 8 s native ceiling as kie_veo3
+    native_fps: 24
+    aspect_ratios: ["9:16", "16:9"]
+    studio_aspect: "9:16"
+    resolution:
+      native_max: "1080p (1080×1920 at 9:16)"
+      meets_floor: true                 # meets the floor, but fine texture is softer than kie_veo3 (Bible §5)
+      upscale_to_floor_required: false
+    native_audio: "yes"                 # native audio present; same suppress-dialogue policy as kie_veo3
+    audio_policy: "identical to kie_veo3 — ambient SFX texture only, dialogue suppressed; VO + music are post (Bible §6.4/§6.5)"
+    supports_reference_image: true
+    reference_image_use: "first-frame conditioning; cheap way to pre-viz the Segment-A→B stitch seam before spending on kie_veo3 (Bible §6.2)"
+    supports_seed: true
+    prompt_style: "natural-language-paragraph"   # same dialect family as kie_veo3
+    text_in_frame_reliability: "low — same Arabic limitation; overlays post-composited"
+    motion_control: "prose-described; physics is good but softer/less consistent than kie_veo3 on macro liquid + hair detail"
+    transition_support: "same in-clip continuous transitions as kie_veo3, but seams and micro-detail are less reliable — verify before promoting to the paid master"
+    cost_tier: 2                        # value tier — cheap Veo-class iteration
+    latency_tier: "fast"
+
+    strengths:
+      - "Cheap, fast Veo-class draws for pre-viz timing, transition feasibility, and hook-window checks during the free reasoning region (ARCHITECTURE.md §4.1)."
+      - "Same natural-language dialect as kie_veo3 → a promising fast draft transfers to the primary with minimal prompt rewrite."
+      - "Native audio + 8 s native clip like kie_veo3 (Bible §6.1)."
+    weaknesses:
+      - "Softer fine detail and less consistent physics than kie_veo3 → higher artifact risk on macro oil/hair — do NOT ship as the master (priority #1 realism, Bible §0/§7)."
+      - "Same Arabic text limitation as the whole matrix (Bible §4, §6.3)."
+    gate_axes_best: ["video_rhythm_retention", "storytelling"]   # timing/pacing pre-viz; NOT the realism-defining axes
+
+    prompt_dialect:
+      form: "same single natural-language paragraph as kie_veo3, slightly simplified — fewer competing micro-details so the faster model resolves the core move cleanly."
+      product_lock: "same verbatim §4 cached lock string (never simplify the lock, even for a draft — consistency is deterministic, ARCHITECTURE.md §4.3)."
+      audio: "same as kie_veo3 (SFX texture only, dialogue suppressed)."
+      negatives: "same Bible §6.6 core via the Kie negative field."
+      note: "Because the dialect is identical to kie_veo3, a draft that scores well here is promoted to kie_veo3 for the paid master with the SAME prompt IR."
+    dialect_ref: "prompt-builders/model-dialect-map.md#kie-veo3-fast"
+
+  # ===========================================================================
+  # kling — Kuaishou Kling. Strong motion/physics mid-tier; no native audio.
+  # Studio role: fallback-2 for the primary AND a strong segment-renderer for
+  # the 13–15 s stitch because it accepts START + END frame conditioning, which
+  # makes a seamless Segment-A→B seam controllable (Bible §6.2).
+  # ===========================================================================
+  kling:
+    id: "kling"
+    display_name: "Kling (Kuaishou)"
+    provider: "kling"
+    model_class: "motion-diffusion"
+    studio_role: "fallback-2 / segment-renderer"
+
+    # --- capability matrix ---
+    max_clip_seconds: 10                # native up to ~10 s (longer single clip than Veo's 8 s) — a full segment fits with headroom
+    native_fps: 30                      # ~30 fps native — in-band top of 24–30 (Bible §5); conform toward 24 for film cadence if needed
+    aspect_ratios: ["9:16", "16:9", "1:1"]
+    studio_aspect: "9:16"
+    resolution:
+      native_max: "1080p (1080×1920 at 9:16)"
+      meets_floor: true                 # meets the floor (Bible §5)
+      upscale_to_floor_required: false
+    native_audio: "no"                  # video only — all sound is post (VO §6.4 + music §6.5)
+    audio_policy: "no native audio; the entire sound bed (VO + oud/qanun music + SFX) is authored and mixed in post (Bible §6.4/§6.5)"
+    supports_reference_image: true      # accepts START and END frame conditioning — key for a controllable stitch seam
+    reference_image_use: "start+end frame conditioning → set Segment B's start frame = Segment A's end frame for a seamless 13–15 s stitch (Bible §6.2)"
+    supports_seed: true
+    prompt_style: "structured"          # rewards structured [subject/action] + [camera] + [motion-strength] fields, not one long paragraph
+    text_in_frame_reliability: "low — same Arabic limitation; overlays post-composited (Bible §6.3)"
+    motion_control: "explicit motion-strength / camera-move controls + start-end frame guidance; strong, physically plausible large motion"
+    transition_support: "achieve the §6.1 transitions via start/end-frame morph targets (drop→ripple, hair-sweep wipe) rather than pure in-clip prose; excellent for a designed seam"
+    cost_tier: 3                        # standard mid-tier
+    latency_tier: "moderate"
+
+    strengths:
+      - "Strong, physically plausible motion and large camera moves — good for the hair-sweep and oil-pour dynamics (Bible §6.1)."
+      - "START+END frame conditioning gives deterministic control of a transition seam — the best matrix option for the 2-segment stitch (Bible §6.2)."
+      - "10 s native clip comfortably contains a single 13–15 s stitch segment with trim headroom."
+    weaknesses:
+      - "No native audio → full sound bed is post (not a blocker; the studio composes VO/music in post anyway, Bible §6.4/§6.5)."
+      - "Human faces/hands and skin micro-realism trail kie_veo3 → higher realism-axis risk on close human beats (Bible §7)."
+      - "Structured dialect differs from the Veo paragraph → the IR must be re-serialized, not copy-pasted."
+    gate_axes_best: ["video_rhythm_retention", "storytelling", "luxury_feel"]   # motion & pacing; verify realism on human close-ups
+
+    prompt_dialect:
+      form: "STRUCTURED — split the IR into fields: subject/action, camera movement, motion strength, and (for transitions/stitch) explicit start-frame and end-frame targets. Do NOT feed Kling one Veo-style paragraph."
+      product_lock: "carry the §4 cached lock string in the subject/action field, verbatim and unshortened (ARCHITECTURE.md §4.3)."
+      camera_motion: "use Kling's explicit camera-move + motion-strength controls; keep the move continuous to preserve the unbroken-move read (Bible §6)."
+      transitions_stitch: "for the 13–15 s cut, render Segment A then set Segment B's start frame to A's last frame; use end-frame targets to land each §6.1 morph (Bible §6.2)."
+      audio: "omit — no audio field; VO + music are post."
+      negatives: "pass the Bible §6.6 master negative core in Kling's negative field (compiled by skill 24)."
+    dialect_ref: "prompt-builders/model-dialect-map.md#kling"
+
+  # ===========================================================================
+  # runway_gen3 — Runway Gen-3 (Alpha / Turbo). Aesthetic, stylized motion with
+  # a distinctive structured camera syntax; native output is below the 1080×1920
+  # floor and must be upscaled; no native audio. Studio role: fallback-3 and a
+  # possible segment-renderer.
+  # ===========================================================================
+  runway_gen3:
+    id: "runway_gen3"
+    display_name: "Runway Gen-3 (Alpha / Turbo)"
+    provider: "runway"
+    model_class: "aesthetic-diffusion"
+    studio_role: "fallback-3 / segment-renderer"
+
+    # --- capability matrix ---
+    max_clip_seconds: 10                # native up to ~10 s (extendable base clips) — a full stitch segment fits
+    native_fps: 24                      # 24 fps native — matches the studio film cadence (Bible §5)
+    aspect_ratios: ["9:16", "16:9"]
+    studio_aspect: "9:16"
+    resolution:
+      native_max: "~768×1280 portrait (below the 1080×1920 floor)"
+      meets_floor: false                # native output is UNDER the floor (Bible §5)
+      upscale_to_floor_required: true   # must upscale to ≥ 1080×1920 in post; flag added realism risk to the gate (Bible §5, §7)
+    native_audio: "no"                  # video only — sound is post
+    audio_policy: "no native audio; full sound bed authored and mixed in post (Bible §6.4/§6.5)"
+    supports_reference_image: true      # image-to-video + first/last-frame conditioning
+    reference_image_use: "first/last-frame conditioning for stitch seams and designed transitions (Bible §6.2)"
+    supports_seed: true
+    prompt_style: "structured"          # Runway's own camera-first structure: '[camera movement]: [scene]. [details]'
+    text_in_frame_reliability: "low — Arabic unreliable; overlays post-composited (Bible §6.3)"
+    motion_control: "explicit camera-move directives + motion brush/direction; stylish, controllable moves"
+    transition_support: "designed transitions via first/last-frame targets and camera directives; strong for a stylized light-bloom, weaker for photoreal liquid morph than kie_veo3"
+    cost_tier: 3                        # standard mid-tier (Turbo cheaper than Alpha)
+    latency_tier: "moderate"
+
+    strengths:
+      - "Distinctive, controllable camera language and aesthetic finish; clean stylized light-bloom for the transformation beat (Bible §6.1)."
+      - "24 fps native matches the studio film cadence (Bible §5)."
+      - "First/last-frame conditioning supports designed stitch seams (Bible §6.2)."
+    weaknesses:
+      - "Native resolution is BELOW the 1080×1920 floor → mandatory upscale adds softness/realism risk (Bible §5, priority #1)."
+      - "Photoreal human skin/hands and macro liquid trail kie_veo3 → realism-axis risk on close human + oil beats (Bible §7)."
+      - "No native audio; structured camera-first dialect differs from both Veo and Kling → IR re-serialized again."
+    gate_axes_best: ["luxury_feel", "storytelling", "video_rhythm_retention"]   # stylized craft; verify realism + resolution
+
+    prompt_dialect:
+      form: "STRUCTURED, camera-first — serialize the IR as '[camera movement]: [establishing scene]. [subject + texture details].' Keep directives terse; Runway over-reacts to long prose."
+      product_lock: "place the §4 cached lock string in the scene/subject clause, verbatim (ARCHITECTURE.md §4.3)."
+      camera_motion: "use Runway's explicit camera directives + motion brush to keep the move continuous; avoid competing directives that fracture the single-move read (Bible §6)."
+      resolution: "always plan the post upscale to ≥ 1080×1920 and flag it to the gate (studio_requirements.resolution_floor)."
+      audio: "omit — no audio field; sound is post."
+      negatives: "express the Bible §6.6 core in Runway's negative/exclude channel (compiled by skill 24)."
+    dialect_ref: "prompt-builders/model-dialect-map.md#runway-gen3"
+
+  # ===========================================================================
+  # pixverse — PixVerse. Budget/speed tier with effect templates; keyword-driven
+  # prompts. Studio role: draft-only / lowest fallback. Cheap motion tests and
+  # concept pre-viz ONLY — it does not clear the luxury realism floor for a
+  # shipped luxury-beauty master.
+  # ===========================================================================
+  pixverse:
+    id: "pixverse"
+    display_name: "PixVerse"
+    provider: "pixverse"
+    model_class: "budget-diffusion"
+    studio_role: "fallback-4 / draft-only"
+
+    # --- capability matrix ---
+    max_clip_seconds: 8                 # native up to ~8 s (tiered; longer tiers exist but fidelity drops)
+    native_fps: 24                      # conform to 24; some fast tiers vary — normalize into the 24–30 band (Bible §5)
+    aspect_ratios: ["9:16", "16:9", "1:1"]
+    studio_aspect: "9:16"
+    resolution:
+      native_max: "up to 1080p on the quality tier; fast/cheap tiers render 540p–720p"
+      meets_floor: "conditional"        # only on the 1080p tier; fast tiers are BELOW the floor (Bible §5)
+      upscale_to_floor_required: true   # assume upscale unless explicitly on the 1080p tier; flag realism risk (Bible §5, §7)
+    native_audio: "no"                  # video (+ template effects) only; sound is post
+    audio_policy: "no native audio; full sound bed authored and mixed in post (Bible §6.4/§6.5)"
+    supports_reference_image: true      # image-to-video + effect templates
+    reference_image_use: "image-to-video for quick pre-viz; template effects can suggest a transition feel cheaply (Bible §6.1)"
+    supports_seed: true
+    prompt_style: "keyword"             # short keyword prompts + effect/template selection, not rich prose
+    text_in_frame_reliability: "low — Arabic unreliable; overlays post-composited (Bible §6.3)"
+    motion_control: "template/effect-driven + light keyword steering; least precise camera control of the matrix"
+    transition_support: "template effects can fake a transition feel, but not the photoreal §6.1 physical morphs; use for feel-tests only"
+    cost_tier: 1                        # budget — the cheapest per second
+    latency_tier: "fast"
+
+    strengths:
+      - "Cheapest and fastest draws for concept pre-viz and motion feel-tests during the free reasoning region (ARCHITECTURE.md §4.1)."
+      - "Effect/template library lets you cheaply audition a transition FEEL before committing to kie_veo3 (Bible §6.1)."
+    weaknesses:
+      - "Weakest photoreal human + macro liquid/hair realism → cannot clear the luxury realism floor; DRAFT-ONLY (priority #1, Bible §0/§7)."
+      - "Keyword dialect discards the nuance of the IR → weak prompt adherence for the continuous single-move (Bible §6)."
+      - "Fast tiers render below the 1080×1920 floor → upscale mandatory (Bible §5)."
+    gate_axes_best: []   # none at ship quality — reserved for pre-viz; never carries a Bible §7 axis on the master
+
+    prompt_dialect:
+      form: "KEYWORD — reduce the IR to a short, high-signal keyword list (subject, hero-set cue, garnet-oil cue, camera-feel) plus a template selection. Do not expect full lock fidelity."
+      product_lock: "include the core §4 lock keywords (garnet oil, matte-white ribbed cap, white label + red band) but treat any pixverse draw as NON-final — the label/lock will drift (Bible §4)."
+      audio: "omit — no audio; sound is post."
+      negatives: "pass whatever subset of the Bible §6.6 core pixverse's negative field accepts (compiled by skill 24)."
+      note: "Never promote a pixverse render to a shipped master; use it only to de-risk timing/feel before spending on kie_veo3."
+    dialect_ref: "prompt-builders/model-dialect-map.md#pixverse"
+
+  # ===========================================================================
+  # generic_template — NOT a real model. The adapter CONTRACT a new renderer must
+  # fill to be onboarded (ARCHITECTURE.md §7.1). Copy this block, rename the key,
+  # fill every axis, add the matching dialect section to model-dialect-map.md, and
+  # insert the model into selection_policy.fallback_order. NOTHING in skills 00–24
+  # changes — a model swap is a config + dialect change only (ARCHITECTURE.md §7.1).
+  # ===========================================================================
+  generic_template:
+    id: "generic_template"
+    display_name: "New Model Adapter — CONTRACT (fill every field)"
+    provider: "<provider-id>"
+    model_class: "<capability-family, e.g. veo3-class | motion-diffusion | aesthetic-diffusion | budget-diffusion>"
+    studio_role: "<primary | fallback-N | draft-only | segment-renderer>"
+
+    max_clip_seconds: "<int — native single-clip ceiling in seconds; if < 8 it cannot serve the 8 s primary alone (Bible §6.1)>"
+    native_fps: "<int or list — conform into the 24–30 band (Bible §5)>"
+    aspect_ratios: "<list of native aspects; must be able to emit 9:16 (Bible §5)>"
+    studio_aspect: "9:16"
+    resolution:
+      native_max: "<native max resolution string>"
+      meets_floor: "<true | false | conditional — vs the 1080×1920 floor (Bible §5)>"
+      upscale_to_floor_required: "<true | false — if native < floor, flag the added realism risk to the gate (Bible §5, §7)>"
+    native_audio: "<yes | no — if yes, apply the suppress-dialogue policy; VO/music stay post (Bible §6.4/§6.5)>"
+    audio_policy: "<how native audio is used (SFX texture only) or that all sound is post>"
+    supports_reference_image: "<true | false — needed for stitch-seam control (Bible §6.2)>"
+    reference_image_use: "<how conditioning is used, esp. for the Segment-A→B seam>"
+    supports_seed: "<true | false — required for deterministic surgical re-rolls (Bible §4.2)>"
+    prompt_style: "<natural-language-paragraph | structured | keyword>"
+    text_in_frame_reliability: "<expected low for Arabic — confirm overlays stay post-composited (Bible §6.3)>"
+    motion_control: "<prose vs explicit controls; note physical-plausibility strength>"
+    transition_support: "<how the four §6.1 transitions are achieved: in-clip prose vs start/end-frame targets>"
+    cost_tier: "<1–5 relative, per cost_tier_legend>"
+    latency_tier: "<fast | moderate | slow>"
+    strengths: ["<what it does best for luxury-beauty realism>"]
+    weaknesses: ["<risks against the Bible §7 axes>"]
+    gate_axes_best: ["<the Bible §7 axes it can credibly satisfy>"]
+    prompt_dialect:
+      form: "<how to serialize the canonical IR for this model>"
+      product_lock: "<carry the §4 cached lock string verbatim — never shorten (ARCHITECTURE.md §4.3)>"
+      audio: "<request/omit per native_audio>"
+      negatives: "<how to express the Bible §6.6 master negative core>"
+    dialect_ref: "prompt-builders/model-dialect-map.md#<new-model-anchor>"
+
+
+# -----------------------------------------------------------------------------
+# selection_policy — how the cost-optimizer (skill 29) picks a target and the
+# gate (skill 27) validates it (ARCHITECTURE.md §7.1). The default + fallback
+# order is OWNED by studio.config.yaml default_model; reproduced here so the
+# matrix is self-contained. Choice is realism-first, then conversion, then cost
+# (Bible §0 priority order) — cost NEVER buys down realism below the gate.
+# -----------------------------------------------------------------------------
+selection_policy:
+  primary: "kie_veo3"                   # the 8 s single-generation cut (Bible §6.1)
+
+  # Ordered fallbacks if the primary is unavailable or fails feasibility. Mirrors
+  # studio.config default_model.fallbacks (veo → kling → runway → pixverse), with
+  # kie_veo3_fast as the same-family cost/latency step before leaving the family.
+  fallback_order:
+    - "kie_veo3_fast"                   # 1 — same Veo dialect; cheaper/faster iteration & cost fallback
+    - "kling"                           # 2 — strong motion + start/end-frame stitch control
+    - "runway_gen3"                     # 3 — aesthetic camera craft; upscale required
+    - "pixverse"                        # 4 — budget draft-only; never the ship master
+
+  # Hard rule: draft-only models (kie_veo3_fast pre-viz tier, pixverse) may render
+  # for $0-adjacent pre-viz inside the free reasoning region, but the SHIPPED
+  # master must come from a model that clears the realism floor. Realism is
+  # priority #1 and independently blocking at the gate (Bible §0, §7).
+  ship_master_must_clear_realism_floor: true
+  draft_only_never_ships: ["pixverse"]  # and kie_veo3_fast only as a promoted-to-kie_veo3 draft
+
+  # Decision inputs the cost-optimizer weighs, in priority order (Bible §0):
+  decision_order:
+    - "1-feasibility: can the model emit 9:16 ≥ 1080×1920, 24–30 fps, and the required clip length? (studio_requirements)"
+    - "2-realism: can it clear the realism floor for photoreal human + macro oil/hair? (gate axis, priority #1)"
+    - "3-fit: native clip length vs the cut (8 s primary → prefer an 8 s+ native clip = kie_veo3, no stitch)"
+    - "4-cost: lowest cost_tier that still satisfies 1–3 (Bible §0 priority #3, never above realism)"
+
+  gate_reads_this_for: >-
+    which Bible §7 axes the chosen model can PHYSICALLY satisfy (e.g. a model with
+    meets_floor=false carries realism/technical risk; native_audio does not affect
+    a load-bearing axis because VO/music are post). The gate (skill 27) will not
+    authorize a target that cannot satisfy an independently-blocking axis ≥ 90.
+
+
+# -----------------------------------------------------------------------------
+# stitch_path — the 13–15 s "director's cut" as a 2-segment stitch (Bible §6.2).
+# The flagship SHIPS as the 8 s single generation on kie_veo3 (Bible §6.1). The
+# extended cut is optional and budget-gated: exactly TWO generations, stitched —
+# NOT one long draw (no matrix model has a >10 s native clip, and Veo's is 8 s).
+# studio.config cost_policy.directors_cut_generations == 2 (Bible §6.2).
+# -----------------------------------------------------------------------------
+stitch_path:
+  applies_to_seconds: [13, 15]          # the director's-cut band (Bible §6.2 = 13 s; §5 ceiling = 15 s)
+  total_generations: 2                  # == studio.config cost_policy.directors_cut_generations (Bible §6.2)
+  budget_gated: true                    # ship the 8 s primary unless budget allows the 2-generation stitch (Bible §6.2)
+
+  segments:
+    - id: "A"
+      beats: "HOOK → DISCOVERY → RITUAL → TRANSFORMATION"   # 0–8.5 s (Bible §6.2)
+      seconds: "0–8.5"
+      renderer: "kie_veo3"              # keep the primary realism on the human/transformation half
+    - id: "B"
+      beats: "TRANSFORMATION hold → OFFER → CTA"            # 8.5–13 s, longer orbit + 1.5 s CTA hold (Bible §6.2)
+      seconds: "8.5–13"
+      renderer: "kie_veo3"              # or a start-frame-conditioned kling/runway if a specific orbit is easier there
+
+  seam_technique: >-
+    Set Segment B's first frame to Segment A's LAST frame using the renderer's
+    reference-image conditioning (supports_reference_image), and reuse the SAME
+    cached §4 product-lock string, hero-environment DNA, seed, and §6.6 negatives
+    across both segments (ARCHITECTURE.md §4.3). This makes the seam invisible and
+    keeps the bottle/label/liquid byte-identical across the cut (Bible §4).
+  seam_note: "kling and runway_gen3 expose start+end-frame conditioning, which gives the most deterministic seam if a segment moves off kie_veo3 (Bible §6.2)."
+
+  reroll_scope: >-
+    A defect in one segment re-rolls THAT segment only, with its identical cached
+    locks — never both (ARCHITECTURE.md §4.2, "regenerate the scene, not the
+    video"). Segment A is untouched when Segment B fails.
+
+
+# -----------------------------------------------------------------------------
+# matrix_summary — the whole capability matrix at a glance (values mirror the
+# per-model blocks above; the blocks are authoritative). Read top-to-bottom as
+# the studio's realism-first preference order for the shipped master.
+# -----------------------------------------------------------------------------
+matrix_summary:
+  legend: "clip=max_clip_seconds · audio=native_audio · floor=meets 1080×1920 · style=prompt_style · cost=cost_tier(1–5) · role=studio_role"
+  rows:
+    - "kie_veo3       | clip 8  | audio yes | floor yes         | style paragraph | cost 4 | role PRIMARY (8 s single generation, Bible §6.1)"
+    - "kie_veo3_fast  | clip 8  | audio yes | floor yes(soft)   | style paragraph | cost 2 | role fallback-1 / draft pre-viz"
+    - "kling          | clip 10 | audio no  | floor yes         | style structured| cost 3 | role fallback-2 / segment-renderer (best stitch seam)"
+    - "runway_gen3    | clip 10 | audio no  | floor NO (upscale)| style structured| cost 3 | role fallback-3 / segment-renderer"
+    - "pixverse       | clip 8  | audio no  | floor conditional | style keyword   | cost 1 | role fallback-4 / draft-only (never ships)"
+
+
+# -----------------------------------------------------------------------------
+# references — the framework this config coordinates with (Bible §1 directory map)
+# -----------------------------------------------------------------------------
+references:
+  bible: "STUDIO-BIBLE.md"                 # supreme source of truth (Bible §0); §5 platform specs, §6.1 primary cut, §6.2 stitch, §6.4/§6.5 sound, §6.6 negatives, §7 gate
+  studio_config: "config/studio.config.yaml"   # owns default_model (kie / veo3-class) + fallback order + cost_policy (directors_cut_generations=2)
+  platforms: "config/platforms.yaml"       # 9:16 / 1080×1920+ / 24–30 fps / hook windows the render must satisfy
+  markets: "config/markets.yaml"           # VO register per market (MSA primary, Khaleeji-spoken for TikTok/Snap)
+  brand_lock: "config/brand/mechat-red-oil.brand.yaml"  # AUTHORITATIVE §4 product lock the model must hold byte-identical
+  dialect_map: "prompt-builders/model-dialect-map.md"   # AUTHORITATIVE per-model prompt syntax (ARCHITECTURE.md §7.1)
+  prompt_builders_dir: "prompt-builders/"  # prompt compiler (25/26) + §6.6 master negatives core (skill 24)
+  cost_optimizer: "skills/29-cost-optimizer/"   # reads this matrix to choose a target (Stage 12)
+  quality_checker: "skills/27-quality-checker/" # reads this matrix for which §7 axes a target can satisfy (Stage 12)
+  architecture: "ARCHITECTURE.md"          # §7.1 adapter pattern, §4 single-generation economics, §4.3 cache
+  pipeline: "PIPELINE.md"                  # the 12-stage end-to-end run

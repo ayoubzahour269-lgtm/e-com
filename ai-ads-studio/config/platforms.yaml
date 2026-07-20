@@ -1,0 +1,300 @@
+# =============================================================================
+# AI ADS STUDIO — PLATFORM DELIVERY SPECS
+# config/platforms.yaml
+# -----------------------------------------------------------------------------
+# Machine-readable per-platform delivery specs for Meta / TikTok / Snapchat:
+# aspect ratio, resolution, fps, duration bands, hook windows, safe zones,
+# sound strategy, caption + CTA affordances, placement routing, and the
+# platform-specific creative best practices the pipeline must honor. This is
+# DATA, not reasoning: the transition designer (skill 15), the Arabic
+# copywriter (20), the prompt compiler (25/26), and the quality gate (27) read
+# these values to place overlays, size CTAs, and check safe zones before spend.
+#
+# AUTHORITY: STUDIO-BIBLE.md is the single source of truth. Every value below
+# traces to a Bible section (cited inline as "Bible §N"). Numeric platform specs
+# derive from Bible §5 (Market, Culture & Platform Rules) and the flagship beat
+# sheet Bible §6.1. If this file ever disagrees with the Bible, THE BIBLE WINS
+# and this file is regenerated (ARCHITECTURE.md §10). Config never changes logic.
+#
+# SIBLING CONFIG (each owns one concern — this file owns platform delivery only):
+#   studio.config.yaml  → global knobs, thresholds, defaults (owns duration band,
+#                          fps band, resolution floor, safe-margin defaults)
+#   markets.yaml        → KSA/UAE/Oman/Egypt culture + language localization
+#   model-adapters.yaml → Kie/Veo/Kling/Runway/PixVerse capability matrix
+#   brand/mechat-red-oil.brand.yaml → the flagship immutable product lock
+#
+# CONVENTIONS (Bible §2): professional agency voice; dense, scannable, no
+# placeholders, no TODO. Every Arabic string carries a Latin transliteration and
+# an English gloss on first use. RTL Arabic. All specs are 9:16 vertical,
+# sound-on design / sound-off legible — overlays carry the story muted (Bible §5).
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# platforms_config — identity of THIS file (Bible §1 directory map)
+# -----------------------------------------------------------------------------
+platforms_config:
+  name: "AI Ads Studio — Platform Delivery Specs"
+  version: "1.0.0"                      # semantic version of this configuration
+  last_updated: "2026-07-20"            # ISO date of the last edit to this file
+  source_of_truth: "STUDIO-BIBLE.md"    # this file is subordinate to the Bible (Bible §0)
+  targets: ["meta", "tiktok", "snapchat"]   # the three delivery surfaces (Bible §5)
+
+  # Pipeline stages that consume these specs (PIPELINE.md; Bible §8):
+  #   Stage 6  transition design (15)   → seamless cuts sized to the hook window
+  #   Stage 9  copy & localization (20) → overlay placement inside the safe zones
+  #   Stage 11 prompt compile (25/26)   → aspect / fps / resolution into ONE prompt
+  #   Stage 12 quality gate (27/28)     → safe-zone + legibility + hook-window checks
+  consumed_by_stages: [6, 9, 11, 12]
+
+
+# -----------------------------------------------------------------------------
+# common — studio-wide render constants shared by ALL platforms (Bible §5)
+# These are the same on every surface; per-platform blocks restate them for the
+# compiler and note that they equal these values (single source, no drift). The
+# numeric bands are OWNED by studio.config.yaml `defaults` and reproduced here.
+# -----------------------------------------------------------------------------
+common:
+  aspect_ratio: "9:16"                  # vertical full-bleed, every platform (Bible §5)
+  min_resolution: "1080x1920"           # hard floor; deliver higher when the model supports it (Bible §5)
+
+  fps:
+    default: 24                         # cinematic film cadence — reads "filmed, not generated" (Bible §5; realism-first)
+    min: 24                             # lower bound of the allowed band (Bible §5)
+    max: 30                             # upper bound of the allowed band (Bible §5)
+
+  # Studio-wide clip band. 8 s is the single-generation PRIMARY cut (Bible §6.1);
+  # 8–15 s is the allowed window (Bible §5, owned by studio.config defaults). The
+  # 13 s "director's cut" is a distinct budget-gated 2-segment stitch (Bible §6.2).
+  duration_range:
+    min: 8                              # never shorter than the primary cut (Bible §6.1)
+    max: 15                             # upper bound of the platform duration window (Bible §5)
+    primary_single_generation: 8        # the 8 s cut that ships as ONE generation (Bible §6.1)
+
+  # Sound strategy: designed sound-on for delight, but the story reads FULLY with
+  # audio muted — the Arabic overlays carry the narrative (Bible §5, §6.5).
+  sound_default:
+    design_sound_on: true               # oud/qanun luxe motif, ~70–85 BPM feel (Bible §6.5)
+    legible_sound_off: true             # overlays carry the full story muted (Bible §5)
+
+  # Safe-zone baseline (Bible §5): reserve top ~14% for the platform status/UI
+  # chrome and bottom ~20% for captions + CTA sticker; keep the hook subject, the
+  # bottle/label, the face, and the price inside the center-safe column. `side_pct`
+  # operationalizes the Bible's explicit "keep key content inside center safe zone"
+  # rule against the right-hand vertical ACTION RAIL (like/comment/share/profile)
+  # that every 9:16 surface overlays; per-platform blocks note where that rail sits.
+  safe_zones_baseline:
+    top_pct: 14                         # reserve top ~14% for platform UI (Bible §5)
+    bottom_pct: 20                      # reserve bottom ~20% for captions / CTA sticker (Bible §5)
+    side_pct: 6                         # keep key content clear of the right action rail (Bible §5 center-safe rule)
+    keep_key_content_in_center: true    # hook subject + bottle + face + CTA stay center-safe (Bible §5)
+
+  caption_required: true                # overlays legible sound-off on every surface (Bible §5)
+  overlay_typeface: "El Messiri (display headlines) / Tajawal (body), RTL"  # Bible §3 fonts, §6.3 overlays
+
+  # HOOK-WINDOW ↔ BEAT-SHEET MAPPING (why one 8 s cut satisfies all three surfaces):
+  # The flagship HOOK/Pain beat runs 0.0–1.2 s (Bible §6.1) — the extreme macro
+  # comb + falling dark strand. 1.2 s lands inside the TIGHTEST window (Snap 0–1.5 s),
+  # so the same master scroll-stops on Meta (≤3 s), TikTok (≤2 s), and Snap (≤1.5 s).
+  # The garnet oil-drop match/liquid-morph hits by ~1.6 s (Bible §6.1) as the
+  # "reason to stay." One master, three-window-safe — no re-shoot per platform.
+  hook_beat_ref: "STUDIO-BIBLE.md#6.1"  # HOOK/Pain 0.0–1.2 s; drop match-cut ~1.6 s
+
+
+# -----------------------------------------------------------------------------
+# platforms — per-surface delivery specs (Bible §5)
+# -----------------------------------------------------------------------------
+platforms:
+
+  # ===========================================================================
+  # META — Facebook / Instagram (Reels · Stories · Feed) (Bible §5)
+  # ===========================================================================
+  meta:
+    id: "meta"
+    name: "Meta (Facebook / Instagram)"
+    aspect_ratio: "9:16"                # equals common (Bible §5)
+    min_resolution: "1080x1920"         # equals common (Bible §5)
+    fps: { default: 24, min: 24, max: 30 }             # equals common (Bible §5)
+    duration_range: { min: 8, max: 15, primary_single_generation: 8 }  # 8–15 s explicit for Meta (Bible §5); 8 s primary (Bible §6.1)
+
+    hook_window_seconds: [0, 3]         # land the pain hook within 0–3 s (Bible §5)
+
+    safe_zones:
+      top_pct: 14                       # status bar + Reels/Stories top chrome (Bible §5)
+      bottom_pct: 20                    # caption + audio ticker + profile/CTA row (Bible §5)
+      side_pct: 6                       # right rail: like/comment/share/audio disc — keep the label & price clear (Bible §5)
+      keep_key_content_in_center: true  # bottle, face, CTA center-safe (Bible §5)
+
+    sound_default: { design_sound_on: true, legible_sound_off: true }   # equals common (Bible §5, §6.5)
+    caption_required: true              # "text legible muted" — burn Arabic overlays high-contrast (Bible §5)
+
+    # CTA affordance: platform CTA sticker/button PLUS an on-frame CTA burned into
+    # the closing hero pack — «اطلبي الآن — الدفع عند الاستلام»
+    # (uṭlubī al-ān — ad-dafʿ ʿind al-istilām, "Order now — Cash on delivery") (Bible §5, §6.3).
+    cta_style: "CTA sticker/button + on-frame CTA burned on the final hero-pack frame"
+
+    # Placement routing (Bible §5). Author ONE 9:16 master; keep every beat
+    # center-safe so the Feed 4:5 crop never clips the bottle, face, or price.
+    placements:
+      - id: "reels"
+        note: "Instagram/Facebook Reels — 9:16 full-bleed; primary placement; mute-first scroll"
+      - id: "stories"
+        note: "Instagram/Facebook Stories — 9:16 full-bleed; tap-forward pacing; CTA sticker at bottom"
+      - id: "feed"
+        note: "Feed — center-safe 9:16 master reads inside a 4:5 crop with the label & CTA intact"
+
+    best_practices:
+      - "Land the macro-comb / falling-strand pain hook FULLY inside 0–3 s before the Reels UI settles; fire the garnet oil-drop match-cut by ~1.6 s so the scroll-stop registers pre-skip (Bible §6.1)."
+      - "Keep the bottle, face, and price inside the center-safe column — Reels overlays the caption + audio ticker + profile CTA across the bottom ~20% and a right action rail; never seat the label or «139 ﷼» there (Bible §5)."
+      - "Design mute-first: the full arc (Pain → Heritage/Trust → Ritual → Transformation → Offer) must read with sound OFF via burned El Messiri overlays; the oud/qanun VO is sound-on delight, never load-bearing (Bible §5, §6.3, §6.5)."
+      - "Author a single 9:16 master and keep all key beats center-safe so the Feed 4:5 crop never clips the hero pack, the over-the-shoulder reveal, or the CTA (Bible §5)."
+      - "Resolve the offer in the final second on the crisp hero pack: «باك 3 قنينات — 139 ﷼ بدل 185 · شحن مجاني» (bāk 3 qanānāt — 139 riyāl badal 185 · shaḥn majjānī, \"3-bottle pack — 139 SAR instead of 185 · Free shipping\") + COD, paired with the platform CTA sticker (Bible §5, §6.1, §6.3)."
+      - "Hold the §4 product lock across every frame — clear rounded-rectangular bottle, matte-white ribbed cap, translucent garnet oil, white label with red top band; a warped label or shifted liquid color fails the branding + product-consistency axes at the gate (Bible §4, §6.6, §7)."
+
+  # ===========================================================================
+  # TIKTOK — In-Feed · TopView · Spark Ads (Bible §5)
+  # ===========================================================================
+  tiktok:
+    id: "tiktok"
+    name: "TikTok"
+    aspect_ratio: "9:16"                # equals common (Bible §5)
+    min_resolution: "1080x1920"         # equals common (Bible §5)
+    fps: { default: 24, min: 24, max: 30 }             # equals common (Bible §5)
+    # Studio-wide band [8,15]; primary 8 s single-generation cut leads on TikTok's
+    # fast-scroll surface (Bible §6.1; band owned by studio.config defaults, Bible §5).
+    duration_range: { min: 8, max: 15, primary_single_generation: 8 }
+
+    hook_window_seconds: [0, 2]         # 0–2 s pattern interrupt; native energy even when luxe (Bible §5)
+
+    safe_zones:
+      top_pct: 14                       # top chrome (Bible §5)
+      bottom_pct: 20                    # username + caption stack + CTA button sit deep — keep the price above it (Bible §5)
+      side_pct: 6                       # right rail is heavier on TikTok (avatar/like/comment/share/spin disc) — center the 3-pack reveal (Bible §5)
+      keep_key_content_in_center: true  # bottle, face, CTA center-safe (Bible §5)
+
+    sound_default: { design_sound_on: true, legible_sound_off: true }   # sound-on native, but stay legible muted (Bible §5, §6.5)
+    caption_required: true              # captions on, always (Bible §5)
+
+    # CTA affordance: native on-frame CTA + the TikTok CTA button (Spark Ads),
+    # captions carry price + COD; ride the §6.3 CTA line (Bible §5, §6.3).
+    cta_style: "on-frame CTA + native TikTok CTA button (Spark Ads); captions carry price + COD"
+
+    placements:
+      - id: "in_feed"
+        note: "In-Feed (For You) — 9:16 full-bleed; native/authentic energy; the default buy"
+      - id: "topview"
+        note: "TopView — first-impression, sound-on reach launch; lead with the strongest 0–2 s interrupt"
+      - id: "spark"
+        note: "Spark Ads — boost an organic-styled post; inherits native credibility and comments"
+
+    best_practices:
+      - "Open on the extreme macro comb + falling dark strand as a 0–2 s pattern interrupt; frame it native and intimate (not 'ad-polished') even though the finish is luxe — TikTok punishes ad-looking openers (Bible §5, §6.1)."
+      - "Use the Khaleeji-spoken VO variant here, not the MSA primary, so the read feels conversational and native to the For You feed while overlays stay elegant MSA sound-off (Bible §5, §6.4)."
+      - "Give a concrete reason to stay by ~2 s — the garnet oil-drop match/liquid-morph curiosity beat — so the hold survives the first swipe (Bible §5, §6.1)."
+      - "Keep the oud/qanun luxe motif with a single resolving swell on the transformation; stay trend-aware but do NOT bury the intimate tone under busy trending audio (Bible §6.5)."
+      - "Run as Spark Ads off an organic-styled post for credibility; reserve TopView for reach launches — both carry the same §4 product lock and the COD 3-pack offer (Bible §3, §4, §5)."
+      - "Center-safe the 3-pack hero reveal and «139 ﷼» clear of TikTok's heavier right rail and the deep caption/CTA stack, so the price and label are never occluded (Bible §5)."
+
+  # ===========================================================================
+  # SNAPCHAT — Single Snap Ads · Story Ads · Dynamic Ads (Bible §5)
+  # ===========================================================================
+  snapchat:
+    id: "snapchat"
+    name: "Snapchat"
+    aspect_ratio: "9:16"                # equals common (Bible §5)
+    min_resolution: "1080x1920"         # equals common (Bible §5)
+    fps: { default: 24, min: 24, max: 30 }             # equals common (Bible §5)
+    # Studio-wide band [8,15]; Snap favors the tightest, fastest-payoff end —
+    # lead with the 8 s primary single-generation cut (Bible §5, §6.1).
+    duration_range: { min: 8, max: 15, primary_single_generation: 8 }
+
+    hook_window_seconds: [0, 1.5]       # 0–1.5 s stop; fastest bail of the three (Bible §5)
+
+    safe_zones:
+      top_pct: 14                       # top chrome (Bible §5)
+      bottom_pct: 20                    # Swipe-Up / attachment CTA affordance zone — keep content clear (Bible §5)
+      side_pct: 6                       # keep the label & price clear of edge UI (Bible §5)
+      keep_key_content_in_center: true  # bottle, face, CTA center-safe (Bible §5)
+
+    sound_default: { design_sound_on: true, legible_sound_off: true }   # many Snap views run muted — legibility is mandatory (Bible §5, §6.5)
+    caption_required: true              # brand + offer legible in the first AND last second (Bible §5)
+
+    # CTA affordance: Swipe-Up / attachment CTA; brand + offer legible in the
+    # opening and closing second (Bible §5). CTA line per §6.3.
+    cta_style: "Swipe-Up / attachment CTA affordance; brand + offer legible in the first & last second"
+
+    placements:
+      - id: "story"
+        note: "Story Ads — narrative sequencing between publisher Stories; full-bleed 9:16"
+      - id: "dynamic"
+        note: "Dynamic Ads — auto-generated from the catalog; carries the COD 3-pack offer, SKU SA04050100M300"
+      - id: "single"
+        note: "Single Snap Ad (Video) — one full-screen skippable clip; the flagship 8 s cut"
+
+    best_practices:
+      - "Register the macro pain hook almost instantly — front-load the falling strand + garnet oil-drop inside the first ~1.5 s, Snap's fastest-bail window (Bible §5, §6.1)."
+      - "Compress toward the 8 s primary cut and reach the transformation + offer quickly; Snap audiences leave fastest, so the payoff cannot wait (Bible §5, §6.1)."
+      - "Make brand + offer legible in the first AND last second: show the §4 bottle label early and resolve «باك 3 قنينات — 139 ﷼ بدل 185 · شحن مجاني» (bāk 3 qanānāt — 139 riyāl badal 185 · shaḥn majjānī, \"3-bottle pack — 139 SAR instead of 185 · Free shipping\") + COD on the closing hero pack (Bible §4, §5, §6.3)."
+      - "Ship vertical full-bleed with NO letterboxing and keep the bottom Swipe-Up / attachment CTA zone clear of the price, label, and face (Bible §5)."
+      - "Assume muted playback — the overlays and the visual Pain→Transformation→Offer arc must carry the entire story sound-off; the oud/qanun bed is a bonus, never the message (Bible §5, §6.5)."
+      - "Use Story Ads for the narrative cut and Dynamic Ads for the COD 3-pack (SKU SA04050100M300), holding the product lock identical across both — no label, cap, or liquid drift (Bible §3, §4, §6.6)."
+
+
+# -----------------------------------------------------------------------------
+# cross_platform_rules — invariants the gate enforces on EVERY surface (Bible §5, §7)
+# -----------------------------------------------------------------------------
+cross_platform_rules:
+  # One 9:16 master, three-window-safe. Never re-author per platform; adjust only
+  # the VO register (MSA vs Khaleeji) and the CTA affordance wrapper (Bible §5, §6.4).
+  single_master_policy: "author ONE 9:16 8 s master; retarget per surface via VO register + CTA wrapper only — never re-shoot (Bible §5, §6.1)"
+
+  legibility:
+    all_overlays_legible_sound_off: true            # the story completes with audio muted on all three (Bible §5)
+    min_contrast: "high-contrast Arabic overlays on cream/garnet frames; El Messiri display, RTL (Bible §3, §6.3)"
+    never_place_key_content_in_ui_zones: true       # keep bottle/face/price out of top 14% / bottom 20% / right rail (Bible §5)
+
+  localization:
+    primary_register: "elegant MSA (فصحى, fuṣḥā, 'standard Arabic') for overlays on every surface (Bible §5)"
+    spoken_variant: "Khaleeji-spoken VO for TikTok/Snap; MSA VO for the Meta primary (Bible §5, §6.4)"
+    forbid: "machine translation; Darija/Egyptian slang in the Saudi cut (Bible §5)"
+
+  culture_lock:
+    modest_aspirational_restrained: true            # elegant, tasteful, never provocative on any surface (Bible §5)
+    hair_is_the_hero: true                          # texture/movement/macro/tasteful over-the-shoulder reveal (Bible §5)
+    forbid: ["alcohol cues", "immodesty", "religious imagery as decoration",
+             "fear-mongering about the body", "fake medical claims"]   # Bible §5
+
+  offer_lock:
+    # Identical to Bible §3 on every surface; never localize the KSA price away.
+    pack: "3 bottles (3 × 250 ml = 750 ml) — full ~3-month treatment (Bible §3)"
+    price_sar: 139                                   # 139 SAR, was 185 (−25%) (Bible §3)
+    was_sar: 185
+    shipping: "free"                                 # free shipping (Bible §3)
+    payment: "cod — الدفع عند الاستلام (ad-dafʿ ʿind al-istilām, 'payment on receipt') (Bible §3)"
+    inspect_before_pay: true                         # فحص المنتج قبل الدفع (faḥṣ al-muntaj qabl al-dafʿ, 'inspect before paying') (Bible §3)
+    sku: "SA04050100M300"                            # Bible §3
+
+  gate_checks:
+    # The quality gate (skill 27) rejects a cut that violates any of these before
+    # a model is ever called (Bible §7; ship ≥95 weighted, no axis <90).
+    - "hook subject lands inside the surface hook_window_seconds (Meta ≤3 / TikTok ≤2 / Snap ≤1.5)"
+    - "bottle, face, and price sit inside the center-safe zone (outside top 14% / bottom 20% / right rail)"
+    - "story is fully legible with sound OFF (overlays carry it)"
+    - "aspect 9:16, resolution ≥ 1080×1920, fps 24–30 (Bible §5)"
+    - "§4 product lock intact and §6.6 master negatives applied on every draw"
+
+
+# -----------------------------------------------------------------------------
+# references — the framework this config coordinates with (Bible §1 directory map)
+# -----------------------------------------------------------------------------
+references:
+  bible: "STUDIO-BIBLE.md"                 # supreme source of truth (Bible §0); §5 platform rules, §6.1 beat sheet, §6.3 overlays
+  studio_config: "config/studio.config.yaml"   # owns duration/fps/resolution/safe-margin defaults reproduced here
+  markets: "config/markets.yaml"           # market culture + language localization (VO register per market)
+  model_adapters: "config/model-adapters.yaml" # per-model native res/fps/aspect + text-in-frame reliability
+  brand_lock: "config/brand/mechat-red-oil.brand.yaml"  # immutable product lock (Bible §3/§4)
+  transition_designer: "skills/15-transition-designer/"  # sizes seamless cuts to the hook window (Stage 6)
+  arabic_copywriter: "skills/20-arabic-copywriter/"      # places overlays inside these safe zones (Stage 9)
+  prompt_builders_dir: "prompt-builders/"  # compiles aspect/fps/resolution into ONE prompt (Stage 11)
+  quality_dir: "quality/"                  # 10-axis rubric + safe-zone/legibility/hook-window checks (Stage 12)
+  pipeline: "PIPELINE.md"                  # the 12-stage end-to-end run

@@ -1,0 +1,672 @@
+# =============================================================================
+# AI ADS STUDIO — MARKETS CONFIGURATION (culture + language localization)
+# config/markets.yaml
+# -----------------------------------------------------------------------------
+# Per-market culture, language, modesty, wardrobe, taboos, numerals, seasonality,
+# COD norms, and delivery expectations for the four target markets:
+#   sa = Saudi Arabia (KSA, PRIMARY) · ae = UAE · om = Oman · eg = Egypt
+# This is DATA the reasoning skills READ; it holds no prose logic of its own.
+# Consumers: 20-arabic-copywriter, 21-cultural-expert-gulf, 03-marketing-strategist,
+# 07-offer-optimizer, 04-creative-director, 27-quality-checker (culture axis).
+#
+# AUTHORITY: STUDIO-BIBLE.md is the single source of truth. Every value below
+# traces to a Bible section (cited inline as "Bible §N") or to the market-culture
+# knowledge dossiers under knowledge/gulf-culture/. If this file ever disagrees
+# with the Bible, THE BIBLE WINS and this file is regenerated. This file NEVER
+# invents new product claims and NEVER fabricates a non-KSA price — the Bible
+# locks a price for KSA ONLY (139 SAR / 3-pack, Bible §3); other markets carry the
+# offer STRUCTURE and route numeric pricing to skill 07 (offer-optimizer).
+#
+# SIBLING CONFIG (each owns one concern):
+#   studio.config.yaml  → global knobs, thresholds, defaults, cost/quality gates
+#   platforms.yaml      → Meta/TikTok/Snap specs, safe zones, hook windows
+#   model-adapters.yaml → Kie/Veo/Kling/Runway/PixVerse capability matrix
+#   brand/mechat-red-oil.brand.yaml → the flagship immutable product lock
+#
+# DEEP-DIVE KNOWLEDGE (idiom, review corpus, taboo catalog, dialect maps):
+#   knowledge/gulf-culture/saudi.md · uae.md · oman.md · egypt.md   (Bible §1)
+#
+# CONVENTIONS (Bible §2): professional agency voice; dense, scannable, no
+# placeholders, no TODO. Arabic is elegant Modern Standard Arabic (فصحى / fuṣḥā,
+# "the eloquent/standard register"); every Arabic string carries a Latin
+# transliteration + English gloss on FIRST use, RTL. Dialect (spoken) copy is a
+# VO-only option for TikTok/Snap; the on-screen premium register is always MSA.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# meta — provenance of this configuration file
+# -----------------------------------------------------------------------------
+meta:
+  file: "config/markets.yaml"
+  version: "1.0.0"                        # semantic version of this markets config
+  last_updated: "2026-07-20"             # ISO date of last edit
+  source_of_truth: "STUDIO-BIBLE.md"     # keystone; this file is subordinate to it
+  primary_market: "sa"                    # KSA is primary; the default cut is authored for it (Bible §3)
+  market_order: ["sa", "ae", "om", "eg"]  # rollout / priority order (Bible §3: KSA → UAE → Oman → Egypt)
+  culture_knowledge_dir: "knowledge/gulf-culture/"   # deep dossiers per market (Bible §1)
+
+
+# =============================================================================
+# shared — defaults that apply to ALL four markets unless a market overrides them
+# These encode the Bible §5 culture/language lock ONCE so each market block stays
+# lean and only carries its deltas. A market may TIGHTEN a shared rule (e.g. raise
+# modesty), never loosen the Bible's hard forbids.
+# =============================================================================
+shared:
+
+  # --- Language register (Bible §2, §5) --------------------------------------
+  # Elegant MSA reads premium and pan-Gulf; it is the on-screen + primary-VO
+  # register in EVERY market. Spoken dialect is offered ONLY as an alternate VO
+  # for TikTok/Snap, never on-screen, never in the primary Saudi cut.
+  language:
+    on_screen_register: "ar-MSA"          # فصحى (fuṣḥā) — all overlays, all markets (Bible §5)
+    primary_vo_register: "ar-MSA"         # primary voice-over is MSA everywhere (Bible §6.4)
+    direction: "rtl"                       # right-to-left Arabic layout (Bible §3 fonts)
+    formality_default: "MSA-lead"          # MSA leads; dialect is a spoken accent layer only
+    forbid_machine_translation: true       # never ship awkward MT; human-grade MSA only (Bible §5)
+    require_translit_and_gloss_on_first_use: true   # every Arabic line: translit + English gloss (Bible §2)
+    fonts:                                 # the locked type system (Bible §3) — identical across markets
+      display: "El Messiri"                # headlines / overlays
+      body: "Tajawal"                       # supporting body text
+      direction: "rtl"
+
+  # --- Modesty & representation lock (Bible §5) ------------------------------
+  # Beauty is shown with restraint and taste in every market. Hair is the hero
+  # and is shown as luxurious texture/movement/macro/silhouette + one tasteful
+  # over-the-shoulder reveal; the model is refined, warm-toned, "no-makeup"
+  # makeup, calm confidence — NEVER provocative. Every market ships a
+  # hijab/styled-hair A/B pair; the default hero keeps hair visible (standard for
+  # hair-care creative shown to women), with an elegant modest alternative.
+  modesty:
+    tone: "elegant, modest, aspirational, restrained"     # Bible §5
+    hair_is_the_hero: true                                # Bible §5
+    model_direction: "refined, natural, warm-toned skin, minimal no-makeup makeup, calm confidence; never provocative"  # Bible §5
+    reveal_style: "tasteful over-the-shoulder turn; hair as texture/movement/macro/silhouette"                          # Bible §5, §6.1
+    hair_visibility_default: "visible"                     # default hero shows hair (women's hair-care norm, Bible §5)
+    always_ship_ab_pair: ["hair-visible (default)", "hijab / elegantly-styled modest alternative"]                       # Bible §5
+
+  # --- Hard forbids — the Bible §5 taboo floor, enforced in EVERY market ------
+  # Per-market `taboos` lists ADD to this floor; they never remove from it.
+  forbid_floor:
+    - "alcohol cues (bottles, bars, toasting, wine tones read as alcohol)"      # Bible §5
+    - "immodesty / provocative framing / skin exposure beyond face-hands-hair"  # Bible §5
+    - "religious imagery used as decoration (Qur'anic text, mosque, prayer as prop)"  # Bible §5
+    - "fear-mongering about the body (disease scare, before-shots that shame)"  # Bible §5
+    - "fake medical claims / cure language beyond the four locked benefits"     # Bible §3, §5
+    - "pork or non-halal cues"                                                   # Gulf culture floor
+    - "romantic/dating framing or intimate free-mixing of unrelated men & women"  # Gulf modesty floor
+    - "disrespect to national symbols, flags, or leadership"                    # regional law/etiquette floor
+
+  # --- Claims lock (Bible §3) — never exceeded, in any market -----------------
+  # The ONLY four functional claims. Localized copy may rephrase but must not
+  # add a fifth claim, a timeline stronger than the Bible, or medical language.
+  allowed_claims:
+    - "stops hair loss from the first weeks"                       # Bible §3
+    - "stimulates new hair growth"                                 # Bible §3
+    - "noticeable density & length with regular use 2–3×/week"     # Bible §3
+    - "shine & softness from first use"                            # Bible §3
+  claims_timeline_note: >-
+    Softness/shine from first use; less shedding in ~3–5 weeks; density in
+    ~2–3 months (Bible §3 objections). Never promise faster; never imply a cure.
+
+  # --- Offer STRUCTURE (Bible §3) — carried to every market -------------------
+  # The numeric PRICE is Bible-locked for KSA only (139 SAR). Non-KSA markets
+  # inherit the offer's SHAPE and route the localized number to skill 07. The
+  # trust mechanics (COD, inspect-before-pay, free shipping intent) carry over.
+  offer_structure:
+    pack: "3 bottles (3 × 250 ml = 750 ml) — full ~3-month treatment"   # Bible §3
+    framing: "3-pack = the complete course; single bottle is a trial, the pack is the result"  # Bible §3
+    payment_default: "cod"                 # الدفع عند الاستلام (ad-dafʿ ʿind al-istilām, "cash on delivery / payment on receipt") — Bible §3
+    inspect_before_pay: true               # فحص المنتج قبل الدفع (faḥṣ al-muntaj qabl al-dafʿ, "inspect the product before paying") — Bible §3
+    dont_like_dont_pay: true               # refuse delivery, no charge (Bible §3 trust element)
+    shipping_intent: "free"                # free shipping is the KSA-locked promise; other markets confirm with fulfillment (Bible §3)
+    price_is_locked_for: ["sa"]            # ONLY KSA has a Bible-locked number (139 SAR)
+    non_ksa_price_policy: "route to skill 07 (offer-optimizer); NEVER fabricate a converted price in config"
+
+  # --- Numerals system reference (defined once; markets state a preference) ---
+  # Western/European Arabic numerals: 0 1 2 3 4 5 6 7 8 9 — الأرقام الغربية
+  #   (al-arqām al-gharbiyya, "the western numerals"); the modern Gulf digital/retail default.
+  # Eastern Arabic-Indic numerals: ٠ ١ ٢ ٣ ٤ ٥ ٦ ٧ ٨ ٩ — الأرقام الهندية
+  #   (al-arqām al-hindiyya, "the Indian numerals"); traditional/print, still common in Egypt.
+  # LOCK: the flagship overlay (Bible §6.3) prints prices in WESTERN numerals
+  #   («… 139 ﷼ بدل 185 …»), so WESTERN is the studio default for prices/CTAs to
+  #   keep the on-frame offer byte-legible and pan-market consistent.
+  numerals:
+    price_and_cta_default: "western"       # 0–9 for all prices, discounts, CTAs (mirrors Bible §6.3)
+    body_numerals_ok: "either"             # incidental numbers may use either system per market taste
+
+  # --- Currency display note --------------------------------------------------
+  # The Bible §6.3 offer overlay uses the classic Rial sign ﷼ (U+FDFC). Saudi
+  # also introduced a new Riyal sign (U+20C1, approved Feb 2025); prefer the
+  # Bible's ﷼ on-frame until platform font support for U+20C1 is universal.
+  currency_display_note: "mirror Bible §6.3 (﷼) for on-frame KSA price; new SAR sign U+20C1 optional once font support is universal"
+
+  # --- Platform/dialect routing (Bible §5) -----------------------------------
+  platform_vo_policy:
+    on_screen_all_platforms: "ar-MSA"      # overlays are MSA everywhere (Bible §5)
+    tiktok_snap_alt_vo: "market spoken dialect (khaleeji or egyptian) — optional alternate VO only"  # Bible §5
+
+
+# =============================================================================
+# markets — the four dossiers. Each block reads: identity → language → modesty →
+# wardrobe → interiors → taboos → numerals → seasonality → COD → delivery →
+# localization_notes. `sa` is PRIMARY and mirrors the flagship (Bible §6) exactly.
+# =============================================================================
+markets:
+
+  # ===========================================================================
+  # sa — SAUDI ARABIA (KSA) — PRIMARY MARKET · mirrors the flagship (Bible §3–§6)
+  # The default 8 s cut, the locked overlays/VO, the hero set, the 139 SAR offer,
+  # and the UNBROKEN THREAD concept are all authored FOR THIS MARKET FIRST.
+  # ===========================================================================
+  sa:
+    name_en: "Saudi Arabia (KSA)"
+    name_ar: "المملكة العربية السعودية"    # al-Mamlaka al-ʿArabiyya as-Saʿūdiyya ("Kingdom of Saudi Arabia")
+    iso: "SA"
+    primary: true                          # THE primary market — the flagship is built here (Bible §3)
+    mirrors_flagship: true                 # this block must not contradict Bible §6; it is the reference cut
+    culture_doc_ref: "knowledge/gulf-culture/saudi.md"
+
+    currency:
+      code: "SAR"                          # Saudi Riyal — the ONLY Bible-locked price currency (Bible §3)
+      name_ar: "ريال سعودي"                # riyāl saʿūdī ("Saudi riyal")
+      symbol_onframe: "﷼"                  # classic Rial sign used in the locked overlay (Bible §6.3)
+      symbol_new: "U+20C1"                 # new SAR sign (Feb 2025); optional once font support is universal
+      decimals: 2                          # halalas: 100 halala = 1 riyal
+
+    language:
+      primary_language: "ar-MSA"           # فصحى on-screen + primary VO (Bible §5, §6.4)
+      spoken_dialect: "khaleeji"           # خليجي (khalījī, "Gulf") — Najdi/Hijazi register for the optional TikTok/Snap VO
+      formality: "MSA-lead"                # MSA is the premium register; khaleeji is a spoken accent layer only (Bible §5)
+      forbid_in_saudi_cut: ["Darija", "Egyptian slang"]   # keep the primary Saudi cut in clean MSA (Bible §5)
+      # Locked flagship overlays/VO for this market are the Bible's — do not re-translate:
+      overlays_ref: "STUDIO-BIBLE.md#6.3"  # the 6 locked RTL overlays (Bible §6.3)
+      vo_ref: "STUDIO-BIBLE.md#6.4"        # the 5-line locked MSA VO (Bible §6.4)
+
+    modesty_level: "very-high"             # KSA is the most conservative target; maximum restraint & taste (Bible §5)
+    hair_visibility_default: "visible"     # women's hair-care norm; default hero shows hair (Bible §5)
+    modest_alternative: "hijab / elegantly-draped styled-hair A/B pair always shipped (Bible §5)"
+
+    wardrobe_palette:
+      # Elegant neutral drape / soft modest blouse / abaya-adjacent tones (Bible §5)
+      # in the brand's warm luxe DNA (Bible §3 palette).
+      base: "abaya-adjacent — عباية (ʿabāya, 'the loose over-garment') silhouette in warm neutrals"
+      colors: ["warm cream #FAF6F1", "garnet red #8E1B1E", "deep garnet #6E1214", "gold #C9A227", "soft brown #6B564E"]
+      fabric: "matte crepe, silk, fine wool drape; no logos, no loud print; light that flatters skin & hair"
+      jewelry: "minimal — thin gold, a single ring; nothing that competes with the bottle or the hair"
+
+    interior_style:
+      # Mirror the Bible §4 hero set exactly for the flagship; broader scenes stay
+      # in Najdi Gulf-luxury with Moroccan-heritage cues (Bible §5).
+      hero_set: "warm cream Moorish/mihrab arch, deep garnet drape, single red hibiscus, palm frond, pale stone/travertine podium, soft directional window light with long gentle shadows (Bible §4)"
+      broader_scenes: "premium warm Gulf interior — brass, mashrabiya light, dates & hibiscus botanicals, Moroccan arch cues (Bible §5)"
+      light: "soft directional window light; warm; long gentle shadows; NEVER flat studio glare (Bible §4, §6.5 mood)"
+
+    taboos:                                # ADD to shared.forbid_floor (never remove from it)
+      - "no depiction of unrelated men & women together; keep the frame woman-centered & private"
+      - "no music/scene that conflicts with a modest, family-safe read (KSA is the strictest read)"
+      - "no misuse of national symbols, the flag, or maps; heritage cues stay tasteful, not political"
+      - "no exposed styling beyond hair/face/hands; wardrobe stays abaya-adjacent"
+      - "no exaggerated before/after that shames the woman's real hair (Bible §5 fear-mongering forbid)"
+
+    numerals:
+      preference: "western"                # 0–9 for prices/CTAs — mirrors the locked overlay «139 ﷼ بدل 185» (Bible §6.3)
+      rationale: "matches the LP + locked overlay; KSA digital/retail standard"
+
+    weekend:
+      days: ["Friday", "Saturday"]         # official KSA weekend since June 2013
+      work_week: "Sunday–Thursday"
+      peak_social_windows: "weekday evenings 20:00–24:00; Thu–Fri evenings peak; late-night during Ramadan"
+
+    seasonality:                           # windows are ranked by commercial weight for THIS product
+      - name_en: "Ramadan"
+        name_ar: "رمضان"                   # ramaḍān
+        when: "annual moving lunar window; next ≈ 8 Feb 2027 (1448 AH), shifts ~11 days earlier each Gregorian year — verify by sighting"
+        weight: "highest"
+        angle: "self-care ritual after iftar/suhoor; heritage & grandmothers' recipe (وصفة الجدات, waṣfat al-jaddāt, 'the grandmothers' recipe'); gifting the 3-pack; nighttime-calm cut"
+        note: "late-night consumption peaks; keep tone spiritual-adjacent but NEVER use religious imagery as decoration (Bible §5)"
+      - name_en: "Eid al-Fitr"
+        name_ar: "عيد الفطر"               # ʿīd al-fiṭr ("festival of breaking the fast") — ≈ end of Ramadan
+        when: "≈ 9 Mar 2027; day after Ramadan ends"
+        weight: "high"
+        angle: "look-your-best for Eid; gifting; density & shine payoff for gatherings"
+      - name_en: "Eid al-Adha"
+        name_ar: "عيد الأضحى"              # ʿīd al-aḍḥā ("festival of sacrifice")
+        when: "annual moving window ≈ mid-May 2027 (10 Dhul-Hijjah)"
+        weight: "medium"
+        angle: "gifting + family-gathering grooming; travel/Hajj-season self-care reset"
+      - name_en: "Saudi Founding Day"
+        name_ar: "يوم التأسيس"             # yawm at-taʾsīs ("Founding Day")
+        when: "22 February (annual, fixed)"
+        weight: "medium"
+        angle: "heritage & authenticity tie-in (Moroccan grandmothers' recipe pairs with Saudi heritage pride); tasteful, non-political"
+      - name_en: "Saudi National Day"
+        name_ar: "اليوم الوطني السعودي"    # al-yawm al-waṭanī as-saʿūdī ("Saudi National Day")
+        when: "23 September (annual, fixed)"
+        weight: "high"
+        angle: "big retail moment; patriotic warmth + offer push; keep flag/symbol use respectful, not decorative"
+      - name_en: "Back-to-School"
+        name_ar: "العودة إلى المدارس"      # al-ʿawda ilā al-madāris ("back to school")
+        when: "mid-August – September (school year start)"
+        weight: "medium"
+        angle: "mothers' self-reset after summer; routine restart; the ICP includes mothers (Bible §3)"
+      - name_en: "Gulf Summer"
+        name_ar: "الصيف"                   # aṣ-ṣayf ("summer")
+        when: "June – August (extreme heat, indoor season, family travel)"
+        weight: "medium-high"
+        angle: "hair stress from sun, chlorine, saltwater & AC dryness → repair/nourish angle; indoor ritual"
+      - name_en: "White Friday"
+        name_ar: "الجمعة البيضاء"          # al-jumʿa al-bayḍāʾ ("White Friday" — the Gulf's November sales event)
+        when: "November (regional Black-Friday equivalent)"
+        weight: "high"
+        angle: "peak COD/e-com moment; lead with the −25% pack value (139 ﷼ بدل 185) and free shipping"
+      - name_en: "Wedding Season"
+        name_ar: "موسم الأعراس"            # mawsim al-aʿrās ("wedding season")
+        when: "October – March (cooler months)"
+        weight: "medium"
+        angle: "henna nights tie directly to the henna ingredient (الحناء الطبيعية); bridal density & shine"
+
+    cod_norms:
+      # COD is the Bible-locked payment and the dominant trust mechanic in KSA.
+      dominance: "very-high — COD is the default and the Bible-locked payment (Bible §3)"
+      confirmation: "phone confirmation call before dispatch is standard; overlay/VO must say «الدفع عند الاستلام»"
+      inspect_before_pay: true             # فحص المنتج قبل الدفع — a headline trust element (Bible §3)
+      refusal_norm: "‘don't like it → don't pay’ (refuse at the door, no charge) — Bible §3"
+      price_locked: "139 SAR / 3-pack (was 185, −25%) — the ONLY Bible-locked price (Bible §3)"
+
+    delivery_expectation:
+      window: "24–48 h major cities / 1–4 business days nationwide, after phone confirmation (Bible §3)"
+      coverage: "all KSA cities (Bible §3)"
+      shipping: "free (Bible §3)"
+      proof: "verified-purchase reviews from Riyadh, Jeddah, Dammam; 4.8/5 rating (Bible §3)"
+      sku: "SA04050100M300"                # Bible §3
+
+    localization_notes: >-
+      This is the reference cut. Reproduce Bible §6 verbatim — do not re-translate
+      the locked overlays (§6.3) or VO (§6.4), do not restate the offer in any
+      currency but SAR, and keep the hero set identical to Bible §4. On-screen text
+      is elegant MSA in western numerals with the ﷼ sign; the optional TikTok/Snap
+      VO may lean Khaleeji (Najdi/Hijazi warmth) while overlays stay MSA. Lead
+      emotion: hope + restored femininity; secondary: heritage trust (Bible §6).
+      Keep the read maximally modest — KSA is the strictest of the four markets, so
+      what passes here passes everywhere. Always ship the hijab/styled-hair A/B pair.
+
+  # ===========================================================================
+  # ae — UNITED ARAB EMIRATES — cosmopolitan Gulf luxe; MSA-lead, khaleeji VO
+  # ===========================================================================
+  ae:
+    name_en: "United Arab Emirates (UAE)"
+    name_ar: "الإمارات العربية المتحدة"    # al-Imārāt al-ʿArabiyya al-Muttaḥida ("United Arab Emirates")
+    iso: "AE"
+    primary: false
+    culture_doc_ref: "knowledge/gulf-culture/uae.md"
+
+    currency:
+      code: "AED"                          # UAE Dirham
+      name_ar: "درهم إماراتي"              # dirham imārātī ("Emirati dirham")
+      symbol_onframe: "د.إ"                # dirham sign (also "AED")
+      decimals: 2                          # fils: 100 fils = 1 dirham
+      price_policy: "route localized price to skill 07 (offer-optimizer); do NOT convert 139 SAR in config (Bible §3)"
+
+    language:
+      primary_language: "ar-MSA"           # فصحى on-screen + primary VO (Bible §5)
+      spoken_dialect: "khaleeji"           # خليجي — Emirati Gulf register for the optional TikTok/Snap VO
+      formality: "MSA-lead"                # MSA leads; Emirati khaleeji is a spoken accent layer only
+      note: "UAE audience is multilingual (Arabic + English); KEEP the studio cut Arabic-MSA for the beauty/heritage read — English is out of scope for this framework"
+
+    modesty_level: "high (cosmopolitan)"   # modest & tasteful, with slightly more contemporary-luxe latitude than KSA
+    hair_visibility_default: "visible"
+    modest_alternative: "hijab / styled-hair A/B pair shipped (Bible §5)"
+
+    wardrobe_palette:
+      base: "abaya-adjacent OR contemporary modest drape; a touch more polished-modern than KSA"
+      colors: ["warm cream #FAF6F1", "garnet red #8E1B1E", "gold #C9A227", "champagne-neutral", "deep garnet #6E1214"]
+      fabric: "silk, crepe, satin drape; refined, editorial; still no immodest cut"
+      jewelry: "delicate gold; a slightly more elevated finish reads well in this market"
+
+    interior_style:
+      hero_set: "same brand hero set for product/offer beats (Bible §4) — the lock is market-agnostic"
+      broader_scenes: "contemporary Gulf luxe — marble, brushed gold, floor-to-ceiling light, modern majlis, desert-modern minimalism"
+      light: "bright warm luxe; clean; still soft directional, never harsh CGI glare (Bible §6.5)"
+
+    taboos:                                # ADD to shared.forbid_floor
+      - "no alcohol cues despite tourism context — the beauty ad stays modest & dry (Bible §5)"
+      - "no disrespect to UAE leadership, the flag, or national symbols"
+      - "avoid overt religious framing; heritage cues stay aesthetic, not devotional (Bible §5)"
+      - "keep skin exposure to face/hands/hair; contemporary ≠ immodest"
+
+    numerals:
+      preference: "western"                # 0–9 standard in UAE retail/digital
+      rationale: "UAE commerce and social feeds are western-numeral by default"
+
+    weekend:
+      days: ["Saturday", "Sunday"]         # UAE moved to Sat–Sun for public sector from 1 Jan 2022; Friday is a half working day
+      work_week: "Monday–Friday (4.5-day for government; Friday half-day)"
+      note: "some private firms retain Fri–Sat or Fri–Sat–Sun — plan flights for Fri–Sun social peak"
+      peak_social_windows: "Thu–Sun evenings; late-night during Ramadan"
+
+    seasonality:
+      - name_en: "Ramadan"
+        name_ar: "رمضان"                   # ramaḍān (see sa for translit/gloss)
+        when: "annual moving window; next ≈ 8 Feb 2027 (1448 AH); shifts ~11 days earlier yearly"
+        weight: "highest"
+        angle: "post-iftar self-care ritual; heritage & gifting; nighttime-calm cut"
+      - name_en: "Eid al-Fitr"
+        name_ar: "عيد الفطر"               # ʿīd al-fiṭr
+        when: "≈ 9 Mar 2027"
+        weight: "high"
+        angle: "look-your-best for Eid gatherings; gifting the 3-pack"
+      - name_en: "Eid al-Adha"
+        name_ar: "عيد الأضحى"              # ʿīd al-aḍḥā
+        when: "≈ mid-May 2027"
+        weight: "medium"
+        angle: "family-gathering grooming; travel-season reset"
+      - name_en: "UAE National Day (Union Day)"
+        name_ar: "عيد الاتحاد"             # ʿīd al-ittiḥād ("Union Day") — the UAE National Day
+        when: "2 December (annual, fixed; 2–3 Dec holidays)"
+        weight: "high"
+        angle: "big retail moment; national warmth + pack value; respectful use of symbols only"
+      - name_en: "Back-to-School"
+        name_ar: "العودة إلى المدارس"      # al-ʿawda ilā al-madāris
+        when: "late August – September"
+        weight: "medium"
+        angle: "mothers' post-summer reset & routine restart (Bible §3 ICP)"
+      - name_en: "Summer"
+        name_ar: "الصيف"                   # aṣ-ṣayf
+        when: "June – August (extreme heat, indoor & travel season)"
+        weight: "medium-high"
+        angle: "sun/chlorine/AC hair stress → repair angle; families travel, indoor ritual sells"
+      - name_en: "White Friday"
+        name_ar: "الجمعة البيضاء"          # al-jumʿa al-bayḍāʾ
+        when: "November"
+        weight: "high"
+        angle: "peak COD/e-com; lead with 3-pack value & free shipping intent"
+      - name_en: "Wedding Season"
+        name_ar: "موسم الأعراس"            # mawsim al-aʿrās
+        when: "October – March (cooler months)"
+        weight: "medium"
+        angle: "henna-night tie-in (الحناء / al-ḥinnāʾ, 'henna' — a locked ingredient); bridal shine & density"
+
+    cod_norms:
+      dominance: "high — COD widely expected, though card/digital penetration is higher than KSA"
+      confirmation: "phone/WhatsApp confirmation common; offer both COD and prepaid, lead with COD trust"
+      inspect_before_pay: true             # carries from the offer structure (Bible §3)
+      fees_note: "some couriers add a small COD fee; keep the '3-pack + free shipping' value message clean"
+
+    delivery_expectation:
+      window: "same/next-day in Dubai, Abu Dhabi, Sharjah; 1–3 business days emirates-wide"
+      coverage: "all seven emirates"
+      shipping: "free-shipping intent carries from the offer structure; confirm with fulfillment (Bible §3)"
+      note: "delivery windows are market EXPECTATIONS, not a Bible-locked promise (only KSA times are locked)"
+
+    localization_notes: >-
+      Slightly more polished-modern latitude than KSA, but the same modesty floor
+      and the same MSA on-screen register apply. Overlays stay elegant MSA in
+      western numerals; price is shown in AED and set by skill 07 — never convert
+      139 SAR here. The optional TikTok/Snap VO may lean Emirati khaleeji while
+      overlays stay MSA. The hero set and product lock are identical to KSA
+      (market-agnostic, Bible §4). Emphasize luxe finish and time-saving delivery;
+      keep alcohol/tourism context entirely out of frame.
+
+  # ===========================================================================
+  # om — OMAN — understated heritage elegance; reserve over ostentation
+  # ===========================================================================
+  om:
+    name_en: "Oman"
+    name_ar: "سلطنة عُمان"                 # Salṭanat ʿUmān ("Sultanate of Oman")
+    iso: "OM"
+    primary: false
+    culture_doc_ref: "knowledge/gulf-culture/oman.md"
+
+    currency:
+      code: "OMR"                          # Omani Rial — a high-value currency
+      name_ar: "ريال عُماني"              # riyāl ʿumānī ("Omani rial")
+      symbol_onframe: "ر.ع."               # Omani rial sign (also "OMR")
+      decimals: 3                          # baisa: 1000 baisa = 1 rial (prices shown to 3 decimals, e.g. 9.900)
+      price_policy: "route localized price to skill 07; OMR is high-value & 3-decimal — never convert 139 SAR in config (Bible §3)"
+
+    language:
+      primary_language: "ar-MSA"           # فصحى on-screen + primary VO (Bible §5)
+      spoken_dialect: "khaleeji"           # خليجي — Omani Arabic is Gulf/South-Arabian; broadly khaleeji-adjacent for the optional VO
+      formality: "MSA-lead"                # MSA leads; Omani khaleeji is a spoken accent layer only
+      note: "Omani register favors calm, measured phrasing; avoid hype — reserve reads as premium here"
+
+    modesty_level: "high (reserved/understated)"   # conservative + understated; subtlety over flash
+    hair_visibility_default: "visible"
+    modest_alternative: "hijab / styled-hair A/B pair shipped (Bible §5)"
+
+    wardrobe_palette:
+      base: "abaya-adjacent in muted, earthy neutrals; understated, never loud"
+      colors: ["warm cream #FAF6F1", "muted garnet #8E1B1E", "soft brown #6B564E", "sage green #4A6741", "antique gold #C9A227"]
+      fabric: "matte, natural-fiber drape; quiet luxury; minimal sheen"
+      jewelry: "Omani silver accent or thin gold; restrained; heritage-leaning"
+
+    interior_style:
+      hero_set: "same brand hero set for product/offer beats (Bible §4) — market-agnostic"
+      broader_scenes: "understated Omani elegance — carved wood, silver, frankincense (لبان / lubān, 'frankincense') mood, muted earth tones, Nizwa/heritage cues, arch & mandoos (مندوس, 'the Omani dowry chest') accents"
+      light: "soft, warm, low-key directional light; gentle shadows; quiet mood (Bible §6.5)"
+
+    taboos:                                # ADD to shared.forbid_floor
+      - "no ostentation or loud flash — Omani taste values restraint; 'quiet luxury' only"
+      - "no disrespect to the Sultan, the flag, or national symbols"
+      - "avoid overt religious framing; heritage cues stay aesthetic (Bible §5)"
+      - "keep exposure to face/hands/hair; understated wardrobe"
+
+    numerals:
+      preference: "western"                # 0–9 standard in Omani retail
+      rationale: "Omani commerce uses western numerals; note OMR shows 3 decimals (baisa)"
+
+    weekend:
+      days: ["Friday", "Saturday"]         # Oman weekend
+      work_week: "Sunday–Thursday"
+      peak_social_windows: "weekday evenings; Thu–Fri evenings; late-night during Ramadan"
+
+    seasonality:
+      - name_en: "Ramadan"
+        name_ar: "رمضان"                   # ramaḍān
+        when: "annual moving window; next ≈ 8 Feb 2027 (1448 AH); shifts ~11 days earlier yearly"
+        weight: "highest"
+        angle: "calm post-iftar self-care ritual; heritage authenticity; understated nighttime cut"
+      - name_en: "Eid al-Fitr"
+        name_ar: "عيد الفطر"               # ʿīd al-fiṭr
+        when: "≈ 9 Mar 2027"
+        weight: "high"
+        angle: "quiet-elegant look for Eid; gifting the 3-pack"
+      - name_en: "Eid al-Adha"
+        name_ar: "عيد الأضحى"              # ʿīd al-aḍḥā
+        when: "≈ mid-May 2027"
+        weight: "medium"
+        angle: "family-gathering grooming; heritage self-care"
+      - name_en: "Oman National Day"
+        name_ar: "العيد الوطني العُماني"   # al-ʿīd al-waṭanī al-ʿumānī ("Omani National Day")
+        when: "18 November (annual, fixed; 18–19 Nov)"
+        weight: "high"
+        angle: "national warmth + heritage pride; understated, respectful; strong retail moment"
+      - name_en: "Back-to-School"
+        name_ar: "العودة إلى المدارس"      # al-ʿawda ilā al-madāris
+        when: "late August – September"
+        weight: "medium"
+        angle: "mothers' post-summer routine reset (Bible §3 ICP)"
+      - name_en: "Summer"
+        name_ar: "الصيف"                   # aṣ-ṣayf
+        when: "June – August (heat & humidity on the coast; khareef/monsoon greenery in Dhofar/Salalah ~Jun–Sep)"
+        weight: "medium"
+        angle: "humidity & sun hair stress → nourish/repair; Salalah khareef season adds a travel/self-care beat"
+      - name_en: "White Friday"
+        name_ar: "الجمعة البيضاء"          # al-jumʿa al-bayḍāʾ
+        when: "November"
+        weight: "medium-high"
+        angle: "COD/e-com push; 3-pack value & free-shipping intent, framed with Omani restraint"
+
+    cod_norms:
+      dominance: "high — COD is the dominant, trusted method in a smaller market"
+      confirmation: "phone confirmation before dispatch standard; smaller order volumes, higher touch"
+      inspect_before_pay: true             # carries from the offer structure (Bible §3)
+
+    delivery_expectation:
+      window: "1–2 business days Muscat; 2–5 business days elsewhere / interior governorates"
+      coverage: "Muscat fastest; interior & Dhofar longer"
+      shipping: "free-shipping intent carries from the offer structure; confirm with fulfillment (Bible §3)"
+      note: "expectations are market norms, not a Bible-locked promise (only KSA times are locked)"
+
+    localization_notes: >-
+      Lead with reserve and quiet luxury — Omani taste rewards understatement, so
+      dial the copy calmer and the wardrobe/interiors more muted than KSA while
+      holding the same modesty floor. Overlays stay elegant MSA in western
+      numerals; price is OMR (3-decimal, high-value) and is set by skill 07 —
+      never convert 139 SAR here. The optional VO may lean Omani khaleeji; overlays
+      stay MSA. Hero set and product lock are identical (Bible §4). Heritage cues
+      (frankincense, silver, muted earth tones) resonate strongly.
+
+  # ===========================================================================
+  # eg — EGYPT — warmer, more expressive; Egyptian dialect VO; COD-critical
+  # ===========================================================================
+  eg:
+    name_en: "Egypt"
+    name_ar: "جمهورية مصر العربية"         # Jumhūriyyat Miṣr al-ʿArabiyya ("Arab Republic of Egypt"); short: مصر (Miṣr, "Egypt")
+    iso: "EG"
+    primary: false
+    culture_doc_ref: "knowledge/gulf-culture/egypt.md"
+
+    currency:
+      code: "EGP"                          # Egyptian Pound
+      name_ar: "جنيه مصري"                # junayh miṣrī ("Egyptian pound")
+      symbol_onframe: "ج.م"                # pound sign (also "EGP" / "LE")
+      decimals: 2                          # piastres: 100 piastres = 1 pound
+      price_policy: "route localized price to skill 07; EGP is volatile — never convert 139 SAR in config (Bible §3)"
+
+    language:
+      primary_language: "ar-MSA"           # فصحى on-screen + primary VO for the premium read (Bible §5)
+      spoken_dialect: "egyptian"           # مصري (miṣrī, "Egyptian") — the widely-understood dialect for the optional TikTok/Snap VO
+      formality: "MSA-lead"                # MSA leads on-screen; Egyptian dialect is a spoken VO option ONLY
+      forbid_in_saudi_cut: ["Egyptian slang"]   # Egyptian slang stays OUT of the primary Saudi cut (Bible §5)
+      note: "Egyptian dialect is pan-Arab familiar and warm; it may voice the EG-market TikTok/Snap VO, but overlays remain MSA and it never bleeds into the KSA cut"
+
+    modesty_level: "moderate-high"         # more expressive/relaxed than the Gulf, but still tasteful & modest
+    hair_visibility_default: "visible"
+    modest_alternative: "hijab / styled-hair A/B pair shipped (Bible §5)"
+
+    wardrobe_palette:
+      base: "modest everyday-elegant blouse or drape; a touch warmer & more relatable than Gulf abaya"
+      colors: ["warm cream #FAF6F1", "garnet red #8E1B1E", "gold #C9A227", "terracotta-warm", "soft brown #6B564E"]
+      fabric: "cotton/silk drape; approachable premium; still no immodest cut"
+      jewelry: "warm gold; a slightly more expressive, everyday finish is authentic here"
+
+    interior_style:
+      hero_set: "same brand hero set for product/offer beats (Bible §4) — market-agnostic"
+      broader_scenes: "warm Cairene/Mediterranean — mashrabiya screens, brass, warm terracotta, Islamic-Cairo geometric detail, Nile-warm light"
+      light: "warm golden light; lived-in warmth; soft directional, never harsh (Bible §6.5)"
+
+    taboos:                                # ADD to shared.forbid_floor
+      - "avoid sectarian/religious sensitivity (Muslim–Christian); keep it universal & warm"
+      - "no political content or national-symbol misuse"
+      - "no fake medical/cure claims (Egyptian audiences are skeptical of over-promising) — stay within the four locked benefits (Bible §3)"
+      - "expressive ≠ immodest — keep exposure to face/hands/hair, tasteful framing"
+
+    numerals:
+      preference: "western"                # 0–9 for prices/CTAs, for pan-market consistency & clarity
+      rationale: "Egypt still sees Eastern Arabic-Indic (٠–٩) in print & tradition; audience is comfortable with BOTH, but keep prices western to match the studio system"
+
+    weekend:
+      days: ["Friday", "Saturday"]         # Egypt weekend (some banks/private Fri only)
+      work_week: "Sunday–Thursday"
+      peak_social_windows: "evenings 21:00–01:00; Thu–Fri peak; heavy late-night during Ramadan"
+
+    seasonality:
+      - name_en: "Ramadan"
+        name_ar: "رمضان"                   # ramaḍān
+        when: "annual moving window; next ≈ 8 Feb 2027 (1448 AH); shifts ~11 days earlier yearly"
+        weight: "highest"
+        angle: "Egypt's biggest media & commerce moment; post-iftar family/self-care; heritage recipe warmth; nighttime cut"
+        note: "Ramadan TV/social viewership peaks hard in Egypt — the single most valuable window"
+      - name_en: "Eid al-Fitr"
+        name_ar: "عيد الفطر"               # ʿīd al-fiṭr
+        when: "≈ 9 Mar 2027"
+        weight: "high"
+        angle: "look-your-best for Eid visits; gifting; density & shine payoff"
+      - name_en: "Eid al-Adha"
+        name_ar: "عيد الأضحى"              # ʿīd al-aḍḥā
+        when: "≈ mid-May 2027"
+        weight: "medium"
+        angle: "family-gathering grooming; self-care reset"
+      - name_en: "Back-to-School"
+        name_ar: "العودة إلى المدارس"      # al-ʿawda ilā al-madāris
+        when: "September – early October (Egyptian school year start)"
+        weight: "medium-high"
+        angle: "mothers' post-summer reset — strong ICP fit (Bible §3 reviews reference daughters); budget-conscious framing"
+      - name_en: "Summer / North Coast season"
+        name_ar: "الصيف"                   # aṣ-ṣayf
+        when: "June – August (heat; Sahel/North-Coast sun & sea season)"
+        weight: "medium-high"
+        angle: "sun/saltwater/chlorine hair damage → repair & nourish angle; post-beach recovery ritual"
+      - name_en: "White Friday"
+        name_ar: "الجمعة البيضاء"          # al-jumʿa al-bayḍāʾ
+        when: "November"
+        weight: "high"
+        angle: "major COD/e-com moment; lead with pack value & free-shipping intent; price-sensitive framing"
+      - name_en: "Wedding Season"
+        name_ar: "موسم الأفراح"            # mawsim al-afrāḥ ("wedding season" — Egyptian phrasing)
+        when: "summer-heavy, plus year-round"
+        weight: "medium"
+        angle: "henna-night tie-in (الحناء / al-ḥinnāʾ, 'henna' — a locked ingredient); bridal density & shine"
+
+    cod_norms:
+      dominance: "very-high — COD is overwhelmingly dominant (cash economy, low card penetration); COD is essential"
+      confirmation: "confirmation call is CRITICAL — refusal/return rates are higher; confirm intent + address before dispatch"
+      inspect_before_pay: true             # carries from the offer structure; strong trust lever in EG (Bible §3)
+      risk_note: "higher COD refusal risk → a clear, honest offer & confirmation call protect margin; never over-promise (Bible §5)"
+
+    delivery_expectation:
+      window: "2–5 business days Cairo/Alexandria/Delta; up to ~a week to Upper Egypt & remote governorates"
+      coverage: "Cairo & Alexandria fastest; Upper Egypt/remote slower"
+      shipping: "free-shipping intent carries from the offer structure; confirm with fulfillment (Bible §3)"
+      note: "expectations are market norms, not a Bible-locked promise (only KSA times are locked)"
+
+    localization_notes: >-
+      Warmer and more relatable than the Gulf, but the modesty floor and the MSA
+      on-screen register still hold. Overlays stay elegant MSA in western numerals;
+      price is EGP (volatile) and set by skill 07 — never convert 139 SAR here. The
+      optional TikTok/Snap VO may use Egyptian dialect (pan-Arab familiar, warm),
+      but overlays stay MSA and Egyptian slang NEVER enters the KSA cut (Bible §5).
+      COD confirmation calls are critical to protect margin. Hero set and product
+      lock are identical (Bible §4). Lean into affordability + honest proof; the
+      audience punishes over-promising, so stay strictly within the four claims.
+
+
+# =============================================================================
+# routing — how skills consume this file (data contract, not logic)
+# =============================================================================
+routing:
+  consumed_by:
+    - "20-arabic-copywriter"               # overlays/VO register, numerals, dialect VO variant
+    - "21-cultural-expert-gulf"            # modesty, taboos, wardrobe, interiors, cultural QA
+    - "03-marketing-strategist"            # seasonality windows → angle & timing
+    - "07-offer-optimizer"                 # per-market currency + non-KSA price localization (never fabricated here)
+    - "04-creative-director"               # wardrobe/interior direction per market
+    - "27-quality-checker"                 # culture/localization axis scoring (Bible §7)
+  hard_rules:
+    - "sa mirrors the flagship (Bible §6); its block must never contradict the Bible"
+    - "on-screen register is elegant MSA in EVERY market; dialect is VO-only for TikTok/Snap (Bible §5)"
+    - "never fabricate a non-KSA price; only KSA has a Bible-locked number (139 SAR, Bible §3)"
+    - "per-market taboos ADD to shared.forbid_floor; they never remove a Bible §5 forbid"
+    - "never exceed the four locked claims or the Bible §3 result timelines"
+    - "always ship the hijab/styled-hair A/B pair; default hero keeps hair visible (Bible §5)"
+
+
+# =============================================================================
+# references — the framework this config coordinates with (Bible §1)
+# =============================================================================
+references:
+  bible: "STUDIO-BIBLE.md"                 # supreme source of truth (Bible §0)
+  studio_config: "config/studio.config.yaml"  # global defaults; owns target_markets routing
+  platforms: "config/platforms.yaml"       # Meta/TikTok/Snap specs & safe zones
+  brand_lock: "config/brand/mechat-red-oil.brand.yaml"  # immutable product lock (Bible §4)
+  culture_docs:                            # deep-dive dossiers (Bible §1)
+    saudi: "knowledge/gulf-culture/saudi.md"
+    uae: "knowledge/gulf-culture/uae.md"
+    oman: "knowledge/gulf-culture/oman.md"
+    egypt: "knowledge/gulf-culture/egypt.md"
+  arabic_copywriter_skill: "skills/20-arabic-copywriter/"
+  cultural_expert_skill: "skills/21-cultural-expert-gulf/"
+  offer_optimizer_skill: "skills/07-offer-optimizer/"

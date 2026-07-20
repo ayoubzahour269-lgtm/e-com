@@ -1,0 +1,405 @@
+# =============================================================================
+# AI ADS STUDIO — FLAGSHIP PRODUCT BRAND-LOCK
+# config/brand/mechat-red-oil.brand.yaml
+# -----------------------------------------------------------------------------
+# The machine-readable, immutable identity of the flagship product:
+#   زيت المشاط الأحمر الأصلي — Zayt al-Mishāṭ al-Aḥmar ("Original Red Mechat Oil").
+#
+# This file is the DATA extract of STUDIO-BIBLE.md §3 (product source of truth)
+# and §4 (product consistency lock). It carries product facts, claims, the offer,
+# the brand palette, and the physical bottle/label lock that EVERY skill,
+# storyboard, overlay, VO line, and compiled Kie prompt reads and must obey on
+# every frame and every regeneration.
+#
+# AUTHORITY: STUDIO-BIBLE.md is the single source of truth. Every value below
+# traces to a Bible section, cited inline as "Bible §N". If this file ever
+# disagrees with the Bible, THE BIBLE WINS and this file is regenerated
+# (STUDIO-BIBLE.md §0 keystone rule; ARCHITECTURE.md §10). Nothing here may be
+# loosened, restated more strongly, or extended into a new product claim.
+#
+# CLAIM DISCIPLINE (hard rule): the `claims` block is worded to MATCH — never
+# exceed — the landing page. No skill may amplify, add a timeline the LP does not
+# state, or introduce a medical/therapeutic claim. When in doubt, weaken, cite
+# the LP, never invent (Bible §3 "do not exceed these claims").
+#
+# CLONE-AND-EDIT (onboarding a new product): copy this file to
+# config/brand/<new-product>.brand.yaml, replace every value with the new
+# product's LP-sourced facts and real product-photo lock, regenerate the Bible's
+# flagship sections for that product, and leave the framework (skills, builders,
+# quality gates) untouched (Bible §0). Keep the SAME KEY SHAPE so downstream
+# skills bind without change. Do not delete keys; set them to the new truth.
+#
+# CONVENTIONS (Bible §2): professional agency voice; DATA not reasoning; no
+# placeholders, no TODO, no "example only". Arabic is elegant Modern Standard
+# Arabic (فصحى); every Arabic string carries a Latin transliteration + English
+# gloss on FIRST use (translit uses ā/ī/ū long vowels, ʿ = ʿayn, ʾ = hamza,
+# ḥ/ṣ/ṭ/dh/sh = emphatic/composite consonants). RTL applies to all Arabic.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# meta — provenance & binding contract for this brand-lock (Bible §0, §2)
+# -----------------------------------------------------------------------------
+meta:
+  schema: "brand-lock/v1"                 # key shape downstream skills bind to; keep stable across clones
+  brand_id: "mechat-red-oil"              # canonical id; matches the config/brand/ filename stem
+  is_flagship: true                       # this is THE flagship the whole studio is authored against (Bible §6, §8)
+  version: "1.0.0"                         # semantic version of this brand-lock
+  last_updated: "2026-07-20"              # ISO date of last edit
+  source_of_truth: "STUDIO-BIBLE.md"      # the keystone; this file is subordinate to it
+  traces_to: ["Bible §3", "Bible §4"]     # every value below extracts from these two sections
+  authority_note: >-
+    The Bible wins on any conflict. This file is a faithful extract, never an
+    expansion. Regenerate it — do not hand-edit around it — if the Bible changes.
+
+
+# -----------------------------------------------------------------------------
+# product — identity (Bible §3, §4)
+# -----------------------------------------------------------------------------
+product:
+  name_ar: "زيت المشاط الأحمر الأصلي"      # the full Arabic product name as on the LP (Bible §3)
+  name_translit: "Zayt al-Mishāṭ al-Aḥmar al-Aṣlī"   # ("The Original Red Mechat Oil")
+  name_en: "Original Red Mechat Oil"      # English working name (NOT printed on the bottle — see product_lock)
+  short_name_ar: "زيت المشاط الأحمر"       # zayt al-mishāṭ al-aḥmar ("Red Mechat Oil") — the everyday name used in copy/VO
+  category: "hair-oil"                    # traditional Moroccan herbal hair oil (Bible §3)
+  origin: "moroccan-heritage"             # authentic Moroccan "grandmothers' recipe" (Bible §3)
+  sku: "SA04050100M300"                   # canonical SKU — the 3×250 ml pack (Bible §3)
+  primary_market: "sa"                    # Saudi Arabia is primary (Bible §3); UAE/Oman/Egypt secondary
+  # "al-Mishāṭ" (المشاط) is both the product's signature name AND its hero ingredient
+  # (walnut husk) — see `ingredients`. Never translate "المشاط" as a generic word in copy.
+
+
+# -----------------------------------------------------------------------------
+# positioning — the one-line promise & proof frame (Bible §3)
+# -----------------------------------------------------------------------------
+positioning:
+  one_line: >-
+    100% natural, authentic Moroccan "grandmothers' recipe" at a modern
+    concentration — the traditional remedy that stops shedding and brings hair
+    back, now in a full 3-month treatment pack.
+  heritage_hook_ar: "وصفة الجدات"          # waṣfat al-jaddāt ("the grandmothers' recipe") — the trust anchor (Bible §3)
+  heritage_hook_en: "the grandmothers' recipe"
+  secret_frame_ar: "سرّ جداتنا"            # sirru jaddātinā ("our grandmothers' secret") — the discovery-beat frame (Bible §6.3)
+  secret_frame_en: "our grandmothers' secret"
+  formulation:
+    concentration: "modern concentration"  # traditional recipe, modern potency (Bible §3)
+    free_from: ["parabens", "silicone"]    # explicitly paraben-free and silicone-free (Bible §3)
+    natural_percent: 100                   # 100% natural — a headline trust element (Bible §3)
+  brand_mood: "warm, luxe, Moroccan-heritage-meets-Gulf, natural, feminine, premium"  # visual DNA (Bible §3)
+
+
+# -----------------------------------------------------------------------------
+# claims — the FOUR functional benefits (Bible §3)
+# WORDED TO MATCH THE LP, NEVER EXCEED IT. These are the only functional claims
+# any skill, overlay, or VO may make. `max_strength` is the ceiling; copy may say
+# less, never more. `timeline` is stated ONLY where the LP states it (see
+# objections.results_timeline) — do not attach timelines elsewhere.
+# -----------------------------------------------------------------------------
+claims:
+  - id: "stops-shedding"
+    ar: "يوقف تساقط الشعر من الأسابيع الأولى"   # yūqif tasāquṭ ash-shaʿr min al-asābīʿ al-ūlā
+    en: "Stops hair loss from the first weeks"
+    max_strength: >-
+      Strengthens and anchors the follicles so there is less shedding in the comb
+      and on the pillow. Say "less shedding", not "zero loss".
+    mechanism: "strengthens & anchors follicles"
+  - id: "stimulates-growth"
+    ar: "يحفّز نمو شعر جديد"                     # yuḥaffiz numuww shaʿr jadīd
+    en: "Stimulates new hair growth"
+    max_strength: >-
+      Moroccan herbs activate scalp circulation and help wake dormant follicles.
+      Frame as "stimulates" / "helps wake" — never "regrows guaranteed".
+    mechanism: "activates scalp circulation, wakes dormant follicles"
+  - id: "density-and-length"
+    ar: "كثافة وطول ملحوظان"                     # kathāfa wa-ṭūl malḥūẓān
+    en: "Noticeable density & length"
+    max_strength: >-
+      Noticeable density and length WITH REGULAR USE (2–3× per week). Always pair
+      this claim with the usage cadence; do not promise it from a single use.
+    usage_cadence: "2–3× per week"
+  - id: "shine-and-softness"
+    ar: "لمعان ونعومة من أول استعمال"            # lamaʿān wa-nuʿūma min awwal istiʿmāl
+    en: "Shine & softness from first use"
+    max_strength: >-
+      Coats the strand for silky, non-greasy shine and softness from the first
+      use. This is the ONLY claim allowed a "first use" timeline (Bible §3).
+    sensory: "coats the strand, silky, non-greasy"
+
+
+# -----------------------------------------------------------------------------
+# ingredients — the FOUR, and only these four (Bible §3)
+# No skill may add, drop, or substitute an ingredient. Order = LP hierarchy.
+# -----------------------------------------------------------------------------
+ingredients:
+  - id: "walnut-husk"
+    ar: "المشاط / قشور الجوز"                    # al-mishāṭ / qushūr al-jawz ("the mishāṭ / walnut husk")
+    en: "walnut husk (al-Mishāṭ)"
+    role: "the traditional secret to strengthen roots & stop shedding"
+    is_signature: true                          # gives the product its name; the hero ingredient
+  - id: "red-hibiscus"
+    ar: "الكركديه الأحمر"                        # al-karkadēh al-aḥmar ("red hibiscus")
+    en: "red hibiscus"
+    role: "antioxidants, stimulates growth, warm tone"
+  - id: "natural-henna"
+    ar: "الحناء الطبيعية"                        # al-ḥinnāʾ aṭ-ṭabīʿiyya ("natural henna")
+    en: "natural henna"
+    role: "coats & protects the strand, adds density & shine"
+  - id: "nourishing-plant-oils"
+    ar: "زيوت نباتية مغذية"                      # zuyūt nabātiyya mughadhdhiya ("nourishing plant oils")
+    en: "nourishing plant oils"
+    role: "hydrate scalp, nourish root → tip"
+
+
+# -----------------------------------------------------------------------------
+# audience — who the creative speaks to (Bible §3)
+# -----------------------------------------------------------------------------
+audience:
+  gender: "women"
+  age_range: [22, 45]                     # ~22–45 (Bible §3)
+  markets_ranked: ["sa", "ae", "om", "eg"]   # KSA primary, then UAE, Oman, Egypt (Bible §3)
+  includes_mothers: true                  # reviews reference daughters (Bible §3)
+  psychographics:
+    - "concerned with shedding, thinning, and visible scalp gaps"
+    - "have tried many oils without result"
+    - "value natural / heritage remedies"
+  emotional_drivers:                      # emotional benefits — the levers copy pulls (Bible §3)
+    - "confidence"
+    - "restored femininity"
+    - "hope"
+    - "self-care ritual"
+    - "heritage / authenticity trust"
+    - "identity"
+  primary_trigger: "hope + restored femininity"   # matches the flagship emotional spine (Bible §6)
+  secondary_trigger: "heritage trust"
+
+
+# -----------------------------------------------------------------------------
+# offer — the KSA-locked offer (Bible §3)
+# NUMBERS ARE BIBLE-LOCKED FOR KSA ONLY. Non-KSA prices are set downstream by
+# skill 07 (offer-optimizer) per markets.yaml — never convert 139 SAR in config.
+# -----------------------------------------------------------------------------
+offer:
+  pack:
+    bottles: 3                            # pack of 3 (Bible §3)
+    volume_ml_each: 250                   # 250 ml per bottle (Bible §3)
+    volume_ml_total: 750                  # 3 × 250 ml = 750 ml (Bible §3)
+    treatment_span: "~3-month full treatment"   # the pack = a full ~3-month course (Bible §3)
+  price_sar: 139                          # current price (Bible §3) — the ONLY Bible-locked price
+  was_sar: 185                            # anchor / strikethrough price (Bible §3)
+  discount_pct: 25                        # −25% (Bible §3); (185−139)/185 ≈ 24.9% → stated as 25%
+  currency: "SAR"                         # Saudi riyal
+  currency_symbol_onframe: "﷼"            # classic Rial sign U+FDFC used in the locked overlay (Bible §6.3)
+  free_shipping: true                     # free shipping (Bible §3)
+  cod: true                               # cash on delivery — الدفع عند الاستلام (Bible §3)
+  cod_ar: "الدفع عند الاستلام"             # ad-dafʿ ʿind al-istilām ("payment on receipt")
+  delivery:
+    coverage: "all KSA cities"            # delivery to all Saudi cities (Bible §3)
+    eta: "24–48h / 1–4 business days"     # after phone confirmation (Bible §3)
+    trigger: "after phone confirmation"   # order confirmed by phone, then dispatched (Bible §3)
+  price_lock_note: >-
+    139 SAR / 3-pack is locked for KSA only (Bible §3). For UAE/Oman/Egypt the
+    price is computed by skill 07 per markets.yaml — do NOT fabricate or convert
+    it here.
+
+
+# -----------------------------------------------------------------------------
+# cta — the locked call to action (Bible §3, §6.3)
+# -----------------------------------------------------------------------------
+cta:
+  ar: "اطلبي الآن — الدفع عند الاستلام"    # the primary CTA, feminine imperative (Bible §3)
+  translit: "uṭlubī al-ān — ad-dafʿ ʿind al-istilām"
+  en: "Order now — Cash on delivery"
+  imperative_gender: "feminine"           # «اطلبي» addresses a woman; keep feminine across all copy (Bible §3, §5)
+  offer_overlay_ar: "باك 3 قنينات — 139 ﷼ بدل 185 · شحن مجاني"   # the on-frame offer line (Bible §6.3)
+  offer_overlay_translit: "bāk 3 qanānāt — 139 riyāl badal 185 · shaḥn majjānī"
+  offer_overlay_en: "3-bottle pack — 139 SAR instead of 185 · Free shipping"
+
+
+# -----------------------------------------------------------------------------
+# trust_elements — the proof stack (Bible §3)
+# -----------------------------------------------------------------------------
+trust_elements:
+  - id: "cod"
+    en: "cash on delivery"
+    ar: "الدفع عند الاستلام"               # ad-dafʿ ʿind al-istilām
+  - id: "inspect-before-pay"
+    en: "inspect the product before paying"
+    ar: "فحص المنتج قبل الدفع"             # faḥṣ al-muntaj qabl ad-dafʿ ("inspecting the product before payment")
+  - id: "100-natural"
+    en: "100% natural"
+    ar: "طبيعي 100%"                       # ṭabīʿī 100%
+  - id: "free-delivery"
+    en: "free delivery"
+    ar: "شحن مجاني"                        # shaḥn majjānī
+  - id: "rating"
+    en: "4.8 / 5 rating"
+    value: 4.8
+    scale: 5
+  - id: "verified-reviews"
+    en: "verified-purchase reviews (Riyadh, Jeddah, Dammam)"
+    cities: ["Riyadh", "Jeddah", "Dammam"]   # الرياض · جدة · الدمام
+  - id: "whatsapp-support"
+    en: "WhatsApp support"
+  - id: "satisfaction-guarantee"
+    en: "\"don't like it → don't pay\" guarantee"
+    ar: "إن لم يعجبكِ لا تدفعي"            # in lam yuʿjibki lā tadfaʿī ("if you don't like it, don't pay")
+
+
+# -----------------------------------------------------------------------------
+# pain_points — the visceral problems the hook exploits (Bible §3)
+# -----------------------------------------------------------------------------
+pain_points:
+  - id: "comb-shedding"
+    en: "hair falling with every comb stroke"
+    ar: "الشعر يتساقط مع كل تمشيطة"        # ash-shaʿr yatasāqaṭ maʿa kull tamshīṭa ("hair falls with every comb stroke")
+    is_primary_hook: true                 # the flagship's macro pain hook (Bible §6, §6.1 HOOK)
+  - id: "gaps-appearing"
+    en: "gaps / thinning patches appearing"
+    ar: "ظهور فراغات في الشعر"            # ẓuhūr farāghāt fī ash-shaʿr ("gaps appearing in the hair")
+  - id: "wasted-money"
+    en: "money wasted on oils that did nothing"
+    ar: "أموال أُنفقت على زيوت بلا نتيجة"   # amwāl unfiqat ʿalā zuyūt bilā natīja ("money spent on oils with no result")
+  - id: "starved-roots"
+    en: "roots not receiving nourishment"
+    ar: "جذور لا تصلها التغذية"            # judhūr lā taṣiluhā at-taghdhiya ("roots the nourishment does not reach")
+
+
+# -----------------------------------------------------------------------------
+# objections — the FAQ answers copy must stay consistent with (Bible §3)
+# These bound what the creative may promise. `results_timeline` is the ONLY
+# sanctioned timeline set — do not state any other timeline anywhere.
+# -----------------------------------------------------------------------------
+objections:
+  results_timeline:
+    softness_shine: "from first use"      # softness & shine — first use (Bible §3)
+    less_shedding: "3–5 weeks"            # noticeably less shedding (Bible §3)
+    density: "2–3 months"                 # visible density (Bible §3)
+  suits_all_hair_types: true              # yes — dry, oily, colored, treated (Bible §3)
+  hair_types: ["dry", "oily", "colored", "treated"]
+  dyes_hair_red: false                    # no — warm reflections only on LIGHT hair with HEAVY use (Bible §3)
+  dye_caveat: "warm reflections only on light hair with heavy use"
+  delivery_and_payment: "COD; inspect the product first before paying"   # (Bible §3)
+  dont_like_it: "refuse delivery — no charge"   # (Bible §3)
+
+
+# -----------------------------------------------------------------------------
+# palette — the brand's visual DNA (Bible §3). All hex verbatim from the LP tokens.
+# Use `garnet_red` for brand/CTA; NEVER let the on-screen product liquid drift from
+# `product_lock.liquid` (a separate, stricter lock than these UI tokens).
+# -----------------------------------------------------------------------------
+palette:
+  garnet_red: "#8E1B1E"                   # primary brand / CTA garnet (Bible §3)
+  deep_garnet: "#6E1214"                  # deep garnet — drapes, shadows, depth (Bible §3)
+  warm_cream: "#FAF6F1"                   # warm cream background / arch stone (Bible §3)
+  surface_white: "#FFFFFF"                # surface white — label field, clean surfaces (Bible §3)
+  ink_brown_dark: "#2A1A16"               # dark warm brown ink — primary text (Bible §3)
+  soft_brown: "#6B564E"                   # soft brown — secondary text, taglines (Bible §3)
+  gold: "#C9A227"                         # gold — the "100% Natural" seal, luxe accents (Bible §3)
+  sage_green: "#4A6741"                   # sage green — botanical accent (hibiscus leaf, palm) (Bible §3)
+
+
+# -----------------------------------------------------------------------------
+# typography — fonts & text direction (Bible §3)
+# -----------------------------------------------------------------------------
+fonts:
+  display: "El Messiri"                   # display / headlines (Bible §3)
+  body: "Tajawal"                         # body copy (Bible §3)
+rtl: true                                 # all Arabic is right-to-left (Bible §3, §5)
+
+
+# -----------------------------------------------------------------------------
+# product_lock — the IMMUTABLE physical identity of the bottle (Bible §4)
+# This is the single hardest lock in the studio. It is described in EVERY prompt
+# exactly as below and must never change across frames or regenerations. Skill 23
+# (product-consistency-guard) enforces it; skill 24 injects the matching negatives.
+# -----------------------------------------------------------------------------
+product_lock:
+  vessel:
+    material: "clear / transparent PET"   # see-through, not frosted (Bible §4)
+    shape: "rounded-rectangular, squarish body — NOT a tall cylinder"   # (Bible §4)
+    shoulders: "soft rounded shoulders"
+    neck: "short neck"
+    volume_ml: 250                        # ~250 ml single bottle (Bible §4)
+  cap:
+    style: "matte white ribbed screw cap, flat top"   # (Bible §4)
+    color: "matte white"                  # NEVER gold, NEVER black (Bible §4)
+    forbidden_colors: ["gold", "black"]
+  liquid:
+    color: "translucent deep garnet / ruby-red oil"   # jewel-like, warm highlights (Bible §4)
+    clarity: "translucent / clear — NOT opaque"        # you can see through it (Bible §4)
+    highlights: "warm highlights"
+    never_shifts_to: ["orange", "brown", "pink"]        # this exact red is fixed (Bible §4)
+  label:
+    shape: "white rounded-square front label"          # (Bible §4)
+    top_band: "red top band / ribbon"                  # garnet band across the top (Bible §4)
+    type_color: "garnet-red Arabic type"
+    line_1_ar: "زيت المشاط"                # zayt al-mishāṭ ("Mechat Oil") — «المشاط» is the LARGEST word (Bible §4)
+    line_1_emphasis: "المشاط largest"
+    line_2_ar: "الأحمر للشعر"              # al-aḥmar li-sh-shaʿr ("the Red — for hair"), set beneath line 1 (Bible §4)
+    taglines_ar:                          # three tiny tagline lines, verbatim (Bible §4)
+      - "نعومة وديمومة"                    # nuʿūma wa-daymūma ("softness and lastingness")
+      - "تغذية للشعر"                      # taghdhiya li-sh-shaʿr ("nourishment for the hair")
+      - "تقوية وتطويل الشعر"               # taqwiya wa-taṭwīl ash-shaʿr ("strengthening and lengthening the hair")
+    seal:
+      shape: "small gold circular seal"   # at the label's UPPER corner (Bible §4)
+      text_ar: "طبيعي 100%"               # ṭabīʿī 100%
+      text_en: "100% Natural"
+      position: "label's upper corner"
+      color_ref: "gold (#C9A227)"
+  immutables:                             # the "never change" list — a hard veto in QA (Bible §4)
+    - "do NOT change the logo or brand mark"
+    - "do NOT change any label wording"
+    - "do NOT change the label layout (band, hierarchy, tagline lines, seal placement)"
+    - "do NOT change the cap color (stays matte white; never gold, never black)"
+    - "do NOT change bottle proportions (squarish, rounded shoulders, short neck)"
+    - "do NOT change the liquid color (translucent garnet; never orange/brown/pink)"
+    - "do NOT add extra text of any kind"
+    - "do NOT add an English brand name to the bottle"
+    - "do NOT redesign, restyle, or 'improve' the packaging"
+
+
+# -----------------------------------------------------------------------------
+# hero_environment — the signature product / offer set (Bible §4)
+# The default staging for hero + offer beats (matches the LP hero image). Skill 18
+# (environment-realism-director) renders it; the flagship §6.1 uses it for the
+# DISCOVERY, TRANSFORMATION reveal, and OFFER+CTA beats.
+# -----------------------------------------------------------------------------
+hero_environment:
+  arch: "warm cream Moorish / mihrab arch"         # the signature backdrop niche (Bible §4)
+  drape: "deep garnet drape behind"                # (color = palette.deep_garnet) (Bible §4)
+  hibiscus: "a single red hibiscus flower"         # one flower, echoes the ingredient (Bible §4)
+  palm: "a palm frond"                             # heritage botanical (Bible §4)
+  podium: "a pale stone / travertine podium"       # the bottle stands on this (Bible §4)
+  light: "soft directional window light with long gentle shadows"   # warm, filmic (Bible §4)
+  usage: "signature set for the product-hero and offer beats"       # (Bible §4, §6.1)
+  mood: "warm, luxe, Moroccan-heritage-meets-Gulf, natural, premium"   # (Bible §3)
+
+
+# -----------------------------------------------------------------------------
+# negatives_ref — pointer to the always-applied negative-prompt core (Bible §6.6)
+# The brand-lock does NOT restate the full negatives (they live once, canonically,
+# with skill 24 and the prompt-builders). It POINTS to them and names the
+# product-specific negatives that protect THIS bottle. Every compiled prompt
+# appends the master core; skill 24 owns the merge (Bible §6.6, §8).
+# -----------------------------------------------------------------------------
+negatives_ref:
+  canonical_source: "STUDIO-BIBLE.md §6.6 (master negative-prompt core)"
+  owned_by_skill: "24-negative-prompt-builder"
+  builder_path: "prompt-builders/"        # the compiler + negatives + dialect map live here (Bible §1)
+  applies_to: "every compiled Kie prompt, always"   # never optional (Bible §6.6, §7)
+  product_specific_negatives:             # the subset that guards THIS product_lock — mirrors §6.6 exactly
+    - "morphing bottle"
+    - "changing / warped label"
+    - "altered logo"
+    - "wrong Arabic"
+    - "gibberish text"
+    - "mismatched cap color"
+    - "liquid color shift"
+    - "subtitles burn-in"
+    - "watermark"
+  realism_negatives_note: >-
+    The full master core (plastic/waxy skin, AI sheen, extra fingers/arms,
+    malformed hands, warped face, uncanny/dead eyes, stiff mannequin motion,
+    forced smile, floating objects, fake/detached shadows, flicker, frame jitter,
+    temporal warping, oversaturation, HDR halos, CGI look, low-res/plastic hair,
+    banding) is applied verbatim from Bible §6.6 by skill 24 — not duplicated here.

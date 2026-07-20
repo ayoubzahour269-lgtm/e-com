@@ -1,0 +1,261 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# KIE AI MODEL CATALOG  —  the credit-optimization engine
+# Consumed by: skill 31 (format-router), 29 (cost-optimizer), 26 (kie-prompt-builder)
+# Pairs with:   knowledge/kie-credit-optimization.md   (the playbook)
+#
+# ⚠️  PRICING & AVAILABILITY DRIFT. Kie (kie.ai) is an aggregator; its model line-up
+#     and per-call credit prices change often. This file stores RELATIVE cost tiers
+#     and capability tags, NOT authoritative prices. The router MUST read live pricing
+#     from kie.ai before any paid run. `verify_live: true` marks every price-sensitive
+#     field. Treat absolute credit numbers as order-of-magnitude planning only.
+# ═══════════════════════════════════════════════════════════════════════════════
+meta:
+  schema_version: kie-models/v2
+  verify_live: true
+  default_mode: balanced          # owner choice (2026-07): draft-iterate cheap, ONE clean final
+  currency: kie-credits (relative)
+
+# ── Capability vocabulary ───────────────────────────────────────────────────────
+reference_modes_glossary:
+  t2i:          text-to-image (NO reference) — FORBIDDEN for any product-bearing asset
+  i2i:          image-to-image (style/scene change conditioned on an input image)
+  edit:         instruction edit of an input image (region-aware)
+  inpaint:      masked region regeneration (keep product, change surroundings, or vice-versa)
+  subject-lock: strong subject/character consistency from a reference
+  bg-replace:   background replacement / relight around a preserved subject (R1 route)
+  i2v:          image-to-video (animate an approved keyframe)
+  t2v:          text-to-video (no keyframe) — avoid for product; product would be reinvented
+  upscale:      resolution/detail enhancement of an existing render
+
+cost_tiers:
+  draft:   { rel_cost: 1,  use: "iterate/compose/QC loop — cheapest, fastest, lower res" }
+  iterate: { rel_cost: 3,  use: "near-final checks, mid res" }
+  final:   { rel_cost: 10, use: "the ONE approved render (or upscale) after QC ≥ 95" }
+  # ratios are illustrative; the point is the ORDER of magnitude gap draft→final.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# IMAGE MODELS  (do the heavy lifting; product assets are image-first)
+# arabic_text: ability to render correct Arabic on the image. Almost all are POOR →
+#   this is WHY the studio adds Arabic in post (typography-compositor), never in-model.
+# ═══════════════════════════════════════════════════════════════════════════════
+image_models:
+  - id: nano-banana                # Google Gemini 2.5 Flash Image
+    provider: google
+    reference_modes: [t2i, i2i, edit, inpaint, subject-lock, bg-replace]
+    strengths: [excellent subject consistency, clean edits, fast, cheap, great for R1 bg-replace]
+    weaknesses: [arabic text poor, occasional over-smoothing]
+    arabic_text: poor
+    relative_cost: low
+    cost_tier: draft
+    best_for: [image-ad, banner base, lp-hero-image, lp-section-image, product compositing]
+    verify_live: true
+
+  - id: flux-kontext               # Black Forest Labs — editing/reference specialist
+    provider: bfl
+    reference_modes: [i2i, edit, inpaint, subject-lock, bg-replace]
+    strengths: [precise reference-preserving edits, keeps product identity, relight]
+    weaknesses: [arabic text poor, needs good reference]
+    arabic_text: poor
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [R2 reference-edit of the product, re-pose/re-light, high-fidelity composites]
+    verify_live: true
+
+  - id: flux-pro                   # high-quality text-to-image (scenes WITHOUT the product)
+    provider: bfl
+    reference_modes: [t2i, i2i]
+    strengths: [photoreal scenes, backgrounds, environments]
+    weaknesses: [t2i only for full gen → not for the product itself]
+    arabic_text: poor
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [empty backgrounds/plates to composite the real product into]
+    verify_live: true
+
+  - id: seedream / seededit        # ByteDance
+    provider: bytedance
+    reference_modes: [t2i, i2i, edit, inpaint]
+    strengths: [photoreal, good editing, strong lighting]
+    weaknesses: [arabic text poor]
+    arabic_text: poor
+    relative_cost: low
+    cost_tier: draft
+    best_for: [image-ad alternates, lp imagery, edit passes]
+    verify_live: true
+
+  - id: gpt-image-1                # OpenAI image (edit-capable)
+    provider: openai
+    reference_modes: [t2i, edit, inpaint]
+    strengths: [strong prompt adherence, decent short text, good composition]
+    weaknesses: [cost, arabic still unreliable, look can read 'AI']
+    arabic_text: weak (better than most but STILL not label-grade — keep text in post)
+    relative_cost: high
+    cost_tier: final
+    best_for: [tough compositional asks, layout comps]
+    verify_live: true
+
+  - id: ideogram                   # best-in-class Latin text (still verify Arabic)
+    provider: ideogram
+    reference_modes: [t2i, edit]
+    strengths: [legible LATIN typography]
+    weaknesses: [arabic RTL unreliable — do not trust for المشاط label]
+    arabic_text: latin-good / arabic-unreliable
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [latin-only lockups if ever needed — NOT the Arabic label]
+    verify_live: true
+
+  - id: imagen                     # Google Imagen (photoreal)
+    provider: google
+    reference_modes: [t2i, i2i]
+    strengths: [photoreal, natural light]
+    weaknesses: [limited edit control, arabic poor]
+    arabic_text: poor
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [photoreal scene plates]
+    verify_live: true
+
+  - id: midjourney                 # via relay (if available on the account)
+    provider: midjourney
+    reference_modes: [t2i, i2i (sref/cref)]
+    strengths: [top-tier aesthetic, mood, luxury feel]
+    weaknesses: [least controllable, no true edit/inpaint, arabic poor, relay latency]
+    arabic_text: poor
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [mood/style exploration, hero aesthetic direction (then rebuild controllably)]
+    verify_live: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# VIDEO MODELS  (reserve for the APPROVED keyframe; product assets use i2v, never t2v)
+# ═══════════════════════════════════════════════════════════════════════════════
+video_models:
+  - id: veo3                       # Google Veo 3 — flagship, with audio
+    provider: google
+    reference_modes: [t2v, i2v]
+    strengths: [top realism, native audio, camera control, physics]
+    weaknesses: [most expensive, arabic on-screen poor]
+    arabic_text: poor
+    relative_cost: high
+    cost_tier: final
+    best_for: [hero-video-ad final render from approved keyframe (i2v)]
+    max_len_s: 8
+    verify_live: true
+
+  - id: veo3-fast                  # cheaper/faster Veo3
+    provider: google
+    reference_modes: [t2v, i2v]
+    strengths: [Veo-family quality, much cheaper, fast]
+    weaknesses: [slightly less fidelity than veo3]
+    arabic_text: poor
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [lp-microvideo loops, motion tests, cheaper hero variants]
+    max_len_s: 8
+    verify_live: true
+
+  - id: kling                      # Kuaishou Kling (2.x) — strong i2v
+    provider: kuaishou
+    reference_modes: [i2v, t2v]
+    strengths: [excellent image-to-video, motion coherence, cost-effective, start+end frame]
+    weaknesses: [audio limited]
+    arabic_text: n/a (text in post)
+    relative_cost: medium
+    cost_tier: iterate
+    best_for: [i2v hero animation, product motion, start/end-frame LOOPS for lp microvideo]
+    max_len_s: 10
+    verify_live: true
+
+  - id: runway-gen                 # Runway Gen-3/4
+    provider: runway
+    reference_modes: [i2v, t2v]
+    strengths: [motion brush, camera control, director-grade control]
+    weaknesses: [cost]
+    arabic_text: n/a
+    relative_cost: high
+    cost_tier: final
+    best_for: [precise camera moves on the hero]
+    max_len_s: 10
+    verify_live: true
+
+  - id: hailuo                     # MiniMax Hailuo
+    provider: minimax
+    reference_modes: [i2v, t2v]
+    strengths: [natural motion, cheap, good i2v]
+    weaknesses: [less camera control]
+    arabic_text: n/a
+    relative_cost: low
+    cost_tier: draft
+    best_for: [cheap motion drafts, microvideo loops]
+    max_len_s: 6
+    verify_live: true
+
+  - id: seedance                   # ByteDance video
+    provider: bytedance
+    reference_modes: [i2v, t2v]
+    strengths: [smooth, cost-effective, good product motion]
+    weaknesses: [newer, verify availability]
+    arabic_text: n/a
+    relative_cost: low
+    cost_tier: draft
+    best_for: [microvideo loops, cheap i2v]
+    max_len_s: 5
+    verify_live: true
+
+upscale_models:
+  - id: kie-upscaler               # generic upscale/enhance (verify exact model on Kie)
+    reference_modes: [upscale]
+    strengths: [resolution + detail on an approved render]
+    relative_cost: low
+    cost_tier: draft
+    best_for: [take an approved draft → final resolution WITHOUT re-generating]
+    verify_live: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ROUTING MATRIX  — how the format-router picks, in BALANCED mode (owner default)
+# HARD RULE: any asset whose subject is the product MUST use a reference-capable
+# route (i2i/edit/inpaint/bg-replace/i2v). t2i/t2v of the product is FORBIDDEN.
+# ═══════════════════════════════════════════════════════════════════════════════
+routing_matrix:
+  image-ad:
+    route: R1 (product-real / world-ai)
+    draft:  { model: nano-banana, mode: bg-replace }     # compose real cutout → scene, iterate cheap
+    final:  { model: flux-kontext, mode: bg-replace }     # cleanest fidelity for the ONE keeper
+    finish: { model: kie-upscaler, mode: upscale }
+    text:   post (typography-compositor) — never in-model
+  banner:
+    route: derive from ONE approved image master → crop/recompose per size (NO re-gen)
+    master: { model: nano-banana, mode: bg-replace }
+    text:   post
+  3d-render:
+    route: R1 studio-CGI look on the real cutout
+    draft:  { model: nano-banana, mode: bg-replace }
+    final:  { model: flux-kontext, mode: edit }
+    note:   single front ref → face-on; true turntable needs more angles
+  lp-hero-image:   { route: R1, draft: {model: nano-banana}, final: {model: flux-kontext}, text: post }
+  lp-section-image:{ route: R1-batch, model: seedream, note: batch shared-style section imagery cheaply }
+  lp-microvideo:
+    route: R3 (i2v from approved keyframe), SHORT loop
+    model: { draft: hailuo|seedance, final: kling|veo3-fast }
+    loop: match first/last frame
+  lp-3d-banner:
+    route: R3 label-face-on micro-rotation (until more angles)
+    model: kling (start+end frame)
+  hero-video-ad:
+    route: R3 (i2v) from the ONE approved, QC-passed keyframe
+    keyframe: { draft: nano-banana, final: flux-kontext, mode: bg-replace }  # build the frame cheaply first
+    animate:  { iterate: veo3-fast|kling, final: veo3 }                       # ONE final video gen
+    audio:    veo3 native OR post sound-design (skill 53)
+    text:     post (motion-graphics-compositor)
+
+# ── Credit policy (enforced everywhere; full playbook in knowledge/kie-credit-optimization.md)
+credit_policy:
+  - image-first: build & QC the keyframe on a DRAFT image model before any video credit
+  - text-in-post: Arabic never sent to the model (correctness + zero regen waste)
+  - one-master-many-exports: crop/recompose sizes & ratios, never re-generate
+  - draft→final: iterate at tier draft; spend tier final ONCE after QC ≥ 95
+  - reference+seed lock: reuse product reference + fixed seed across the set
+  - upscale-not-regenerate for resolution
+  - short loopable microvideo on cheap video tier, not 8s hero renders
+  - surface the bill: per-asset estimate + campaign total BEFORE spend, with a cheaper fallback each

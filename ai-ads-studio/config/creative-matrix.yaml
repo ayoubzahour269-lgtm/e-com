@@ -1,0 +1,83 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# CREATIVE MATRIX  —  default asset plans (what to produce, per objective × placement)
+# Consumed by: skill 30 (creative-matrix-planner). The planner reads the campaign
+# objective + target placements and emits the concrete asset list + credit budget.
+# Everything is reference-conditioned to the active products/<slug>/product-lock.yaml.
+# ═══════════════════════════════════════════════════════════════════════════════
+meta:
+  schema_version: creative-matrix/v2
+  default_mode: balanced
+  markets: [SA (primary), AE, OM, EG]
+  primary_ratio: "9:16"
+  languages: { vo: khaleeji-female, overlays: MSA }   # owner choice 2026-07
+
+# ── Asset families (see STUDIO-BIBLE §8 / v2 spec) ──────────────────────────────
+families:
+  ad:  [hero-video-ad, image-ad, banner, 3d-render]
+  lp:  [lp-hero-image, lp-section-image, lp-3d-banner, lp-microvideo]
+
+# ── Placement specs (aspect + safe-zone intent) ─────────────────────────────────
+placements:
+  meta_reels:        { ratio: "9:16", family: ad }
+  meta_feed:         { ratio: "4:5",  family: ad }
+  meta_story:        { ratio: "9:16", family: ad }
+  tiktok:            { ratio: "9:16", family: ad }
+  snap:              { ratio: "9:16", family: ad }
+  ig_feed_square:    { ratio: "1:1",  family: ad }
+  retargeting_banner:{ ratio: [ "1:1","9:16","300x250","728x90","160x600","320x50" ], family: ad }
+  landing_page:      { ratio: [ "16:9","1:1","9:16" ], family: lp }
+
+# ── Default plans by objective ──────────────────────────────────────────────────
+# Each plan lists asset TYPES × counts. Counts are variant counts for A/B.
+# The planner scales counts to the credit budget and BALANCED mode.
+plans:
+  awareness:
+    goal: scroll-stop + brand impression
+    assets:
+      - { type: hero-video-ad, count: 1, len_s: 8,  placements: [meta_reels, tiktok, snap] }
+      - { type: image-ad,      count: 3, placements: [meta_feed, ig_feed_square] }
+    priority: [hero-video-ad, image-ad]
+
+  consideration:
+    goal: benefit demonstration + desire
+    assets:
+      - { type: hero-video-ad, count: 1, len_s: 12, placements: [meta_reels, tiktok] }
+      - { type: image-ad,      count: 3, placements: [meta_feed] }
+      - { type: 3d-render,     count: 1, placements: [meta_feed, ig_feed_square] }
+    priority: [hero-video-ad, 3d-render, image-ad]
+
+  conversion:
+    goal: offer + CTA (COD)
+    assets:
+      - { type: hero-video-ad, count: 1, len_s: 8,  placements: [meta_reels, tiktok, snap] }
+      - { type: image-ad,      count: 4, placements: [meta_feed, ig_feed_square], note: "incl. offer/price cards" }
+      - { type: banner,        count: 1, placements: [retargeting_banner] }
+    priority: [image-ad, hero-video-ad, banner]
+
+  retargeting:
+    goal: recover + close
+    assets:
+      - { type: banner,   count: 1, placements: [retargeting_banner] }
+      - { type: image-ad, count: 2, placements: [meta_feed], note: "social proof + objection-handling" }
+    priority: [banner, image-ad]
+
+  landing_page_pack:
+    goal: professional LP render with the CORRECT product
+    assets:
+      - { type: lp-hero-image,    count: 1 }
+      - { type: lp-section-image, count: 4, note: "benefits, ingredients, ritual, trust" }
+      - { type: lp-microvideo,    count: 2, len_s: 4, note: "oil pour + hair shine loops" }
+      - { type: lp-3d-banner,     count: 1, note: "face-on micro-rotation hero" }
+      - { type: 3d-render,        count: 1, note: "clean packshot for PDP" }
+    priority: [lp-hero-image, lp-microvideo, lp-section-image, 3d-render, lp-3d-banner]
+
+# ── Cross-cutting rules ─────────────────────────────────────────────────────────
+rules:
+  - Front-half reasoning (intake→audience→strategy→concept→brand/product lock→cultural
+    QA→negatives→QC) is SHARED across every asset in a plan; only back-half (director →
+    prompt-compile → model route → fidelity+quality gate) is per-format.
+  - Every product-bearing asset is reference-conditioned (never t2i). See kie-models.yaml.
+  - One approved image master feeds banners (all sizes) and the hero-video keyframe.
+  - Model-presence & aesthetic follow knowledge/gulf-beauty-brand-norms.md (real market
+    norms, anti-stereotype) + the active market culture doc.
+  - Budget & QC gates (skills 29, 27, 41) run before any final-tier spend.

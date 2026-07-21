@@ -1,14 +1,18 @@
 ---
 name: ai-ads-studio
 description: >-
-  Produce a cinematic, high-converting luxury beauty/hair/skincare video ad
-  (9:16, 8-15s) for Meta / TikTok / Snapchat targeting the Gulf (KSA, UAE, Oman,
-  Egypt), ending in ONE optimized Kie AI (Veo3-class) generation prompt plus the
-  full creative package (storyboard, shot list, Arabic VO + overlays, music &
-  sound, quality score, A/B plan). Use when the user wants a beauty ad, a video
-  ad, a Kie/Veo/Kling/Runway prompt, an "AI studio" run, ad concepts/hooks, or a
-  commercial for a product with a landing page. Reasons fully before spending any
-  video-generation credit.
+  Produce high-converting, indistinguishable-from-real beauty/hair/skincare ad
+  creative AND landing-page media for the Gulf (KSA, UAE, Oman, Egypt) —
+  multi-format: cinematic 9:16 video ads (8-15s), static image ads, multi-size
+  banners, photoreal 3D/packshot renders, and landing-page images/microvideos —
+  each ending in ONE optimized, reference-conditioned Kie AI prompt plus the full
+  package (storyboard, shot list, Arabic VO + overlays, music & sound, quality
+  score, A/B plan, credit plan). The real product photos are the fidelity truth
+  (never redrawn). Use when the user wants a beauty/product ad, video/image/banner/
+  3D creative, landing-page assets, a Kie/Veo/Kling/Flux/nano-banana prompt, an
+  "AI studio" run, ad concepts/hooks, or media for a product with a landing page.
+  Works for ANY product (drop its photos, run onboarding). Reasons and QCs fully
+  before spending any generation credit.
 ---
 
 # AI Ads Studio — Orchestrator Skill
@@ -29,12 +33,28 @@ tells you how to drive the framework end to end.
 
 ## Before anything, read these
 
-- `ai-ads-studio/STUDIO-BIBLE.md` — the single source of truth (product facts,
-  the immutable product/bottle lock, market/culture rules, the locked flagship
-  creative, Arabic copy, negatives, quality gates, conventions).
-- `ai-ads-studio/PIPELINE.md` — the 12-stage run you will execute.
-- `ai-ads-studio/config/` — `studio.config.yaml`, `platforms.yaml`,
-  `markets.yaml`, `model-adapters.yaml`, and the per-product `brand/*.brand.yaml`.
+- `ai-ads-studio/STUDIO-BIBLE.md` — the base source of truth (product facts,
+  market/culture rules, the locked flagship creative, Arabic copy, negatives,
+  quality gates, file conventions §2).
+- `ai-ads-studio/STUDIO-BIBLE-V2.md` — the v2 architecture: the creative matrix
+  (video/image/banner/3D + landing media), the product reference-lock (routes
+  R1/R2/R3), the Kie credit engine, the undetectable-realism engine, the
+  video-editing department, the generic product/brand guardian, and the
+  multi-format pipeline.
+- `ai-ads-studio/products/<slug>/` — the active product's fidelity truth:
+  `product-lock.yaml` + `fidelity-checklist.md` + `reference-manifest.yaml` and
+  the real photos in `references/`. The product is ALWAYS reference-conditioned,
+  never redrawn from text. New product = drop photos, run skill `40`.
+- `ai-ads-studio/knowledge/gulf-beauty-brand-norms.md` — researched, anti-stereotype
+  Gulf model-presence & aesthetic norms (default: hands/hair/back-of-head, ritual/
+  heritage, amber palette).
+- `ai-ads-studio/PIPELINE.md` — the base run. For multi-format, start with skill
+  `30` (creative-matrix-planner) → `31` (format-router) → the per-format directors.
+- `ai-ads-studio/config/` — `studio.config.yaml`, `platforms.yaml`, `markets.yaml`,
+  `model-adapters.yaml`, `kie-models.yaml` (credit engine), `creative-matrix.yaml`,
+  and the per-product `brand/*.brand.yaml`.
+- `ai-ads-studio/examples/mechat-red-oil/` — the full worked multi-format example
+  (image + video + 3D + landing pack + credit plan). Mirror its depth.
 
 ## How to run (12 stages)
 
@@ -73,6 +93,20 @@ step. Produce the artifact for each stage before moving on.
     score < 95 → auto-improve and re-score; **do not generate**. Only when the
     gate is PASS do you emit the generation call. After render: QA it; regenerate
     only failing scenes; log the run to `memory/`.
+
+## Multi-format run (v2)
+
+For anything beyond a single video, run Stage 0 first: skill `30` studies the landing
+page + objective and outputs the asset plan + **credit budget** (per `creative-matrix.yaml`);
+skill `31` routes each asset to the right Kie model (`kie-models.yaml`) and **enforces
+reference-conditioning** for every product-bearing asset (R1 real-cutout→world / R2 edit /
+R3 image-to-video — never text-to-image of the product). The front half (intake→audience→
+strategy→concept→product-lock→culture→negatives→QC) is shared; the back half is per-format:
+image `32`, banner `33`, 3D `34`, landing `35`, microvideo `36`, typography `37`, upscale
+`38`. Video adds the editing dept (`50`–`56`) and the undetectable-realism engine (`42`–`46`)
+with the AI-tell gate. Product fidelity is auto-verified by skill `41` (no manual checking);
+Arabic is added in post (`37`/`54`), never in-model. Nothing is generated until fidelity,
+undetectability, culture, and overall quality all pass ≥95.
 
 ## Deliverables (always return these)
 

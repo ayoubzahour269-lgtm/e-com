@@ -1,3 +1,7 @@
+> 🔴 SECURITY: this repo was PUBLIC and these secrets leaked. The real token/key were
+> REDACTED and MUST be rotated (Shopify Theme Access app + kie.ai dashboard). Keep secrets
+> in an uncommitted store, never in git. Also make the repo private.
+
 # HANDOFF COMPLET — Projet زيت المشاط الأحمر (Mechat Red Oil, KSA)
 > Document de passation pour toute autre branche/session Claude. Contient TOUTES les connexions,
 > méthodes, leçons et inventaires de la session d'origine. Lire ce fichier = être à jour.
@@ -11,17 +15,17 @@
 On ne se connecte PAS à l'Admin API classique. On passe par le **proxy Theme Kit Access** avec un token `shptka_` :
 
 - **Boutique** : `dw0dwe-bp.myshopify.com`
-- **Token Theme Access** : `shptka_48d13fcfb9d600bae4cc4b4dee71f3c6`
+- **Token Theme Access** : `shptka_REDACTED__ROTATE_THIS_TOKEN_NOW`
 - **Base URL** : `https://theme-kit-access.shopifyapps.com/cli/admin/api/2024-10/`
 - **Headers obligatoires sur CHAQUE requête** :
-  - `X-Shopify-Access-Token: shptka_48d13fcfb9d600bae4cc4b4dee71f3c6`
+  - `X-Shopify-Access-Token: shptka_REDACTED__ROTATE_THIS_TOKEN_NOW`
   - `X-Shopify-Shop: dw0dwe-bp.myshopify.com`
 - **Thèmes** : Horizon (LIVE) id `188180398382` · Development (CLI, vierge) id `188183183662`
 
 **Lister les thèmes**
 ```bash
 curl -s "https://theme-kit-access.shopifyapps.com/cli/admin/api/2024-10/themes.json" \
-  -H "X-Shopify-Access-Token: shptka_48d13fcfb9d600bae4cc4b4dee71f3c6" \
+  -H "X-Shopify-Access-Token: shptka_REDACTED__ROTATE_THIS_TOKEN_NOW" \
   -H "X-Shopify-Shop: dw0dwe-bp.myshopify.com"
 ```
 **Lire un asset**
@@ -41,7 +45,7 @@ curl -s -g "https://theme-kit-access.shopifyapps.com/cli/admin/api/2024-10/theme
 - Throttle : des 503 temporaires arrivent après beaucoup de PUT — retry avec backoff.
 
 ### 1.2 kie.ai (génération images/vidéos)
-- **Clé API** : `e0345dd2cd0b486830bb6e17f6b70115`
+- **Clé API** : `REDACTED__ROTATE_THIS_KIE_KEY_NOW`
 - **Crédits** : vérifier via `GET https://api.kie.ai/api/v1/chat/credit` (Bearer). (~460 restants fin de session ; recharges déjà faites 2×.)
 - **Images (jobs)** : `POST https://api.kie.ai/api/v1/jobs/createTask` body `{"model":"...","input":{"prompt":"...","image_urls":[...],"output_format":"png","image_size":"9:16"}}` → poll `GET .../api/v1/jobs/recordInfo?taskId=...` (state: waiting/success/fail ; URL résultat dans `resultJson`).
   - `google/nano-banana` (4 cr) — génération simple

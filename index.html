@@ -260,6 +260,21 @@ footer a{color:rgba(255,255,255,.7)}
   .b-row .b-media img,.b-row .b-media video{transform:none;transition:none}
   .btn::after{display:none}
 }
+
+/* ── Conversion motion (subtle) ── */
+@keyframes glowpulse{0%,100%{box-shadow:0 8px 22px rgba(142,27,30,.35)}50%{box-shadow:0 12px 32px rgba(142,27,30,.62)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.sticky-bar .btn,#submit-btn{animation:glowpulse 2.8s ease-in-out infinite}
+.price-save,.bundle .pop-tag{animation:pop .6s cubic-bezier(.2,.9,.3,1.3) both}
+.steps-grid .step:nth-child(2),.rev-grid .rev-card:nth-child(2){transition-delay:.12s}
+.steps-grid .step:nth-child(3),.rev-grid .rev-card:nth-child(3){transition-delay:.24s}
+.wrap>h2.rv::after{content:"";display:block;width:0;height:3px;margin:.6rem auto 0;border-radius:3px;
+  background:linear-gradient(90deg,var(--c-gold),var(--c-accent));transition:width .9s ease .25s}
+.wrap>h2.rv.on::after{width:64px}
+@media (prefers-reduced-motion:reduce){
+  .sticky-bar .btn,#submit-btn,.price-save,.bundle .pop-tag{animation:none}
+  .wrap>h2.rv::after{transition:none;width:64px}
+}
 </style>
 </head>
 <body>
@@ -364,7 +379,7 @@ footer a{color:rgba(255,255,255,.7)}
 <!-- ██ VIDEO BANNER ██ -->
 <section class="vbanner">
   <video autoplay muted loop playsinline preload="none" poster="assets/hair-result.webp">
-    <source src="assets/hair-video.mp4" type="video/mp4">
+    <source src="assets/videos/mechat-reveal-video.mp4" type="video/mp4">
   </video>
   <div class="wrap rv">
     <h2>شعر يتكلم عنك قبل أن تتكلمي</h2>

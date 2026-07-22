@@ -12,8 +12,9 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "..", "..", "..");
 const OUT = join(HERE, "..", "out");
 
-// Direction artistique par angle (préambule fidélité + scène + espace négatif en haut).
-const FIDELITY = "Place THIS EXACT bottle, completely unchanged — do not alter its shape, the red white and gold label, the arabic text on the label, the white screw cap, or the deep red oil color. Keep the product 100% identical to the reference. Photorealistic premium product photography. ";
+// PIPELINE CANONIQUE (défaut) — IA-embed : le produit est FONDU dans la scène (reflets/ombres
+// réels), pas plaqué. Préambule fidélité renforcé pour préserver chaque lettre du label.
+const FIDELITY = "Integrate THIS EXACT bottle naturally into the scene with realistic reflections, contact shadow and matching light — it must look photographed in the scene, not pasted. Keep the product 100% identical to the reference: do not change its shape, the red white and gold label, the white screw cap, or the deep red oil color. Reproduce EVERY letter of the label text exactly, including the arabic wording, the '250 ml' and the '100% Natural' seal — do not alter, invent or garble any text on the label. Photorealistic premium product photography. ";
 const NEG_TOP = " Leave elegant empty negative space in the TOP third for text.";
 const SCENE_PROMPTS: Record<string, string> = {
   heritage: FIDELITY + "Luxury Moroccan still-life: ivory silk fabric, scattered dried hibiscus petals and henna leaves, a carved wooden comb, warm golden-hour side light, soft shadows, polished marble surface, shallow depth of field." + NEG_TOP,

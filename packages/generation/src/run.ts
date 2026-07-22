@@ -29,7 +29,8 @@ async function saveUrls(urls: string[], tag: string): Promise<string[]> {
   mkdirSync(OUT, { recursive: true });
   const saved: string[] = [];
   for (let i = 0; i < urls.length; i++) {
-    const res = await fetch(urls[i]);
+    const res = await fetch(urls[i], { signal: AbortSignal.timeout(60_000) });
+    if (!res.ok) throw new Error(`download ${res.status} pour ${urls[i]}`); // évite d'écrire un corps d'erreur
     const buf = Buffer.from(await res.arrayBuffer());
     const ext = urls[i].split(".").pop()?.split("?")[0]?.slice(0, 4) || "png";
     const file = join(OUT, `${tag}-${i}.${ext}`);

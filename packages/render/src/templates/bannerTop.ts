@@ -35,7 +35,7 @@ html,body{width:${size.w}px;height:${size.h}px;background:transparent;overflow:h
 .top{position:absolute;top:${px(60)};left:0;right:0;padding:0 ${px(72)};
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:${px(16)}}
 .kicker{font-family:'Reem Kufi',sans-serif;font-weight:700;color:${p.goldDark};
-  font-size:${px(26)};letter-spacing:${px(2)};display:flex;align-items:center;gap:${px(14)}}
+  font-size:${px(26)};letter-spacing:0;display:flex;align-items:center;gap:${px(14)}}
 .kicker::before,.kicker::after{content:"";width:${px(30)};height:1px;background:linear-gradient(90deg,transparent,${p.gold})}
 .kicker::after{transform:scaleX(-1)}
 .title{font-family:${titleFamily},serif;font-weight:700;line-height:1.16;font-size:${px(78)};

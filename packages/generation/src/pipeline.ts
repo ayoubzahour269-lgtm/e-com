@@ -60,24 +60,26 @@ export async function generateBestOfN(opts: BestOfNOptions): Promise<BestOfNResu
   for (let r = 0; r < maxRounds; r++) {
     rounds = r + 1;
 
-    // Génère N candidats en parallèle.
-    const gens: GenResult[] = await Promise.all(
+    // Génère N candidats en parallèle. allSettled → un candidat qui throw ne perd pas les autres (déjà payés).
+    const settled = await Promise.allSettled(
       Array.from({ length: n }, () => opts.provider.generateImage(opts.request))
     );
+    const gens: GenResult[] = settled.flatMap((s) => (s.status === "fulfilled" ? [s.value] : []));
     for (const g of gens) {
       cost += g.costCredits;
       opts.ledger?.record({ model: g.model, credits: g.costCredits, taskId: g.taskId, ok: g.ok });
     }
 
-    // Note chaque candidat (fidélité vs Character Sheet).
+    // Note chaque candidat (fidélité vs Character Sheet). allSettled → un critic qui throw n'annule pas les verdicts.
     const urls = gens.filter((g) => g.ok).flatMap((g) => g.urls.map((u) => ({ u, id: g.taskId })));
-    const judged = await Promise.all(
+    const judgedSettled = await Promise.allSettled(
       urls.map(async ({ u, id }) => ({
         url: u,
         taskId: id,
         verdict: await opts.critic(u, opts.referenceUrls, opts.intent),
       }))
     );
+    const judged: Candidate[] = judgedSettled.flatMap((s) => (s.status === "fulfilled" ? [s.value] : []));
     all.push(...judged);
 
     // Un candidat passe le seuil → on s'arrête (best-of-N a réussi).

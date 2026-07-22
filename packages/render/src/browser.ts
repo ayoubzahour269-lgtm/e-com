@@ -9,18 +9,27 @@ let browserPromise: Promise<Browser> | null = null;
 
 async function getBrowser(): Promise<Browser> {
   if (!browserPromise) {
-    browserPromise = chromium.launch({
-      executablePath: CHROME_PATH,
-      args: ["--no-sandbox", "--disable-dev-shm-usage", "--force-color-profile=srgb"],
-    });
+    browserPromise = chromium
+      .launch({
+        executablePath: CHROME_PATH,
+        args: ["--no-sandbox", "--disable-dev-shm-usage", "--force-color-profile=srgb"],
+      })
+      .catch((e) => {
+        browserPromise = null; // n'empoisonne pas le cache : un prochain appel retentera le lancement
+        throw e;
+      });
   }
   return browserPromise;
 }
 
 export async function closeBrowser(): Promise<void> {
   if (browserPromise) {
-    const b = await browserPromise;
-    await b.close();
+    try {
+      const b = await browserPromise;
+      await b.close();
+    } catch {
+      /* lancement échoué : rien à fermer */
+    }
     browserPromise = null;
   }
 }
@@ -43,9 +52,11 @@ export async function renderHtmlToPng(
   });
   try {
     await page.setContent(html, { waitUntil: "load" });
-    // Attendre que TOUTES les @font-face soient prêtes (sinon fallback = arabe cassé).
+    // Attendre que TOUTES les @font-face soient prêtes (sinon fallback = arabe cassé),
+    // mais borner à 10 s : un woff2 défaillant ne doit pas figer le rendu (font-display:block).
     await page.evaluate(async () => {
-      await (document as unknown as { fonts: { ready: Promise<unknown> } }).fonts.ready;
+      const fonts = (document as unknown as { fonts: { ready: Promise<unknown> } }).fonts;
+      await Promise.race([fonts.ready, new Promise((r) => setTimeout(r, 10_000))]);
     });
     return await page.screenshot({ type: "png", omitBackground: transparent });
   } finally {

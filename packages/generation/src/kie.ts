@@ -49,14 +49,21 @@ export class KieProvider implements GenProvider {
     return h;
   }
 
-  private async req(url: string, init: RequestInit, tries = 4): Promise<unknown> {
+  private async req(
+    url: string,
+    init: RequestInit,
+    opts: { tries?: number; idempotent?: boolean } = {}
+  ): Promise<unknown> {
+    const tries = opts.tries ?? 4;
+    const idempotent = opts.idempotent ?? true; // GET par défaut ; POST facturés = non-idempotents
     let lastErr: unknown;
     for (let i = 0; i < tries; i++) {
       try {
-        const res = await fetch(url, init);
+        // Timeout dur par requête → une connexion pendue ne fige pas la génération au-delà de la deadline.
+        const res = await fetch(url, { ...init, signal: AbortSignal.timeout(30_000) });
         if (res.status === 503 || res.status === 429) {
-          lastErr = new Error(`HTTP ${res.status} (throttled)`); // évite throw undefined si tout throttle
-          await sleep(2000 * 2 ** i); // backoff exponentiel sur throttle
+          lastErr = new Error(`HTTP ${res.status} (throttled)`); // rejet serveur = job NON créé → retry sûr même en POST
+          if (i < tries - 1) await sleep(2000 * 2 ** i);
           continue;
         }
         const body = (await res.json()) as unknown;
@@ -64,9 +71,10 @@ export class KieProvider implements GenProvider {
         return body;
       } catch (e) {
         lastErr = e;
-        // 4xx non-throttle (clé/params invalides) = non-retryable → échec immédiat, pas de backoff inutile.
-        if (e instanceof Error && /^HTTP 4\d\d/.test(e.message)) throw e;
-        await sleep(2000 * 2 ** i);
+        if (e instanceof Error && /^HTTP 4\d\d/.test(e.message)) throw e; // 4xx non-throttle = non-retryable
+        // POST non-idempotent : ne pas retenter une erreur réseau (le job a pu être créé ET facturé).
+        if (!idempotent) throw e;
+        if (i < tries - 1) await sleep(2000 * 2 ** i); // pas de backoff inutile après la dernière tentative
       }
     }
     throw lastErr ?? new Error("kie.ai: tentatives épuisées");
@@ -87,7 +95,9 @@ export class KieProvider implements GenProvider {
       method: "POST",
       headers: { Authorization: `Bearer ${this.apiKey}` },
       body: form,
+      signal: AbortSignal.timeout(60_000),
     });
+    if (!res.ok) throw new Error(`Upload HTTP ${res.status}`);
     const body = (await res.json()) as unknown;
     const url = pick(body, ["data", "downloadUrl"]);
     if (typeof url !== "string") throw new Error(`Upload échoué: ${JSON.stringify(body)}`);
@@ -107,7 +117,7 @@ export class KieProvider implements GenProvider {
           image_size: req.aspectRatio ?? "9:16",
         },
       }),
-    });
+    }, { idempotent: false }); // création facturée → pas de retry réseau (anti double-facturation)
     const taskId = String(pick(created, ["data", "taskId"]) ?? pick(created, ["taskId"]) ?? "");
     if (!taskId) {
       return { ok: false, urls: [], costCredits: 0, model: req.model, error: `createTask sans taskId: ${JSON.stringify(created)}`, raw: created };
@@ -153,7 +163,7 @@ export class KieProvider implements GenProvider {
         aspectRatio: req.aspectRatio ?? "9:16",
         imageUrls: req.imageUrls ?? [],
       }),
-    });
+    }, { idempotent: false }); // création facturée → pas de retry réseau
     const taskId = String(pick(created, ["data", "taskId"]) ?? pick(created, ["taskId"]) ?? "");
     if (!taskId) {
       return { ok: false, urls: [], costCredits: 0, model: req.model, error: `veo/generate sans taskId: ${JSON.stringify(created)}`, raw: created };

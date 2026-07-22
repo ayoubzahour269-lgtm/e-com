@@ -45,7 +45,7 @@ html,body{width:${size.w}px;height:${size.h}px;background:transparent;overflow:h
   display:flex;flex-direction:column;align-items:center;text-align:center;gap:${px(18)}}
 
 .kicker{font-family:'Reem Kufi',sans-serif;font-weight:700;color:${p.goldDark};
-  font-size:${px(26)};letter-spacing:${px(2)};
+  font-size:${px(26)};letter-spacing:0;/* pas de tracking sur l'arabe (casse les liaisons cursives) */
   display:flex;align-items:center;gap:${px(14)}}
 .kicker::before,.kicker::after{content:"";width:${px(30)};height:1px;
   background:linear-gradient(90deg,transparent,${p.gold})}
@@ -72,7 +72,7 @@ html,body{width:${size.w}px;height:${size.h}px;background:transparent;overflow:h
   font-size:${px(24)};padding:${px(7)} ${px(18)};border-radius:${px(999)}}
 
 .brand{font-family:'Tajawal',sans-serif;font-weight:600;color:${p.garnet};
-  font-size:${px(25)};letter-spacing:${px(1)};opacity:.85}
+  font-size:${px(25)};letter-spacing:0;opacity:.85}
 </style></head>
 <body>
   <div class="stage">

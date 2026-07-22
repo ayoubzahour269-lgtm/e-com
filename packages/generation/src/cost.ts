@@ -12,7 +12,11 @@ export const CREDIT_COST: Record<string, number> = {
 
 export function estimateCost(model: string, n = 1): number {
   const unit = CREDIT_COST[model];
-  if (unit === undefined) return 0; // inconnu → non facturé dans l'estimation, à compléter
+  if (unit === undefined) {
+    // Un modèle absent de la table serait facturé par kie mais compté 0 → fausserait un garde-fou budget.
+    console.warn(`[cost] modèle inconnu "${model}" — estimé à 0, compléter CREDIT_COST.`);
+    return 0;
+  }
   return unit * n;
 }
 

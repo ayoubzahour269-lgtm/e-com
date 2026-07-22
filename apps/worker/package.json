@@ -1,0 +1,19 @@
+{
+  "name": "@studio/worker",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Orchestrateur end-to-end : Product Kit → concepts (agents) → scène fidèle (generation) → ArtDirector → typo (render) → batch de créatives + plan de test.",
+  "scripts": { "batch": "tsx src/batch.ts" },
+  "dependencies": {
+    "@studio/core": "workspace:*",
+    "@studio/agents": "workspace:*",
+    "@studio/generation": "workspace:*",
+    "@studio/render": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

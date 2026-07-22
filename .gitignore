@@ -10,3 +10,8 @@ dist/
 # sorties de rendu (générées) — les preuves de spike sont versionnées dans docs/spikes/
 packages/*/out/
 .fonttest/
+
+# Next.js
+.next/
+next-env.d.ts
+apps/web/studio-dashboard.png

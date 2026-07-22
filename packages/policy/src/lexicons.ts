@@ -28,11 +28,24 @@ export const PERSONAL_ATTRIBUTE_TOKENS: string[] = [
   "تساقط شعرك", "فروة رأسك", "رأسك", "مشكلتك",
 ];
 
+/**
+ * Racines de parties du corps / attributs personnels (NORMALISÉES : sans harakat/tatweel,
+ * alef unifié). Le linter détecte racine + suffixe possessif (ك/كِ/كم) sur le texte normalisé,
+ * ce qui résiste aux diacritiques (ex : شَعرك) et au tatweel (شعــرك).
+ */
+export const BODY_PART_ROOTS: string[] = [
+  "شعر", "بشرت", "بشرة", "وجه", "عين", "عيون", "وزن", "بطن", "جسم", "راس",
+  "اسنان", "صحت", "صحة", "رائحت", "رائحة", "حيات", "حياة", "فروت", "فروة", "مشكلت", "مشكلة",
+];
+
 /** Marqueurs de dialecte khaliji (interdits si fusha requise). */
 export const KHALIJI_MARKERS: string[] = [
-  "وش", "شلون", "كيفك", "ابغى", "أبغى", "ابي", "أبي", "وايد",
+  "وش", "شلون", "كيفك", "ابغى", "ابي", "وايد",
   "زين", "كذا", "حقك", "حقتك", "تبين", "تبي", "ليش", "عشان", "يبيلك", "الحين",
 ];
+
+/** Préfixes clitiques arabes à retirer avant de tester un marqueur dialectal (وعشان → عشان). */
+export const CLITIC_PREFIXES: string[] = ["و", "ف", "ب", "ل", "ال", "وال", "بال", "فال"];
 
 export interface ClaimRule {
   code: string;

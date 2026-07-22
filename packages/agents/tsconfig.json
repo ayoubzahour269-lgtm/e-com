@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@studio/core": ["../core/src/index.ts"],
+      "@studio/policy": ["../policy/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*"]
+}

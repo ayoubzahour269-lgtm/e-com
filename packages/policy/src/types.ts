@@ -22,6 +22,7 @@ export interface CopyPayload {
   angle?: Angle;
   lang: "ar";
   requireFusha?: boolean; // interdit le dialecte (khaliji) si true
+  verifiedClaims?: string[]; // faits RÉELS vérifiés (ex "25%", "علاج") → non signalés
   fields: Partial<Record<CopyField, string>>;
 }
 

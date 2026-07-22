@@ -1,0 +1,131 @@
+{
+  "_note": "Bibliothèque d'angles (framework Andromeda) — encodée depuis creative/docs/BRIEF-CREATIFS.md (copy éprouvé, policy-safe). Slots remplis depuis le Product Kit : {price} {compareAt} {cod} {pack} {ingredients}. Base déterministe ; la couche LLM enrichit/localise ensuite.",
+  "angles": [
+    {
+      "id": "offer",
+      "name": "Ancre d'offre",
+      "hookType": "value",
+      "hook": "علاج ٣ أشهر كامل لشعرٍ أكثف وأطول",
+      "rationale": "Valeur/prix — prospection warm + retargeting.",
+      "recommendTemplate": "banner_top",
+      "formats": ["meta_4x5", "square_1x1"],
+      "copy": {
+        "meta": {
+          "primary": "{pack} من زيت المشاط الأحمر بخصم 25% — علاج ٣ أشهر كامل. {cod}.",
+          "headline": "{pack} — {price} بدل {compareAt}",
+          "description": "{cod}"
+        }
+      }
+    },
+    {
+      "id": "before_after",
+      "name": "Transformation (BAB)",
+      "hookType": "result_first",
+      "hook": "تسعون يومًا من الانتظام تصنع الفرق",
+      "rationale": "Transformation — nécessite la mention صورة توضيحية sur le visuel.",
+      "recommendTemplate": "banner_top",
+      "formats": ["meta_4x5", "story_9x16"],
+      "copy": {
+        "meta": {
+          "primary": "تسعون يومًا من الانتظام تصنع الفرق: جذور تتغذّى، تساقط أقل، ولمعان يظهر في المرآة.",
+          "headline": "الفرق يبدأ من الجذور",
+          "description": "توصيل مجاني ٢–٥ أيام"
+        },
+        "tiktok": { "caption": "٩٠ يومًا من الانتظام — والفرق أمامك ✨ {cod}" }
+      }
+    },
+    {
+      "id": "claim",
+      "name": "Claim contrarian / mécanisme",
+      "hookType": "curiosity",
+      "hook": "المشكلة ليست في الشامبو",
+      "rationale": "Pattern interrupt — mécanisme (les racines non nourries).",
+      "recommendTemplate": "editorial",
+      "formats": ["meta_4x5"],
+      "copy": {
+        "meta": {
+          "primary": "المشكلة ليست في الشامبو — الجذور التي لا تتغذّى هي السبب. وصفة مغربية طبيعية 100% تغذّي البصيلات من العمق.",
+          "headline": "غذّي الجذور، لا الأطراف",
+          "description": "طبيعي 100%"
+        }
+      }
+    },
+    {
+      "id": "heritage",
+      "name": "Patrimoine / authenticité",
+      "hookType": "identity",
+      "hook": "سرٌّ توارثته الأجيال",
+      "rationale": "Transmission — codes du luxe/patrimoine marocain.",
+      "recommendTemplate": "banner_top",
+      "formats": ["meta_4x5", "story_9x16"],
+      "copy": {
+        "meta": {
+          "primary": "وصفة مغربية توارثتها الأجيال — {ingredients} في عبوة كاملة. طبيعية 100%.",
+          "headline": "سرٌّ توارثته الأجيال",
+          "description": "طبيعي 100%"
+        }
+      }
+    },
+    {
+      "id": "comparison",
+      "name": "Comparatif (us vs them)",
+      "hookType": "comparison",
+      "hook": "ليست كل الزيوت سواء",
+      "rationale": "Comparaison vérifiable vs génériques (aucune marque citée = policy-safe).",
+      "recommendTemplate": "editorial",
+      "formats": ["meta_4x5"],
+      "copy": {
+        "meta": {
+          "primary": "قبل أن تشتري أي زيت للشعر، قارني: مكوّنات طبيعية، بلا سيليكون، وعبوة كاملة بالدفع عند الاستلام.",
+          "headline": "ليست كل الزيوت سواء",
+          "description": "قارني بنفسك"
+        }
+      }
+    },
+    {
+      "id": "pain",
+      "name": "Pain (problem-aware)",
+      "hookType": "pain",
+      "hook": "التساقط المستمر ليس قدرًا",
+      "rationale": "Douleur — formulation impersonnelle (jamais « شعرك »).",
+      "recommendTemplate": "editorial",
+      "formats": ["meta_4x5", "story_9x16"],
+      "copy": {
+        "meta": {
+          "primary": "التساقط المستمر ليس قدرًا — إنه إشارة من جذورٍ تحتاج التغذية. عناية ٩٠ يومًا من الطبيعة.",
+          "headline": "غذّي الجذور قبل فوات الأوان",
+          "description": "{cod}"
+        }
+      }
+    },
+    {
+      "id": "trust_cod",
+      "name": "Confiance / COD",
+      "hookType": "value",
+      "hook": "لا تدفعين شيئًا قبل الاستلام",
+      "rationale": "Réassurance paiement à la livraison — UGC unboxing.",
+      "recommendTemplate": "hero_light",
+      "formats": ["story_9x16"],
+      "copy": {
+        "tiktok": { "caption": "وصل الطلب 📦 عبوة كاملة — ادفعي عند الاستلام" },
+        "snap": { "headline": "ادفعي عند الاستلام" }
+      }
+    },
+    {
+      "id": "outcome",
+      "name": "Outcome sensoriel / lمعان",
+      "hookType": "identity",
+      "hook": "روتين صغير… إحساس مختلف",
+      "rationale": "Bénéfice sensoriel (brillance/densité) — eye-candy.",
+      "recommendTemplate": "banner_top",
+      "formats": ["meta_4x5", "story_9x16"],
+      "copy": {
+        "meta": {
+          "primary": "روتين صغير يصنع فرقًا كبيرًا: لمعان وكثافة يلتفّان حول كل خصلة.",
+          "headline": "روتين صغير… إحساس مختلف",
+          "description": "{cod}"
+        }
+      }
+    }
+  ]
+}

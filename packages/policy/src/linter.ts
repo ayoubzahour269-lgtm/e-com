@@ -69,10 +69,12 @@ export function lintCopy(payload: CopyPayload): LintResult {
       }
     }
 
-    // 4) Déclarations à risque
+    // 4) Déclarations à risque (sauf faits vérifiés déclarés)
+    const verified = payload.verifiedClaims ?? [];
     for (const rule of CLAIM_RULES) {
       const match = text.match(rule.pattern);
       if (match) {
+        if (verified.includes(match[0])) continue; // fait réel autorisé
         findings.push({
           code: rule.code,
           severity: rule.severity,

@@ -39,6 +39,7 @@ export const ProductKit = z.object({
     ingredients: z.array(z.string()).default([]),
     claims: z.array(z.string()).default([]),
     pack: z.string().optional(),
+    packAr: z.string().optional(), // libellé arabe court (ex عبوة ٣ قوارير)
     sku: z.string().optional(),
   }),
   offer: OfferBlock.extend({ twoPacks: z.string().optional() }),

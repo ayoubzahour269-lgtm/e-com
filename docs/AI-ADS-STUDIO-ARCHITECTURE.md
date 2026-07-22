@@ -71,12 +71,31 @@ TypeScript end-to-end · Next.js · worker BullMQ/Redis · Postgres+Drizzle · S
 | **4 — Boucle de perf** | Le vrai moat | Métriques manuelles → API Meta/TikTok → `Learner`. |
 | **5 — SaaS-ready** | Ouverture | Auth, tenancy, billing/crédits, quotas, avatars UGC, white-label. |
 
-## État Phase 0 (au commit courant)
-- ✅ **Spike A — moteur typographie arabe déterministe** : opérationnel. Rend l'arabe **parfait**
-  (naskh Amiri + kufi Reem Kufi), RTL, ligatures, diacritiques, dégradé or, filet, chip d'offre,
-  aux specs exactes (4:5 / 9:16), ~3–5 s/créative, **coût 0** (hors-IA). Preuves : `docs/spikes/`.
-- 🔎 **Constat** : coller du texte sur une photo produit arbitraire crée des collisions (titre sur
-  l'étiquette). → confirme le besoin de **scènes art-directées avec zone de copy réservée** + un
-  **ArtDirector conscient des zones de sécurité** + un **QC de collision/légibilité**. Aligné avec l'archi.
-- ✅ **Spike B — adaptateur kie.ai + cost ledger + best-of-N + QC** : code-complete (`packages/generation/`),
-  typecheck OK. **Run live en attente de la clé kie.ai** (`secrets.env`).
+## État réel (mis à jour)
+Le studio est **fonctionnel de bout en bout** pour les statics, avec UI de pilotage.
+
+**Packages (tous typecheck OK, poussés) :**
+- `core` — schémas Zod (ProductKit, Concept, CreativeSpec) + pipeline.
+- `policy` — linter conformité déterministe (caps, attributs personnels, dialecte, claims, disclaimers).
+- `agents` — cerveau Andromeda (angles/hooks/copy) depuis `templates/angles.json` + Product Kit ; LLM branchable.
+- `generation` — adaptateur kie.ai (jobs/veo/upload, backoff, guards) + cost ledger + best-of-N + FidelityCritic.
+- `render` — typo arabe déterministe (Chromium) + compositing (Sharp) + ArtDirector (placement/collision) +
+  templates (editorial, hero_light, banner_top) + compositing verrouillé (fallback fidélité).
+
+**Apps :**
+- `apps/worker` — orchestrateur : `batch` (IA-embed, défaut), `bon`/`finalize` (best-of-N + critique),
+  `batch-locked` (fallback verrouillé). Jobs async (fichiers `out/jobs/<id>.json`).
+- `apps/web` — UI Next.js RTL : **dashboard** (concepts + pipeline + galerie + téléchargements),
+  **/concepts** (checkpoint copy éditable, linter en direct), **/review** (best-of-N : lancer génération
+  async avec barre de progression → choisir le gagnant → finaliser). Le critique de fidélité = humain
+  aujourd'hui (interface `FidelityCritic` prête pour un modèle vision).
+
+**Fidélité (fermée) :** IA-embed par défaut (produit *fondu* dans la scène, prompt fidélité renforcé) ;
+best-of-N + critique pour écarter les dérives ; mode verrouillé (re-collage des pixels réels) en fallback.
+
+**Décisions produit verrouillées :** produit canonique = `creative/bottle_straight.png` (bouteille ronde).
+
+**Hardening :** revue adversariale multi-agents → 7 correctifs de robustesse (kie.ts, worker, finalize).
+
+**Reste :** checkpoint storyboard/DA éditable, export multi-format (9:16 story), vidéo (Phase 3),
+boucle de perf (Phase 4), passage SaaS (auth/tenancy/billing).

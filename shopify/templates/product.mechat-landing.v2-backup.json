@@ -1,0 +1,632 @@
+{
+  "layout": "landing",
+  "sections": {
+    "lp_hero": {
+      "type": "landing-hero",
+      "blocks": {
+        "hb1": {
+          "type": "bullet",
+          "settings": {
+            "text": "تساقط أقل تلاحظينه منذ الأسابيع الأولى"
+          }
+        },
+        "hb2": {
+          "type": "bullet",
+          "settings": {
+            "text": "تغذية عميقة للبصيلات ونموّ أقوى"
+          }
+        },
+        "hb3": {
+          "type": "bullet",
+          "settings": {
+            "text": "كثافة ولمعان يظهران في المرآة"
+          }
+        },
+        "hb4": {
+          "type": "bullet",
+          "settings": {
+            "text": "بلا بارابين ولا سيليكون ولا عطور صناعية"
+          }
+        }
+      },
+      "block_order": [
+        "hb1",
+        "hb2",
+        "hb3",
+        "hb4"
+      ],
+      "settings": {
+        "eyebrow": "وصفة مغربية أصيلة — طبيعية 100%",
+        "title": "ثلاث قوارير… <em>وتسعون يومًا</em> تفصلك عن شعرٍ أكثف وأطول",
+        "subtitle": "زيت المشاط الأحمر يغذّي الجذور من العمق، فيقلّ التساقط ويعود لشعرك امتلاؤه ولمعانه. عبوة العلاج الكاملة: ثلاث قوارير × 250 مل.",
+        "image_asset": "mechat-pack-podium.webp",
+        "video_asset": "mechat-hero-video2.mp4",
+        "badge": "علاج 3 أشهر · خصم 25%",
+        "cta_label": "اطلبي الآن — الدفع عند الاستلام",
+        "social_text": ""
+      }
+    },
+    "lp_stats": {
+      "type": "landing-stats",
+      "blocks": {
+        "st1": {
+          "type": "stat",
+          "settings": {
+            "prefix": "",
+            "number": "100",
+            "suffix": "٪",
+            "label": "مكوّنات طبيعية"
+          }
+        },
+        "st2": {
+          "type": "stat",
+          "settings": {
+            "prefix": "",
+            "number": "3",
+            "suffix": " قوارير",
+            "label": "في عبوة العلاج الكاملة"
+          }
+        },
+        "st3": {
+          "type": "stat",
+          "settings": {
+            "prefix": "",
+            "number": "90",
+            "suffix": " يومًا",
+            "label": "من العناية المتواصلة"
+          }
+        },
+        "st4": {
+          "type": "stat",
+          "settings": {
+            "prefix": "",
+            "number": "24",
+            "suffix": " ساعة",
+            "label": "لمعالجة طلبك"
+          }
+        }
+      },
+      "block_order": [
+        "st1",
+        "st2",
+        "st3",
+        "st4"
+      ],
+      "settings": {}
+    },
+    "lp_marquee": {
+      "type": "landing-marquee",
+      "blocks": {
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "الدفع عند الاستلام"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "توصيل مجاني إلى جميع مدن المملكة"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "طبيعي 100%"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "وصفة مغربية أصيلة"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
+      ],
+      "settings": {}
+    },
+    "lp_problem": {
+      "type": "landing-problem",
+      "blocks": {
+        "p1": {
+          "type": "pain",
+          "settings": {
+            "icon": "",
+            "text": "خصلة كاملة تبقى في المشط بعد كل تسريحة"
+          }
+        },
+        "p2": {
+          "type": "pain",
+          "settings": {
+            "icon": "",
+            "text": "الوسادة تمتلئ بالشعر المتساقط كل صباح"
+          }
+        },
+        "p3": {
+          "type": "pain",
+          "settings": {
+            "icon": "",
+            "text": "ربطة الشعر أصبحت أرفع مما كانت بكثير"
+          }
+        },
+        "p4": {
+          "type": "pain",
+          "settings": {
+            "icon": "",
+            "text": "فراغات بدأت تظهر وتحرجك أمام الجميع"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "heading": "هل أصبح شعرك يمنعك من إطلالتك التي تحبين؟",
+        "subheading": "إن كنتِ تعرفين واحدة من هذه اللحظات، فهذا العلاج صُمّم لأجلك"
+      }
+    },
+    "lp_benefits": {
+      "type": "landing-benefits",
+      "blocks": {
+        "ben1": {
+          "type": "benefit",
+          "settings": {
+            "image_asset": "mechat-oil-macro.webp",
+            "emoji": "",
+            "title": "تساقط أقل",
+            "text": "تركيبة غنية تقوّي البصيلات وتثبّتها، فيظهر الفرق في المشط والوسادة"
+          }
+        },
+        "ben2": {
+          "type": "benefit",
+          "settings": {
+            "image_asset": "mechat-ingredients.webp",
+            "emoji": "",
+            "title": "نموّ متجدد",
+            "text": "أعشاب مغربية تنشّط فروة الرأس وتوقظ البصيلات الخاملة"
+          }
+        },
+        "ben3": {
+          "type": "benefit",
+          "settings": {
+            "image_asset": "mechat-reveal.webp",
+            "emoji": "",
+            "title": "كثافة وطول",
+            "text": "مع المواظبة يزداد الشعر كثافةً وطولًا ويستعيد حيويته"
+          }
+        },
+        "ben4": {
+          "type": "benefit",
+          "settings": {
+            "image_asset": "mechat-shine2.webp",
+            "emoji": "",
+            "title": "لمعان حريري",
+            "text": "نعومة ولمعان صحيّان من الاستعمالات الأولى، بلا ثقل ولا ملمس دهني"
+          }
+        }
+      },
+      "block_order": [
+        "ben1",
+        "ben2",
+        "ben3",
+        "ben4"
+      ],
+      "settings": {
+        "heading": "لماذا تحبّه عميلاتنا؟",
+        "columns": "2",
+        "bg_color": "#fdf5ef",
+        "heading_color": "#2A1A16"
+      }
+    },
+    "lp_slider": {
+      "type": "landing-slider",
+      "settings": {
+        "heading": "الفرق الذي تصنعه العناية الصحيحة",
+        "hint": "اسحبي المؤشر يمينًا ويسارًا لرؤية الفرق",
+        "before_asset": "mechat-ba-before.webp",
+        "after_asset": "mechat-ba-after.webp"
+      }
+    },
+    "lp_media": {
+      "type": "landing-media-text",
+      "blocks": {
+        "row2": {
+          "type": "row",
+          "settings": {
+            "image_asset": "mechat-ritual.webp",
+            "video_asset": "mechat-ritual-video.mp4",
+            "badge": "الطقس",
+            "title": "لحظة لكِ وحدك",
+            "text": "<p>دلّكي فروة رأسك بحركات دائرية لطيفة، ودعي دفء الحمّام يفتح المسام. دقائق من الهدوء تكفي ليتغلغل الزيت حتى الجذور — هذا وقتك، لا يشاركك فيه أحد.</p>"
+          }
+        },
+        "row3": {
+          "type": "row",
+          "settings": {
+            "image_asset": "mechat-reveal.webp",
+            "video_asset": "mechat-reveal-video.mp4",
+            "badge": "النتيجة",
+            "title": "شعرٌ يستحق الانتظار",
+            "text": "<p>النعومة تشعرين بها من الغسلة الأولى. ومع كل أسبوع تقوى الجذور وتمتلئ الفراغات ويعود اللمعان — حتى تصبح تسريحة الصباح لحظة تفخرين بها.</p>"
+          }
+        },
+        "row1": {
+          "type": "row",
+          "settings": {
+            "image_asset": "mechat-oil-macro.webp",
+            "video_asset": "",
+            "badge": "الآلية",
+            "title": "يتغلغل حتى الجذور",
+            "text": "<p>تركيبة المشاط والكركديه والحناء خفيفة القوام، فتنساب بين الخصلات وتصل إلى البصيلة مباشرة. هناك تعمل: تغذّي الجذر، وتنشّط الدورة الدموية في فروة الرأس، فيقلّ التساقط تدريجيًا.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "row1",
+        "row2",
+        "row3"
+      ],
+      "settings": {
+        "heading": "كيف يعمل زيت المشاط؟",
+        "bg_color": "#ffffff"
+      }
+    },
+    "lp_steps": {
+      "type": "landing-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "image_asset": "mechat-pour-real.webp",
+            "title": "اسكبي قليلًا من الزيت",
+            "text": "ملء راحة اليد يكفي لكل استعمال"
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "image_asset": "mechat-ritual.webp",
+            "title": "دلّكي فروة الرأس",
+            "text": "بأطراف الأصابع، بحركات دائرية لخمس دقائق"
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "image_asset": "mechat-hair-result.webp",
+            "title": "اتركيه ثم اغسليه",
+            "text": "ساعة على الأقل، ثم شامبو خفيف — مرتين في الأسبوع"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "heading": "طريقة الاستعمال — ثلاث خطوات",
+        "bg_color": "#f7ede4",
+        "accent_color": "#8E1B1E"
+      }
+    },
+    "lp_reviews": {
+      "type": "landing-reviews",
+      "blocks": {
+        "r1": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "image_asset": "mechat-ugc1.webp",
+            "text": "كان شعري يتساقط مع كل تسريحة بشكل يقلقني. بعد شهر ونصف قلّ التساقط بوضوح وعادت له لمعة جميلة، والطلب وصل الرياض سريعًا.",
+            "name": "أم ريان",
+            "city": "الرياض"
+          }
+        },
+        "r2": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "image_asset": "mechat-ugc2.webp",
+            "text": "رائحته خفيفة ولا يثقل الشعر إطلاقًا. ابنتي شعرها خفيف وبدأ يظهر لها شعر جديد صغير منذ الشهر الثاني. سنطلب عبوة أخرى بالتأكيد.",
+            "name": "نورة ع.",
+            "city": "جدة"
+          }
+        },
+        "r3": {
+          "type": "review",
+          "settings": {
+            "stars": 4,
+            "image_asset": "mechat-ugc3.webp",
+            "text": "النعومة تشعرين بها من أول غسلة بصراحة، أما التكثيف فيحتاج إلى شيء من الصبر. الدفع عند الاستلام مريح جدًا.",
+            "name": "أم فهد",
+            "city": "الدمام"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "settings": {
+        "heading": "آراء عميلاتنا",
+        "subheading": "تجارب من مدن المملكة",
+        "bg_color": "#ffffff"
+      }
+    },
+    "lp_faq": {
+      "type": "landing-faq",
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "كيف أدفع؟",
+            "answer": "<p>الدفع عند الاستلام — تدفعين نقدًا أو بالشبكة لمندوب التوصيل عند وصول الطلب. لا ندفعك ريالًا قبل أن تستلمي.</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "متى يصل الطلب؟",
+            "answer": "<p>خلال يومين إلى خمسة أيام عمل لجميع مدن المملكة، والتوصيل مجاني بالكامل.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "هل يناسب جميع أنواع الشعر؟",
+            "answer": "<p>نعم — الجاف والدهني والمصبوغ والمعالج. التركيبة طبيعية 100% وخالية من البارابين والسيليكون.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "هل يصبغ الشعر باللون الأحمر؟",
+            "answer": "<p>لا. اللون الأحمر مصدره الكركديه والأعشاب الطبيعية؛ قد يمنح انعكاسات دافئة خفيفة للشعر الفاتح فقط، ولا يغيّر لون الشعر الداكن.</p>"
+          }
+        },
+        "q5": {
+          "type": "qa",
+          "settings": {
+            "question": "متى أرى النتيجة؟",
+            "answer": "<p>النعومة واللمعان من الاستعمالات الأولى. يقلّ التساقط عادة بعد ثلاثة إلى خمسة أسابيع، وتظهر الكثافة والنمو الجديد من الشهر الثاني — ولهذا كانت العبوة علاجًا كاملًا لتسعين يومًا.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "heading": "الأسئلة الشائعة",
+        "open_first": true,
+        "bg_color": "#faf7f2"
+      }
+    },
+    "lp_compare": {
+      "type": "landing-compare",
+      "blocks": {
+        "c1": {
+          "type": "row",
+          "settings": {
+            "feature": "وصفة مغربية أصيلة 100% طبيعية",
+            "ours": true,
+            "theirs": false
+          }
+        },
+        "c2": {
+          "type": "row",
+          "settings": {
+            "feature": "يغذّي الجذور ويقلّل التساقط",
+            "ours": true,
+            "theirs": false
+          }
+        },
+        "c3": {
+          "type": "row",
+          "settings": {
+            "feature": "بلا بارابين ولا سيليكون ولا عطور صناعية",
+            "ours": true,
+            "theirs": false
+          }
+        },
+        "c4": {
+          "type": "row",
+          "settings": {
+            "feature": "خفيف على الشعر ولا يترك ملمسًا دهنيًا",
+            "ours": true,
+            "theirs": false
+          }
+        },
+        "c5": {
+          "type": "row",
+          "settings": {
+            "feature": "عبوة علاج كاملة لثلاثة أشهر",
+            "ours": true,
+            "theirs": false
+          }
+        },
+        "c6": {
+          "type": "row",
+          "settings": {
+            "feature": "الدفع عند الاستلام مع معاينة قبل الدفع",
+            "ours": true,
+            "theirs": false
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6"
+      ],
+      "settings": {
+        "heading": "لماذا زيت المشاط الأحمر وليس أي زيت؟",
+        "ours_label": "زيت المشاط الأحمر",
+        "theirs_label": "الزيوت العادية"
+      }
+    },
+    "lp_guarantee": {
+      "type": "landing-guarantee",
+      "settings": {
+        "heading": "اطلبي وأنتِ مطمئنة — المخاطرة علينا",
+        "text": "عايني المنتج عند الاستلام قبل أن تدفعي. وإن لم يعجبك أو كانت فيه أي مشكلة، تواصلي معنا ونستبدله لك دون نقاش.",
+        "card1": "لا تدفعين ريالًا واحدًا قبل أن تستلمي وتعايني",
+        "card2": "من يومين إلى خمسة أيام عمل لجميع مدن المملكة",
+        "card3": "أي مشكلة في المنتج نستبدله لك دون نقاش"
+      }
+    },
+    "lp_cta": {
+      "type": "landing-cta",
+      "settings": {
+        "heading": "بعد تسعين يومًا… ستتمنين لو بدأتِ اليوم",
+        "subheading": "الدفع عند الاستلام · توصيل مجاني إلى جميع مدن المملكة",
+        "button_label": "اطلبي الآن — الدفع عند الاستلام",
+        "note": "سعر الإطلاق 139 ر.س بدلًا من 185 — لفترة محدودة",
+        "bg_color": "#2b0d0e",
+        "text_color": "#ffffff",
+        "button_bg": "#C9A227",
+        "button_text": "#2b1f06"
+      }
+    },
+    "lp_sticky": {
+      "type": "landing-sticky-cta",
+      "settings": {
+        "button_label": "اطلبي الآن"
+      }
+    },
+    "lp_wa": {
+      "type": "landing-whatsapp",
+      "settings": {
+        "number": "",
+        "message": "أودّ الاستفسار عن زيت المشاط الأحمر"
+      }
+    },
+    "lp_order": {
+      "type": "landing-order",
+      "settings": {
+        "heading": "أكملي طلبك الآن",
+        "subheading": "املئي بياناتك وسنتصل بك لتأكيد الطلب — دون أي دفع مسبق",
+        "product_label": "عبوة العلاج الكاملة — ثلاث قوارير × 250 مل",
+        "note": "شامل التوصيل — الدفع نقدًا أو بالشبكة عند الاستلام",
+        "ribbon": "عرض الإطلاق — وفّري 46 ر.س على عبوة الثلاث قوارير"
+      }
+    },
+    "lp_pack3d": {
+      "type": "landing-pack3d",
+      "blocks": {
+        "c1": {
+          "type": "chip",
+          "settings": {
+            "value": "3",
+            "label": "قوارير"
+          }
+        },
+        "c2": {
+          "type": "chip",
+          "settings": {
+            "value": "750",
+            "label": "مل من الزيت"
+          }
+        },
+        "c3": {
+          "type": "chip",
+          "settings": {
+            "value": "90",
+            "label": "يومًا من العناية"
+          }
+        },
+        "c4": {
+          "type": "chip",
+          "settings": {
+            "value": "100٪",
+            "label": "مكوّنات طبيعية"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "heading": "عبوة العلاج الكاملة — <em>تسعون يومًا</em> من العناية",
+        "subheading": "ثلاث قوارير من زيت المشاط الأحمر، كل قارورة تكفي شهرًا كاملًا من طقسك الأسبوعي. حرّكي العبوة بإصبعك وشاهديها تستجيب.",
+        "image_asset": "mechat-hero-luxe.webp",
+        "caption": "المنتج كما يصلك تمامًا — بلا تعديل ولا رتوش"
+      }
+    },
+    "lp_offers": {
+      "type": "landing-offers",
+      "blocks": {
+        "of1": {
+          "type": "offer",
+          "settings": {
+            "qty_label": "١",
+            "title": "عبوة واحدة — ثلاث قوارير (علاج 90 يومًا)",
+            "price": "139 ر.س",
+            "old_price": "185 ر.س",
+            "note": "توصيل مجاني",
+            "badge": "",
+            "featured": false
+          }
+        },
+        "of2": {
+          "type": "offer",
+          "settings": {
+            "qty_label": "٢",
+            "title": "عبوتان — ست قوارير (لكِ ولمن تحبين)",
+            "price": "259 ر.س",
+            "old_price": "370 ر.س",
+            "note": "وفّري 111 ر.س + توصيل مجاني",
+            "badge": "الأفضل قيمة",
+            "featured": true
+          }
+        }
+      },
+      "block_order": [
+        "of1",
+        "of2"
+      ],
+      "settings": {
+        "heading": "اختاري عرضك — القيمة تزداد مع الكمية"
+      }
+    }
+  },
+  "order": [
+    "lp_hero",
+    "lp_stats",
+    "lp_marquee",
+    "lp_problem",
+    "lp_pack3d",
+    "lp_slider",
+    "lp_benefits",
+    "lp_media",
+    "lp_steps",
+    "lp_reviews",
+    "lp_compare",
+    "lp_offers",
+    "lp_guarantee",
+    "lp_order",
+    "lp_faq",
+    "lp_cta",
+    "lp_sticky",
+    "lp_wa"
+  ]
+}

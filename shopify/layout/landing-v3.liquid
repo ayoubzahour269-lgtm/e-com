@@ -1,0 +1,25 @@
+<!doctype html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title | default: shop.name }}</title>
+  {{ content_for_header }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#F8F2E6;color:#2B1B10;font-family:'IBM Plex Sans Arabic',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:#8F6B12;text-decoration:none} a:hover{color:#5E1322}
+    input::placeholder{color:#B4A183}
+    html{scroll-behavior:smooth}
+    img{max-width:100%}
+    @keyframes floatSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @keyframes heroIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  {{ content_for_layout }}
+</body>
+</html>

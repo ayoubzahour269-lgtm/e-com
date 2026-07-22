@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import { loadProductKit, loadAngles, planConcepts } from "@studio/agents";
+import ResultPanel from "./ResultPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,9 @@ export default function Page() {
           ))}
         </div>
       </section>
+
+      {/* Plan résultat (avant/après apparié) */}
+      <ResultPanel />
 
       {/* Concepts (le cerveau) */}
       <section className="mb-14">

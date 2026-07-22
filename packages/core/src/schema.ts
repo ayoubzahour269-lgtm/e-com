@@ -30,6 +30,8 @@ export const ProductKit = z.object({
   canonical: z.object({
     masterDetoured: z.string(), // chemin du master produit détouré (référence VERROUILLÉE)
     characterSheet: z.string().optional(),
+    resultAfter: z.string().optional(), // image "après" (élément impacté) pour l'avant/après apparié
+    resultTitle: z.string().optional(), // titre du plan résultat (défaut : hook before_after)
     shape: z.string().optional(),
     label: z.string().optional(),
     volume_ml: z.number().optional(),

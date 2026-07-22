@@ -51,6 +51,36 @@ export async function launchBatchAsync(angle: string, n: number) {
   return { ok: true as const, jobId, total: N };
 }
 
+/** Génère le plan RÉSULTAT (avant/après apparié) de façon async. ~4 crédits. */
+export async function generateResultAsync() {
+  try {
+    if (fs.existsSync(JOBS)) {
+      for (const f of fs.readdirSync(JOBS)) {
+        if (!f.endsWith(".json")) continue;
+        try {
+          const j = JSON.parse(fs.readFileSync(path.join(JOBS, f), "utf8"));
+          if (j.type === "result" && j.status === "running") {
+            return { ok: false as const, error: "Un plan résultat est déjà en cours." };
+          }
+        } catch { /* ignore */ }
+      }
+    }
+  } catch { /* ignore */ }
+  const jobId = randomUUID();
+  fs.mkdirSync(JOBS, { recursive: true });
+  fs.writeFileSync(path.join(JOBS, `${jobId}.json`), JSON.stringify({ id: jobId, type: "result", total: 1, done: 0, status: "running" }));
+  const tsx = path.join(REPO, "apps/worker/node_modules/.bin/tsx");
+  const script = path.join(REPO, "apps/worker/src/result-matched.ts");
+  const child = spawn(tsx, [script, "", jobId], {
+    cwd: path.join(REPO, "apps/worker"),
+    detached: true,
+    stdio: "ignore",
+    env: { ...process.env, ...PROXY_ENV },
+  });
+  child.unref();
+  return { ok: true as const, jobId };
+}
+
 /** Lit l'état d'un job de génération. */
 export async function getJob(jobId: string) {
   if (!/^[\w-]+$/.test(jobId)) return { status: "failed", error: "id invalide" };

@@ -3,6 +3,7 @@ import { buildFontFaceCss } from "./fonts.js";
 import { renderHtmlToPng, closeBrowser } from "./browser.js";
 import { editorialHtml } from "./templates/editorial.js";
 import { heroLightHtml } from "./templates/heroLight.js";
+import { bannerTopHtml } from "./templates/bannerTop.js";
 import { composeCreative } from "./compose.js";
 import { FORMAT_SIZES, type CreativeSpec } from "./types.js";
 
@@ -20,9 +21,12 @@ export async function renderCreative(spec: CreativeSpec): Promise<Buffer> {
   const size = FORMAT_SIZES[spec.format];
   const fontCss = buildFontFaceCss();
   const isHero = spec.template === "hero_light";
-  const html = isHero
-    ? heroLightHtml(spec, size, fontCss)
-    : editorialHtml(spec, size, fontCss);
+  const html =
+    spec.template === "hero_light"
+      ? heroLightHtml(spec, size, fontCss)
+      : spec.template === "banner_top"
+        ? bannerTopHtml(spec, size, fontCss)
+        : editorialHtml(spec, size, fontCss);
 
   // Couche transparente (texte + voiles) rendue par Chromium à SCALE×.
   const layerPng = await renderHtmlToPng(html, size.w, size.h, {

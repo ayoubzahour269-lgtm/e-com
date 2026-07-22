@@ -9,6 +9,7 @@ import { FORMAT_SIZES, type CreativeSpec } from "./types.js";
 
 export * from "./types.js";
 export * from "./artdirector.js";
+export { composeLocked } from "./lockedCompose.js";
 export { closeBrowser };
 
 const SCALE = 2; // suréchantillonnage → texte arabe net

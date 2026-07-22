@@ -8,6 +8,7 @@ export interface Span { top: number; bottom: number } // bornes normalisées 0..
 export interface SceneAnalysis {
   productSpan: Span; // travée verticale occupée par le produit
   clearance: { top: number; bottom: number }; // espace libre au-dessus / en-dessous
+  bandEnergy: { top: number; bottom: number }; // "occupation" moyenne des bandes (0 = vide, idéal pour texte)
   rowEnergy: number[]; // profil vertical (debug)
 }
 
@@ -57,7 +58,17 @@ export async function analyzeScene(imagePath: string): Promise<SceneAnalysis> {
 
   const productSpan: Span = { top: top / h, bottom: (bottom + 1) / h };
   const clearance = { top: productSpan.top, bottom: 1 - productSpan.bottom };
-  return { productSpan, clearance, rowEnergy };
+
+  // Énergie moyenne des bandes haut/bas (0 = zone vide, idéale pour poser du texte).
+  const band = (r0: number, r1: number) => {
+    let s = 0, n = 0;
+    for (let y = Math.max(0, r0); y < Math.min(h, r1); y++) { s += rowEnergy[y]; n++; }
+    return n ? s / n : 0;
+  };
+  const topN = Math.round(h * 0.28), botN = Math.round(h * 0.28);
+  const bandEnergy = { top: band(0, topN), bottom: band(h - botN, h) };
+
+  return { productSpan, clearance, bandEnergy, rowEnergy };
 }
 
 export interface PlacementVerdict {

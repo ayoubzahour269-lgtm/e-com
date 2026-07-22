@@ -1,32 +1,74 @@
 "use client";
 import { useState } from "react";
-import { finalizeWinner } from "./actions";
+import { useRouter } from "next/navigation";
+import { finalizeWinner, launchBatch } from "./actions";
 
 export interface Run {
   angle: string;
   candidates: string[]; // noms de fichiers (bon-<angle>-<i>.png)
 }
 
-export default function ReviewClient({ runs }: { runs: Run[] }) {
+export default function ReviewClient({ runs, angles }: { runs: Run[]; angles: string[] }) {
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
       <header className="mb-8 flex items-end justify-between border-b border-white/10 pb-5">
         <div>
           <h1 className="text-2xl font-extrabold text-goldlight">Revue best-of-N</h1>
-          <p className="mt-1 text-sm text-white/60">Le critique de fidélité : choisis le meilleur candidat, on finalise.</p>
+          <p className="mt-1 text-sm text-white/60">Génère des candidats, choisis le meilleur, on finalise.</p>
         </div>
         <a href="/" className="text-sm text-gold hover:underline">← Dashboard</a>
       </header>
+
+      <LaunchPanel angles={angles} />
+
       {runs.length === 0 ? (
-        <p className="text-sm text-white/40">
-          Aucun run best-of-N. Lance <code className="text-gold">pnpm bon &lt;angle&gt; 3</code> puis recharge.
-        </p>
+        <p className="mt-8 text-sm text-white/40">Aucun run — lance une génération ci-dessus.</p>
       ) : (
-        <div className="space-y-12">
+        <div className="mt-10 space-y-12">
           {runs.map((r) => <RunBlock key={r.angle} run={r} />)}
         </div>
       )}
     </main>
+  );
+}
+
+function LaunchPanel({ angles }: { angles: string[] }) {
+  const router = useRouter();
+  const [angle, setAngle] = useState(angles[0] ?? "heritage");
+  const [n, setN] = useState(3);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  async function launch() {
+    setBusy(true); setMsg(null);
+    const res = await launchBatch(angle, n);
+    setBusy(false);
+    if (res.ok) { setMsg(`✓ ${res.count} candidats générés`); router.refresh(); }
+    else setMsg(`Erreur : ${res.error}`);
+  }
+
+  return (
+    <div className="flex flex-wrap items-end gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+      <label className="text-xs text-white/60">
+        Angle
+        <select value={angle} onChange={(e) => setAngle(e.target.value)}
+          className="mt-1 block rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-paper">
+          {angles.map((a) => <option key={a} value={a}>{a}</option>)}
+        </select>
+      </label>
+      <label className="text-xs text-white/60">
+        Candidats
+        <select value={n} onChange={(e) => setN(Number(e.target.value))}
+          className="mt-1 block rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-paper">
+          {[2, 3, 4].map((k) => <option key={k} value={k}>{k}</option>)}
+        </select>
+      </label>
+      <button onClick={launch} disabled={busy}
+        className="rounded-full bg-gold px-5 py-2.5 text-sm font-bold text-ink disabled:opacity-40">
+        {busy ? "Génération kie.ai…" : `Générer (~${n * 4} crédits)`}
+      </button>
+      {msg && <span className="text-sm text-emerald-400">{msg}</span>}
+    </div>
   );
 }
 

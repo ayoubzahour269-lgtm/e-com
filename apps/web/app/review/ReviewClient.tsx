@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { finalizeWinner, launchBatch } from "./actions";
+import { finalizeWinner, launchBatchAsync, getJob } from "./actions";
 
 export interface Run {
   angle: string;
@@ -37,37 +37,59 @@ function LaunchPanel({ angles }: { angles: string[] }) {
   const [angle, setAngle] = useState(angles[0] ?? "heritage");
   const [n, setN] = useState(3);
   const [busy, setBusy] = useState(false);
+  const [prog, setProg] = useState<{ done: number; total: number } | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
   async function launch() {
-    setBusy(true); setMsg(null);
-    const res = await launchBatch(angle, n);
-    setBusy(false);
-    if (res.ok) { setMsg(`✓ ${res.count} candidats générés`); router.refresh(); }
-    else setMsg(`Erreur : ${res.error}`);
+    setBusy(true); setMsg(null); setProg({ done: 0, total: n });
+    const res = await launchBatchAsync(angle, n);
+    if (!res.ok) { setBusy(false); setProg(null); setMsg(`Erreur : ${res.error}`); return; }
+    // Polling non bloquant de l'avancement du job.
+    const timer = setInterval(async () => {
+      const j = await getJob(res.jobId);
+      if (j.status === "running") setProg({ done: j.done ?? 0, total: j.total ?? n });
+      else if (j.status === "done") {
+        clearInterval(timer); setBusy(false); setProg(null);
+        setMsg(`✓ ${(j.candidates || []).length} candidats générés`); router.refresh();
+      } else if (j.status === "failed") {
+        clearInterval(timer); setBusy(false); setProg(null); setMsg(`Erreur : ${j.error}`);
+      }
+    }, 3000);
   }
 
+  const pct = prog && prog.total ? Math.round((prog.done / prog.total) * 100) : 0;
+
   return (
-    <div className="flex flex-wrap items-end gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-      <label className="text-xs text-white/60">
-        Angle
-        <select value={angle} onChange={(e) => setAngle(e.target.value)}
-          className="mt-1 block rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-paper">
-          {angles.map((a) => <option key={a} value={a}>{a}</option>)}
-        </select>
-      </label>
-      <label className="text-xs text-white/60">
-        Candidats
-        <select value={n} onChange={(e) => setN(Number(e.target.value))}
-          className="mt-1 block rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-paper">
-          {[2, 3, 4].map((k) => <option key={k} value={k}>{k}</option>)}
-        </select>
-      </label>
-      <button onClick={launch} disabled={busy}
-        className="rounded-full bg-gold px-5 py-2.5 text-sm font-bold text-ink disabled:opacity-40">
-        {busy ? "Génération kie.ai…" : `Générer (~${n * 4} crédits)`}
-      </button>
-      {msg && <span className="text-sm text-emerald-400">{msg}</span>}
+    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+      <div className="flex flex-wrap items-end gap-3">
+        <label className="text-xs text-white/60">
+          Angle
+          <select value={angle} onChange={(e) => setAngle(e.target.value)} disabled={busy}
+            className="mt-1 block rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-paper">
+            {angles.map((a) => <option key={a} value={a}>{a}</option>)}
+          </select>
+        </label>
+        <label className="text-xs text-white/60">
+          Candidats
+          <select value={n} onChange={(e) => setN(Number(e.target.value))} disabled={busy}
+            className="mt-1 block rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-paper">
+            {[2, 3, 4].map((k) => <option key={k} value={k}>{k}</option>)}
+          </select>
+        </label>
+        <button onClick={launch} disabled={busy}
+          className="rounded-full bg-gold px-5 py-2.5 text-sm font-bold text-ink disabled:opacity-40">
+          {busy ? "Génération…" : `Générer (~${n * 4} crédits)`}
+        </button>
+        {msg && <span className="text-sm text-emerald-400">{msg}</span>}
+      </div>
+      {prog && (
+        <div className="mt-3">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+            <div className="h-full rounded-full bg-gold transition-all" style={{ width: `${pct}%` }} />
+          </div>
+          <p className="mt-1 text-xs text-white/50">{prog.done}/{prog.total} candidats · génération kie.ai…</p>
+        </div>
+      )}
     </div>
   );
 }

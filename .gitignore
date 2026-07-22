@@ -18,3 +18,4 @@ apps/web/studio-dashboard.png
 apps/web/review-selected.png
 apps/web/review-finalized.png
 apps/web/*.png
+apps/*/out/

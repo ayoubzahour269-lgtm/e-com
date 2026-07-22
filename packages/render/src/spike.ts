@@ -30,31 +30,32 @@ const specs: CreativeSpec[] = [
     brandLine: "زيت المشاط الأحمر",
   },
   {
-    // Reproduit "B-heritage" — composé sur une VRAIE photo produit
-    id: "B-editorial-photo",
+    // CORRIGÉ — product-preserving : master produit DÉTOURÉ (fond transparent), JAMAIS recouvert.
+    // Titre en haut, offre en bas, produit intact au centre → fidélité respectée.
+    id: "D-hero-product-4x5",
     format: "meta_4x5",
-    template: "editorial",
+    template: "hero_light",
     lang: "ar",
     dir: "rtl",
     palette: MECHAT_PALETTE,
     titleFont: "amiri",
-    scenePath: asset("assets-v2/mechat-bottle-clean.webp"),
-    kicker: "وصفة الأجداد",
+    scenePath: asset("creative/bottle_straight.png"), // master détouré (alpha)
+    kicker: "وصفة مغربية أصيلة",
     title: "سرٌّ توارثته الأجيال",
-    subtitle: "مشاط، كركديه، حنّاء — وصفة مغربية أصيلة بلا بارابين ولا سيليكون.",
+    subtitle: "مشاط، كركديه، حنّاء — بلا بارابين ولا سيليكون.",
     offer: { price: "139 ر.س", compareAt: "185", badge: "الدفع عند الاستلام" },
     brandLine: "زيت المشاط الأحمر",
   },
   {
-    // Format story 9:16, titre Reem Kufi (kufi géométrique), composé sur le hero
-    id: "C-story-hero",
+    // CORRIGÉ — même principe en story 9:16, titre Reem Kufi.
+    id: "E-hero-product-9x16",
     format: "story_9x16",
-    template: "editorial",
+    template: "hero_light",
     lang: "ar",
     dir: "rtl",
     palette: MECHAT_PALETTE,
     titleFont: "reemKufi",
-    scenePath: asset("assets-v2/mechat-hero-v2.webp"),
+    scenePath: asset("creative/bottle_straight.png"),
     kicker: "٩٠ يومًا من الانتظام",
     title: "الفرق يبدأ من الجذور",
     subtitle: "جذور تتغذّى، تساقط أقل، ولمعان يظهر في المرآة.",

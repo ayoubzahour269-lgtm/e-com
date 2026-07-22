@@ -2,6 +2,7 @@
 import { buildFontFaceCss } from "./fonts.js";
 import { renderHtmlToPng, closeBrowser } from "./browser.js";
 import { editorialHtml } from "./templates/editorial.js";
+import { heroLightHtml } from "./templates/heroLight.js";
 import { composeCreative } from "./compose.js";
 import { FORMAT_SIZES, type CreativeSpec } from "./types.js";
 
@@ -17,9 +18,12 @@ const SCALE = 2; // suréchantillonnage → texte arabe net
 export async function renderCreative(spec: CreativeSpec): Promise<Buffer> {
   const size = FORMAT_SIZES[spec.format];
   const fontCss = buildFontFaceCss();
-  const html = editorialHtml(spec, size, fontCss);
+  const isHero = spec.template === "hero_light";
+  const html = isHero
+    ? heroLightHtml(spec, size, fontCss)
+    : editorialHtml(spec, size, fontCss);
 
-  // Couche transparente (scrim + typo) rendue par Chromium à SCALE×.
+  // Couche transparente (texte + voiles) rendue par Chromium à SCALE×.
   const layerPng = await renderHtmlToPng(html, size.w, size.h, {
     transparent: true,
     scale: SCALE,
@@ -29,7 +33,11 @@ export async function renderCreative(spec: CreativeSpec): Promise<Buffer> {
     layerPng,
     size,
     scale: SCALE,
-    scenePath: spec.scenePath,
+    // Mode hero : le produit détouré est posé sur fond studio (jamais recouvert).
+    // Mode editorial : la scène est en plein cadre.
+    productMasterPath: isHero ? spec.scenePath : undefined,
+    scenePath: isHero ? undefined : spec.scenePath,
+    bgTheme: isHero ? "cream" : "garnet",
     palette: spec.palette,
   });
 }

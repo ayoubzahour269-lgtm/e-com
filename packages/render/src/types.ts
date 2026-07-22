@@ -33,7 +33,8 @@ export interface OfferBlock {
 export interface CreativeSpec {
   id: string;
   format: PlatformFormat;
-  template: "editorial";
+  /** "editorial" = texte sur scène sombre (art-directée) · "hero_light" = produit intact, texte en zones réservées. */
+  template: "editorial" | "hero_light";
   lang: "ar";
   dir: "rtl";
   palette: BrandPalette;

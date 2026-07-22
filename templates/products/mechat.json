@@ -1,0 +1,42 @@
+{
+  "id": "mechat-red-oil",
+  "brand": "زيت المشاط الأحمر",
+  "category": "hair-oil",
+  "market": "KSA",
+  "lang": "ar",
+  "dir": "rtl",
+  "canonical": {
+    "note": "RÉFÉRENCE PRODUIT VERROUILLÉE — toute créative composite CE flacon exact. Décision utilisateur 2026-07-22.",
+    "masterDetoured": "creative/bottle_straight.png",
+    "characterSheet": "creative/sheet.png",
+    "shape": "bouteille ronde cylindrique, bouchon blanc vissé",
+    "label": "المشاط للشعر — bandeau rouge, sceau or 100% Natural, 250 ml",
+    "volume_ml": 250
+  },
+  "palette": {
+    "garnet": "#6E1414",
+    "gold": "#C9A227",
+    "goldLight": "#F4E1A6",
+    "goldDark": "#9C7A1E",
+    "bandRed": "#C21E1E",
+    "ink": "#1A0B0B",
+    "paper": "#F7F6F4"
+  },
+  "facts": {
+    "ingredients": ["مشاط", "كركديه", "حنّاء", "ليمون"],
+    "claims": ["طبيعي 100%", "بلا بارابين", "بلا سيليكون", "علاج 90 يومًا"],
+    "pack": "3 × 250 ml (cure 90 jours)",
+    "sku": "SA04050100M300"
+  },
+  "offer": {
+    "price": "139 ر.س",
+    "compareAt": "185",
+    "badge": "الدفع عند الاستلام",
+    "twoPacks": "259 ر.س"
+  },
+  "copyCaps": { "primary": 125, "headline": 40, "description": 30, "snapHeadline": 34, "tiktokCaption": 100 },
+  "policy": {
+    "notes": "Formulations impersonnelles (fusha). Avant/après = catégorie coiffure + mention صورة توضيحية. Aucune stat/avis inventé. Pas d'attribut personnel (ex: شعرك المتساقط).",
+    "avoidDialect": true
+  }
+}

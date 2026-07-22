@@ -19,6 +19,20 @@ const PROXY_ENV = { NODE_USE_ENV_PROXY: "1", NODE_EXTRA_CA_CERTS: "/root/.ccr/ca
 export async function launchBatchAsync(angle: string, n: number) {
   if (!/^[\w-]+$/.test(angle)) return { ok: false as const, error: "angle invalide" };
   const N = Math.min(6, Math.max(1, Math.floor(n) || 3));
+  // Verrou anti-double-soumission (double-clic / 2 onglets) : refuse si un job du même angle tourne.
+  try {
+    if (fs.existsSync(JOBS)) {
+      for (const f of fs.readdirSync(JOBS)) {
+        if (!f.endsWith(".json")) continue;
+        try {
+          const j = JSON.parse(fs.readFileSync(path.join(JOBS, f), "utf8"));
+          if (j.angle === angle && j.status === "running") {
+            return { ok: false as const, error: `Un job « ${angle} » est déjà en cours.` };
+          }
+        } catch { /* json illisible → ignore */ }
+      }
+    }
+  } catch { /* dossier absent → pas de verrou */ }
   const jobId = randomUUID();
   fs.mkdirSync(JOBS, { recursive: true });
   fs.writeFileSync(
@@ -65,6 +79,7 @@ export async function finalizeWinner(angle: string, index: number) {
     fs.copyFileSync(src, path.join(destDir, dest));
     return { ok: true, file: dest, angle };
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+    console.error("[finalizeWinner] échec:", e); // détail côté serveur uniquement
+    return { ok: false, error: "Le rendu a échoué (voir logs serveur)." }; // message générique (pas de chemins internes)
   }
 }

@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadProductKit, loadAngles, planConcepts } from "@studio/agents";
-import { KieProvider, CostLedger } from "@studio/generation";
+import { KieProvider, CostLedger, estimateCost } from "@studio/generation";
 import { scenePromptFor } from "./scenes.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -15,8 +15,9 @@ const OUT = join(HERE, "..", "out");
 const JOBS = join(OUT, "jobs");
 
 const ANGLE = process.argv[2] || "heritage";
-const N = Number(process.argv[3] || 3);
+const N = Math.min(8, Math.max(1, Math.floor(Number(process.argv[3])) || 3)); // borné même en CLI
 const JOB_ID = process.argv[4]; // optionnel
+const MODEL = "google/nano-banana-edit";
 
 function writeJob(patch: Record<string, unknown>) {
   if (!JOB_ID) return;
@@ -49,7 +50,13 @@ async function main() {
 
   const kie = new KieProvider({ apiKey: kieKey() });
   const ledger = new CostLedger();
-  console.log(`Solde : ${await kie.credits()} · best-of-${N} IA-embed pour « ${ANGLE} »`);
+  // Garde-fou COÛT : on refuse le batch si le solde ne couvre pas l'estimation (argent réel).
+  const balance = await kie.credits();
+  const need = estimateCost(MODEL, N);
+  console.log(`Solde : ${balance} · besoin estimé ${need} · best-of-${N} IA-embed pour « ${ANGLE} »`);
+  if (balance < need) {
+    throw new Error(`Solde insuffisant : ${balance} crédits < ${need} requis pour ${N} candidats.`);
+  }
   const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
   const prompt = scenePromptFor(ANGLE);
 
@@ -58,7 +65,7 @@ async function main() {
     process.stdout.write(`  candidat ${i + 1}/${N}… `);
     // Un candidat qui échoue (exception réseau/kie, download) ne doit PAS tuer le batch.
     try {
-      const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt, imageUrls: [masterUrl], aspectRatio: "3:4" });
+      const gen = await kie.generateImage({ model: MODEL, prompt, imageUrls: [masterUrl], aspectRatio: "3:4" });
       ledger.record({ model: gen.model, credits: gen.costCredits, taskId: gen.taskId, ok: gen.ok });
       if (gen.ok && gen.urls[0]) {
         const p = await dl(gen.urls[0], join(OUT, `bon-${ANGLE}-${i}.png`));

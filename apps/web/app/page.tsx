@@ -6,10 +6,15 @@ export const dynamic = "force-dynamic";
 
 const REPO = path.join(process.cwd(), "..", "..");
 
-function creativesList(): string[] {
+function creativesList(): { f: string; v: number }[] {
   const dir = path.join(process.cwd(), "public", "creatives");
   try {
-    return fs.readdirSync(dir).filter((f) => f.endsWith(".png")).sort();
+    return fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".png"))
+      .sort()
+      // v = mtime → cache-busting : une créative re-finalisée (même nom) n'est pas servie depuis le cache.
+      .map((f) => ({ f, v: Math.round(fs.statSync(path.join(dir, f)).mtimeMs) }));
   } catch {
     return [];
   }
@@ -85,13 +90,13 @@ export default function Page() {
           <p className="text-sm text-white/40">Aucune créative — lance un batch (<code className="text-gold">pnpm batch</code>).</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {creatives.map((f) => (
+            {creatives.map(({ f, v }) => (
               <figure key={f} className="overflow-hidden rounded-xl border border-white/10 bg-black/20">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/creatives/${f}`} alt={f} className="aspect-[4/5] w-full object-cover" />
+                <img src={`/creatives/${f}?v=${v}`} alt={f} className="aspect-[4/5] w-full object-cover" />
                 <figcaption className="flex items-center justify-between gap-2 px-2 py-1.5 text-[11px] text-white/40">
                   <span className="truncate">{f.replace(/\.png$/, "")}</span>
-                  <a href={`/creatives/${f}`} download className="shrink-0 font-semibold text-gold hover:underline">↓</a>
+                  <a href={`/creatives/${f}?v=${v}`} download aria-label={`Télécharger ${f}`} className="shrink-0 font-semibold text-gold hover:underline">↓</a>
                 </figcaption>
               </figure>
             ))}

@@ -19,7 +19,7 @@ const EMPTY_SCENE: Record<string, string> = {
   outcome: "Elegant beauty still-life SCENE: glossy cream silk ribbon swirl, floating soft gold particles, warm light, marble surface. Empty clear center for a product, negative space at the TOP. NO bottle, no product, no text.",
 };
 
-const N = Number(process.argv[3] || 3); // candidats par concept
+const N = Math.min(8, Math.max(1, Math.floor(Number(process.argv[3])) || 3)); // candidats par concept (borné)
 const QUIET_MAX = 0.14; // énergie max de la bande haute pour un texte lisible (0 = vide)
 
 function kieKey(): string {

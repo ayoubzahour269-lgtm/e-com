@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { finalizeWinner, launchBatchAsync, getJob } from "./actions";
 
@@ -39,20 +39,33 @@ function LaunchPanel({ angles }: { angles: string[] }) {
   const [busy, setBusy] = useState(false);
   const [prog, setProg] = useState<{ done: number; total: number } | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Nettoie le polling au démontage (navigation) → pas de fuite ni setState sur composant démonté.
+  useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
+
+  function stop() { if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; } }
 
   async function launch() {
     setBusy(true); setMsg(null); setProg({ done: 0, total: n });
     const res = await launchBatchAsync(angle, n);
     if (!res.ok) { setBusy(false); setProg(null); setMsg(`Erreur : ${res.error}`); return; }
-    // Polling non bloquant de l'avancement du job.
-    const timer = setInterval(async () => {
+    let attempts = 0;
+    const MAX = 240; // ~12 min à 3s → jamais de spinner infini
+    timerRef.current = setInterval(async () => {
+      attempts++;
       const j = await getJob(res.jobId);
-      if (j.status === "running") setProg({ done: j.done ?? 0, total: j.total ?? n });
-      else if (j.status === "done") {
-        clearInterval(timer); setBusy(false); setProg(null);
+      if (j.status === "done") {
+        stop(); setBusy(false); setProg(null);
         setMsg(`✓ ${(j.candidates || []).length} candidats générés`); router.refresh();
       } else if (j.status === "failed") {
-        clearInterval(timer); setBusy(false); setProg(null); setMsg(`Erreur : ${j.error}`);
+        stop(); setBusy(false); setProg(null); setMsg(`Erreur : ${j.error || "échec"}`);
+      } else if (j.status === "running") {
+        setProg({ done: j.done ?? 0, total: j.total ?? n });
+        if (attempts >= MAX) { stop(); setBusy(false); setProg(null); setMsg("Délai dépassé — voir logs serveur."); }
+      } else if (attempts >= MAX) {
+        // statut inattendu/"unknown" (fichier absent ou écriture partielle) qui ne se résout jamais
+        stop(); setBusy(false); setProg(null); setMsg("Job introuvable — délai dépassé.");
       }
     }, 3000);
   }

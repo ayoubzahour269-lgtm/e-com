@@ -42,7 +42,7 @@ const MOTIONS: Record<number, string> = {
 const FIBER_STILL =
   "Extreme macro shot, CGI-beauty-commercial style: ONE single human hair fiber crossing the frame diagonally from lower-left to upper-right, its surface DRY and rough with lifted cuticle scales like dry bark, slightly frizzy micro-fibers. Dark warm blurred background with faint golden bokeh (warm bedroom tones). Dramatic warm side light. Photorealistic, premium hair-science advertising macro. 9:16.";
 const FIBER_MOTION =
-  "Macro locked on the dry rough hair fiber: a single glistening red-gold oil drop lands gently on the fiber and glides slowly along it; where the drop passes, the lifted rough scales close and seal, the fiber becomes smooth, glossy and radiant behind the drop; warm light glints travel; at the end the whole fiber is silky and shiny. Elegant, slow, luxurious. No text.";
+  "Macro locked on the dry rough hair fiber: a single glistening red-gold oil drop lands gently on the fiber and glides slowly along it, coating it; where the drop passes, the lifted rough scales VISIBLY close flat and seal, the frizzy micro-fibers smooth down and disappear, and the fiber surface becomes perfectly sleek, uniform and mirror-glossy like a polished silk thread. By the end the ENTIRE fiber is completely smooth and sealed — absolutely no frizz or rough texture left — radiant in the warm light. Elegant, slow, luxurious. No text.";
 
 // Fidélité produit pour les stills d'édition (flacon exact ajouté à la scène).
 const FID =
@@ -310,6 +310,81 @@ async function bridge(args: string[]) {
   console.log(`✓ bridge → ${join(OUT, outName)} (corps A ${dBody.toFixed(1)}s + whip ${(dTail + HEAD - XF).toFixed(1)}s)`);
 }
 
+/**
+ * film : assemblage FILM PUR (sans texte, sans audio) — grammaire zoom-through partout.
+ * Voyage : chambre → (plonge main) → fibre gainée → (ressort) → elle transformée
+ * → [apparition flacon] → poussée flacon → (plonge liquide) → monde de l'huile
+ * → (ressort) → trio. Un seul mouvement.
+ */
+async function film() {
+  const P = (n: string) => join(OUT, n);
+  const durOf = async (f: string) => parseFloat((await exec("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f])).stdout.trim());
+  const TAIL = 0.6, HEAD = 0.7, XF = 0.25;
+  const NT = Math.round(TAIL * 24), NH = Math.round(HEAD * 24);
+
+  const body = async (src: string, t0: number, t1: number, speed: number, out: string) =>
+    ff(["-i", P(src), "-filter_complex", `[0:v]trim=${t0}:${t1},setpts=(PTS-STARTPTS)/${speed},scale=1080:1920,fps=24[v]`,
+      "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
+  const tailZoom = async (src: string, t0: number, t1: number, ax: number, ay: number, out: string) =>
+    ff(["-i", P(src), "-filter_complex",
+      `[0:v]trim=${t0}:${t1},setpts=PTS-STARTPTS,scale=2160:3840,zoompan=z='1+2.4*pow(on/${NT},2.2)':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
+      "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
+  const headZoom = async (src: string, t0: number, t1: number, ax: number, ay: number, out: string) =>
+    ff(["-i", P(src), "-filter_complex",
+      `[0:v]trim=${t0}:${t1},setpts=PTS-STARTPTS,scale=2160:3840,zoompan=z='max(3.2-2.2*pow(on/${NH},0.7),1.0)':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
+      "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
+  const fuse = async (tailF: string, headF: string, out: string) => {
+    const d = await durOf(P(tailF));
+    await ff(["-i", P(tailF), "-i", P(headF), "-filter_complex",
+      `[0:v][1:v]xfade=transition=zoomin:duration=${XF}:offset=${(d - XF).toFixed(2)}[v]`,
+      "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
+  };
+  const concat = async (files: string[], out: string) => {
+    const inputs = files.flatMap((f) => ["-i", P(f)]);
+    await ff([...inputs, "-filter_complex",
+      files.map((_, i) => `[${i}:v]`).join("") + `concat=n=${files.length}:v=1:a=0[v]`,
+      "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
+  };
+
+  // — Monde 1 → fibre —
+  await body("chain-clip-1.mp4", 0, 3.4, 1.12, "p1.mp4");
+  await tailZoom("chain-clip-1.mp4", 3.4, 4.0, 0.40, 0.42, "t1.mp4");
+  await headZoom("fiber-clip.mp4", 0, HEAD, 0.5, 0.5, "h1.mp4");
+  await fuse("t1.mp4", "h1.mp4", "br1.mp4");
+  // — fibre (gainage) → elle transformée —
+  await body("fiber-clip.mp4", HEAD, 5.6, 1.1, "p2.mp4");
+  await tailZoom("fiber-clip.mp4", 5.6, 6.2, 0.48, 0.42, "t2.mp4");
+  await headZoom("chain-clip-3.mp4", 4.6, 4.6 + HEAD, 0.60, 0.42, "h2.mp4");
+  await fuse("t2.mp4", "h2.mp4", "br2.mp4");
+  await body("chain-clip-3.mp4", 4.6 + HEAD, 7.8, 1.0, "p3.mp4");
+  await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4"], "partA.mp4");
+
+  // — flacon (apparition) → liquide → trio —
+  await body("chain-clip-5.mp4", 0, 5.6, 1.15, "p4.mp4");
+  await tailZoom("chain-clip-5.mp4", 5.6, 6.2, 0.38, 0.56, "t3.mp4");
+  await headZoom("luxe-macro.mp4", 0, HEAD, 0.5, 0.5, "h3.mp4");
+  await fuse("t3.mp4", "h3.mp4", "br3.mp4");
+  await body("luxe-macro.mp4", HEAD, 2.8, 1.1, "p5.mp4");
+  await tailZoom("luxe-macro.mp4", 2.8, 3.4, 0.5, 0.5, "t4.mp4");
+  // Trio : dézoom long depuis le corps rouge du flacon avant → révélation des 3.
+  const D6 = 3.5, F6 = Math.round(D6 * 24);
+  await ff(["-loop", "1", "-i", P("chain-trio.png"), "-t", String(D6), "-filter_complex",
+    `[0:v]scale=2160:3840,zoompan=z='max(3.2-2.2*pow(on/${F6},0.6),1.0)':x='iw*0.30-(iw/zoom/2)':y='ih*0.60-(ih/zoom/2)':d=${F6}:s=1080x1920:fps=24[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("trio-move.mp4")]);
+  await fuse("t4.mp4", "trio-move.mp4", "br4.mp4");
+  await concat(["p4.mp4", "br3.mp4", "p5.mp4", "br4.mp4"], "partB.mp4");
+
+  // — Apparition du flacon (fondu court, tout le décor identique) + grade + fades —
+  const dA = await durOf(P("partA.mp4"));
+  const dB = await durOf(P("partB.mp4"));
+  const total = dA - 0.3 + dB;
+  await ff(["-i", P("partA.mp4"), "-i", P("partB.mp4"), "-filter_complex",
+    `[0:v][1:v]xfade=transition=fade:duration=0.3:offset=${(dA - 0.3).toFixed(2)}[vx];` +
+    `[vx]eq=saturation=1.05:contrast=1.02,fade=t=in:st=0:d=0.3,fade=t=out:st=${(total - 0.6).toFixed(2)}:d=0.6[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-movflags", "+faststart", P("FILM-mechat.mp4")]);
+  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) → ${P("FILM-mechat.mp4")}`);
+}
+
 const [cmd, a1, a2] = process.argv.slice(2);
 const run = async () => {
   if (cmd === "still1") return still1();
@@ -322,7 +397,8 @@ const run = async () => {
   if (cmd === "fiber-still") return fiberStill();
   if (cmd === "fiber-clip") return fiberClip();
   if (cmd === "bridge") return bridge(process.argv.slice(3));
-  console.error("Usage: still1 | clip <n> | frame <n> <t> | place | trio | join | assemble | fiber-still | fiber-clip | bridge <A> <tA0> <tA1> <ax> <ay> <B> <tB1> <out>");
+  if (cmd === "film") return film();
+  console.error("Usage: still1 | clip <n> | frame <n> <t> | place | trio | join | assemble | fiber-still | fiber-clip | bridge | film");
   process.exit(1);
 };
 run().catch((e) => { console.error("ÉCHEC:", e instanceof Error ? e.message : e); process.exit(1); });

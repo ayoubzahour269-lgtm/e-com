@@ -11,6 +11,7 @@ export * from "./types.js";
 export * from "./artdirector.js";
 export { composeLocked } from "./lockedCompose.js";
 export { renderBeforeAfter, type BeforeAfterSpec } from "./beforeAfter.js";
+export { renderOverlayLayer } from "./overlay.js";
 export { closeBrowser };
 
 const SCALE = 2; // suréchantillonnage → texte arabe net

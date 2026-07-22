@@ -11,7 +11,8 @@
     "batch-locked": "tsx src/batch-locked.ts",
     "video": "tsx src/video.ts",
     "result": "tsx src/result.ts",
-    "result-matched": "tsx src/result-matched.ts"
+    "result-matched": "tsx src/result-matched.ts",
+    "montage": "tsx src/montage.ts"
   },
   "dependencies": {
     "@studio/agents": "workspace:*",

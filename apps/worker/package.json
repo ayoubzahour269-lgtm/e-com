@@ -10,7 +10,8 @@
     "finalize": "tsx src/finalize.ts",
     "batch-locked": "tsx src/batch-locked.ts",
     "video": "tsx src/video.ts",
-    "result": "tsx src/result.ts"
+    "result": "tsx src/result.ts",
+    "result-matched": "tsx src/result-matched.ts"
   },
   "dependencies": {
     "@studio/agents": "workspace:*",

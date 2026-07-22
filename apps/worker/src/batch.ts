@@ -1,101 +1,56 @@
-// Orchestrateur end-to-end. Product Kit → concepts (Andromeda) → pour chaque concept :
-// scène FIDÈLE (kie.ai, produit exact composité) → ArtDirector → typo déterministe → créative finie.
-// Émet aussi le plan de test. Lancer avec NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+// Orchestrateur simple (1 shot par concept). IA-embed : produit fondu dans la scène.
+// Pour la fidélité garantie sans babysitting → best-of-N (boN.ts + finalize.ts).
+// Lancer avec NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadProductKit, loadAngles, planConcepts } from "@studio/agents";
 import { KieProvider, CostLedger } from "@studio/generation";
-import { renderCreative, closeBrowser, analyzeScene, evaluatePlacement, MECHAT_PALETTE, type CreativeSpec } from "@studio/render";
+import { renderCreative, closeBrowser } from "@studio/render";
+import { scenePromptFor, buildSpec } from "./scenes.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "..", "..", "..");
 const OUT = join(HERE, "..", "out");
 
-// PIPELINE CANONIQUE (défaut) — IA-embed : le produit est FONDU dans la scène (reflets/ombres
-// réels), pas plaqué. Préambule fidélité renforcé pour préserver chaque lettre du label.
-const FIDELITY = "Integrate THIS EXACT bottle naturally into the scene with realistic reflections, contact shadow and matching light — it must look photographed in the scene, not pasted. Keep the product 100% identical to the reference: do not change its shape, the red white and gold label, the white screw cap, or the deep red oil color. Reproduce EVERY letter of the label text exactly, including the arabic wording, the '250 ml' and the '100% Natural' seal — do not alter, invent or garble any text on the label. Photorealistic premium product photography. ";
-const NEG_TOP = " Leave elegant empty negative space in the TOP third for text.";
-const SCENE_PROMPTS: Record<string, string> = {
-  heritage: FIDELITY + "Luxury Moroccan still-life: ivory silk fabric, scattered dried hibiscus petals and henna leaves, a carved wooden comb, warm golden-hour side light, soft shadows, polished marble surface, shallow depth of field." + NEG_TOP,
-  offer: FIDELITY + "Clean premium studio: warm beige seamless backdrop, soft single-source light, gentle drop shadow, a few dried hibiscus petals, minimal and elegant." + NEG_TOP,
-  outcome: FIDELITY + "Elegant beauty still-life: glossy silk ribbon swirl, floating soft gold particles, warm light, marble surface, minimal luxury." + NEG_TOP,
-};
-
-function loadKieKey(): string {
-  const p = join(REPO, "secrets.env");
-  const m = readFileSync(p, "utf8").match(/KIE_API_KEY\s*=\s*(\S+)/);
-  if (!m) throw new Error("KIE_API_KEY absent de secrets.env");
+function kieKey(): string {
+  const m = readFileSync(join(REPO, "secrets.env"), "utf8").match(/KIE_API_KEY\s*=\s*(\S+)/);
+  if (!m) throw new Error("KIE_API_KEY absent");
   return m[1];
 }
-async function download(url: string, file: string): Promise<string> {
-  const res = await fetch(url);
-  writeFileSync(file, Buffer.from(await res.arrayBuffer()));
-  return file;
-}
+async function dl(url: string, file: string) { writeFileSync(file, Buffer.from(await (await fetch(url)).arrayBuffer())); return file; }
 
 async function main() {
   const angleIds = (process.argv[2] || "heritage,offer").split(",");
   const kit = loadProductKit(REPO);
-  const lib = loadAngles(REPO);
-  const plan = planConcepts(kit, lib, { platforms: ["meta"], angleIds });
+  const plan = planConcepts(kit, loadAngles(REPO), { platforms: ["meta"], angleIds });
   mkdirSync(OUT, { recursive: true });
 
-  const kie = new KieProvider({ apiKey: loadKieKey() });
+  const kie = new KieProvider({ apiKey: kieKey() });
   const ledger = new CostLedger();
-  console.log(`Solde crédits : ${await kie.credits()}`);
+  console.log(`Solde : ${await kie.credits()} · batch de ${plan.length} : ${angleIds.join(", ")}\n`);
   const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
-  console.log(`Master uploadé. Batch de ${plan.length} concepts : ${angleIds.join(", ")}\n`);
 
-  const delivered: { angle: string; file: string; template: string; format: string }[] = [];
-
+  const delivered: { angle: string; file: string }[] = [];
   for (const r of plan) {
     const angle = r.concept.angle;
-    const scenePrompt = SCENE_PROMPTS[angle] ?? SCENE_PROMPTS.offer;
-    process.stdout.write(`■ ${angle} — génération scène… `);
-    const gen = await kie.generateImage({
-      model: "google/nano-banana-edit", prompt: scenePrompt, imageUrls: [masterUrl], aspectRatio: "3:4",
-    });
+    process.stdout.write(`■ ${angle} — scène… `);
+    const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: scenePromptFor(angle), imageUrls: [masterUrl], aspectRatio: "3:4" });
     ledger.record({ model: gen.model, credits: gen.costCredits, taskId: gen.taskId, ok: gen.ok });
     if (!gen.ok || !gen.urls[0]) { console.log(`échec (${gen.error})`); continue; }
-    const scenePath = await download(gen.urls[0], join(OUT, `scene-${angle}.png`));
+    const scenePath = await dl(gen.urls[0], join(OUT, `scene-${angle}.png`));
 
-    // ArtDirector : confirme le placement (bascule si collision).
-    const a = await analyzeScene(scenePath);
-    let template = r.recommendTemplate as CreativeSpec["template"];
-    if (template === "editorial" && evaluatePlacement("editorial", a).collision) template = "banner_top";
-
-    const meta = r.concept.copy.find((c) => c.platform === "meta");
-    const title = meta?.headline ?? r.concept.hook;
-    // Kicker court seulement s'il diffère du titre (évite la répétition).
-    const kicker = r.concept.hook.length <= 30 && r.concept.hook !== title ? r.concept.hook : undefined;
-    const spec: CreativeSpec = {
-      id: r.concept.id,
-      format: "meta_4x5",
-      template,
-      lang: "ar", dir: "rtl",
-      palette: MECHAT_PALETTE,
-      titleFont: angle === "claim" || angle === "comparison" ? "reemKufi" : "amiri",
-      scenePath,
-      kicker,
-      title,
-      offer: { price: kit.offer.price, compareAt: kit.offer.compareAt, badge: kit.offer.badge },
-      brandLine: kit.brand,
-    };
-    const png = await renderCreative(spec);
+    const png = await renderCreative(buildSpec(r, kit, scenePath));
     const file = join(OUT, `CREATIVE-${angle}-4x5.png`);
     writeFileSync(file, png);
-    delivered.push({ angle, file, template, format: "meta_4x5" });
-    console.log(`✓ scène ${gen.costCredits}cr · template ${template} · créative prête`);
+    delivered.push({ angle, file });
+    console.log(`✓ ${gen.costCredits}cr · créative prête`);
   }
   await closeBrowser();
 
-  // Plan de test (1 variable/test — diversité Andromeda).
   console.log(`\n— Plan de test —`);
-  delivered.forEach((d, i) =>
-    console.log(`  ${i + 1}. ${d.angle.padEnd(12)} Meta 4:5 · variable: ANGLE · métrique: CTR ≥1% / CPA`)
-  );
-  console.log(`\nCrédits dépensés ce batch : ${ledger.total()} · Livrées : ${delivered.length}/${plan.length} → ${OUT}`);
+  delivered.forEach((d, i) => console.log(`  ${i + 1}. ${d.angle.padEnd(12)} Meta 4:5 · variable: ANGLE · métrique: CTR ≥1% / CPA`));
+  console.log(`\nCrédits : ${ledger.total()} · Livrées : ${delivered.length}/${plan.length} → ${OUT}`);
 }
 
 main().catch((e) => { console.error("ÉCHEC:", e); process.exit(1); });

@@ -15,7 +15,9 @@ const IMG = process.argv[2] || "apps/worker/out/bon-outcome-1.png";
 const ASPECT = (process.argv[3] as "9:16" | "16:9") || "9:16";
 const MODEL = process.argv[4] || "veo3_fast";
 
+// Prompt de mouvement — surchargeable via la variable d'env MOTION_PROMPT (pour tester des plans complexes).
 const MOTION =
+  process.env.MOTION_PROMPT ||
   "Cinematic slow push-in on the bottle with a gentle camera orbit. Golden dust particles drift slowly, soft silk shimmers, warm luxury lighting, shallow depth of field. The product stays perfectly still and 100% identical to the image — do not change its label, shape or color. No text, no captions. Elegant premium beauty commercial, 8 seconds.";
 
 function kieKey(): string {

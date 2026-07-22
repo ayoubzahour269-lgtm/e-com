@@ -12,8 +12,8 @@
     "video": "tsx src/video.ts"
   },
   "dependencies": {
-    "@studio/core": "workspace:*",
     "@studio/agents": "workspace:*",
+    "@studio/core": "workspace:*",
     "@studio/generation": "workspace:*",
     "@studio/render": "workspace:*"
   },

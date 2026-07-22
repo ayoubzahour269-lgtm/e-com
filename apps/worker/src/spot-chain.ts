@@ -38,6 +38,12 @@ const MOTIONS: Record<number, string> = {
   5: "The camera pushes in slowly and smoothly toward the bottle standing on the wooden vanity table; the focus shifts gently onto the bottle; a few tiny dried hibiscus petals drift in the warm lamp light; the woman with her beautiful silky hair stays softly blurred in the background. The bottle stays perfectly still and 100% identical — do not change its label, shape or colors. Same scene, same light, no text.",
 };
 
+// ————— Monde 2 : la fibre (plan mécanisme façon CGI beauté) —————
+const FIBER_STILL =
+  "Extreme macro shot, CGI-beauty-commercial style: ONE single human hair fiber crossing the frame diagonally from lower-left to upper-right, its surface DRY and rough with lifted cuticle scales like dry bark, slightly frizzy micro-fibers. Dark warm blurred background with faint golden bokeh (warm bedroom tones). Dramatic warm side light. Photorealistic, premium hair-science advertising macro. 9:16.";
+const FIBER_MOTION =
+  "Macro locked on the dry rough hair fiber: a single glistening red-gold oil drop lands gently on the fiber and glides slowly along it; where the drop passes, the lifted rough scales close and seal, the fiber becomes smooth, glossy and radiant behind the drop; warm light glints travel; at the end the whole fiber is silky and shiny. Elegant, slow, luxurious. No text.";
+
 // Fidélité produit pour les stills d'édition (flacon exact ajouté à la scène).
 const FID =
   "Add THIS EXACT bottle (second reference image) standing on the wooden vanity table in the foreground, among her perfumes, with a few tiny dried hibiscus petals and henna leaves around its base. Keep EVERYTHING else in the scene pixel-identical: the woman, her hair, the mirror, the lamp, the light. CRITICAL: copy the bottle's label EXACTLY from the reference image — the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small arabic benefit lines), '250 ml', the golden '100% Natural' seal. Do NOT invent, replace or garble ANY text on the label. Do not add latin text. Deep red oil color, white ribbed cap. The bottle stands FIRMLY on the table surface (not at the edge), well inside the table, with a soft realistic contact shadow beneath it; the petals lie flat on the wood around its base. The bottle is reasonably large in the foreground, upright, sharp and clearly readable. Photorealistic.";
@@ -241,6 +247,69 @@ async function assemble() {
   console.log(`✓ SPOT-CHAIN (${total.toFixed(1)}s) → ${final}`);
 }
 
+// fiber-still / fiber-clip : le monde macro du cheveu (plan mécanisme).
+async function fiberStill() {
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · fiber still (~4cr)`);
+  const gen = await kie.generateImage({ model: "google/nano-banana", prompt: FIBER_STILL, aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "fiber-still.png"));
+  console.log(`✓ ${gen.costCredits}cr → fiber-still.png`);
+}
+async function fiberClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · fiber clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, "fiber-still.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: FIBER_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "fiber-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → fiber-clip.mp4`);
+}
+
+/**
+ * bridge : preuve du ZOOM-THROUGH — fin du plan A accélérée en zoom vers une cible
+ * (easing quadratique), entrée du plan B en dézoom symétrique, bascule xfade zoomin
+ * de 0.25s AU PIC DE VITESSE (l'œil est dans le flou de mouvement).
+ * Usage: bridge <A.mp4> <tA_start> <tA_cut> <ax> <ay> <B.mp4> <tB_body_end> <out.mp4>
+ */
+async function bridge(args: string[]) {
+  const [A, tA0, tA1, ax, ay, B, tB1, outName] = args;
+  const TAIL = 0.6, HEAD = 0.7, XF = 0.25;
+  const aTail = join(OUT, "_atail.mp4"), bHead = join(OUT, "_bhead.mp4"), aBody = join(OUT, "_abody.mp4");
+  const NT = Math.round(TAIL * 24), NH = Math.round(HEAD * 24);
+
+  // Corps de A (avant l'accélération), à vitesse légèrement soutenue.
+  await ff(["-i", join(OUT, A), "-filter_complex",
+    `[0:v]trim=${tA0}:${(parseFloat(tA1) - TAIL).toFixed(2)},setpts=(PTS-STARTPTS)/1.12,scale=1080:1920[v]`,
+    "-map", "[v]", "-an", "-r", "24", "-pix_fmt", "yuv420p", "-c:v", "libx264", aBody]);
+  // Queue de A : zoom accéléré vers la cible (ax,ay normalisés).
+  await ff(["-i", join(OUT, A), "-filter_complex",
+    `[0:v]trim=${(parseFloat(tA1) - TAIL).toFixed(2)}:${tA1},setpts=PTS-STARTPTS,scale=2160:3840,` +
+    `zoompan=z='1+2.4*pow(on/${NT},2.2)':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", aTail]);
+  // Tête de B : dézoom symétrique depuis le centre.
+  await ff(["-i", join(OUT, B), "-filter_complex",
+    `[0:v]trim=0:${HEAD},setpts=PTS-STARTPTS,scale=2160:3840,` +
+    `zoompan=z='max(3.2-2.2*pow(on/${NH},0.7),1.0)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", bHead]);
+  // Corps de B.
+  const bBody = join(OUT, "_bbody.mp4");
+  await ff(["-i", join(OUT, B), "-filter_complex",
+    `[0:v]trim=${HEAD}:${tB1},setpts=PTS-STARTPTS,scale=1080:1920[v]`,
+    "-map", "[v]", "-an", "-r", "24", "-pix_fmt", "yuv420p", "-c:v", "libx264", bBody]);
+
+  // Assemblage : Abody + (Atail xfade-zoomin Bhead) + Bbody.
+  const durProbe = async (f: string) => parseFloat((await exec("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f])).stdout.trim());
+  const dBody = await durProbe(aBody), dTail = await durProbe(aTail);
+  await ff(["-i", aBody, "-i", aTail, "-i", bHead, "-i", bBody, "-filter_complex",
+    `[1:v][2:v]xfade=transition=zoomin:duration=${XF}:offset=${(dTail - XF).toFixed(2)}[mid];` +
+    `[0:v][mid][3:v]concat=n=3:v=1:a=0[v]`,
+    "-map", "[v]", "-r", "24", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-movflags", "+faststart", join(OUT, outName)]);
+  console.log(`✓ bridge → ${join(OUT, outName)} (corps A ${dBody.toFixed(1)}s + whip ${(dTail + HEAD - XF).toFixed(1)}s)`);
+}
+
 const [cmd, a1, a2] = process.argv.slice(2);
 const run = async () => {
   if (cmd === "still1") return still1();
@@ -250,7 +319,10 @@ const run = async () => {
   if (cmd === "trio") return trio();
   if (cmd === "join") return joinChain(process.argv.slice(3));
   if (cmd === "assemble") return assemble();
-  console.error("Usage: still1 | clip <n> | frame <n> <t> | place <frameN> | trio | join | assemble");
+  if (cmd === "fiber-still") return fiberStill();
+  if (cmd === "fiber-clip") return fiberClip();
+  if (cmd === "bridge") return bridge(process.argv.slice(3));
+  console.error("Usage: still1 | clip <n> | frame <n> <t> | place | trio | join | assemble | fiber-still | fiber-clip | bridge <A> <tA0> <tA1> <ax> <ay> <B> <tB1> <out>");
   process.exit(1);
 };
 run().catch((e) => { console.error("ÉCHEC:", e instanceof Error ? e.message : e); process.exit(1); });

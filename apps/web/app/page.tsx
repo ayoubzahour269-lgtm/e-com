@@ -30,6 +30,9 @@ export default function Page() {
           <p className="mt-1 text-sm text-white/60">
             Agence créative encodée · produit : <span className="text-gold">{kit.brand}</span> · marché {kit.market}
           </p>
+          <a href="/review" className="mt-2 inline-block text-sm font-semibold text-gold hover:underline">
+            Revue best-of-N →
+          </a>
         </div>
         <div className="flex gap-3 text-center text-xs">
           <Stat label="Concepts" value={String(plan.length)} />

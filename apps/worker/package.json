@@ -13,7 +13,8 @@
     "result": "tsx src/result.ts",
     "result-matched": "tsx src/result-matched.ts",
     "montage": "tsx src/montage.ts",
-    "spot-luxe": "tsx src/spot-luxe.ts"
+    "spot-luxe": "tsx src/spot-luxe.ts",
+    "spot-chain": "tsx src/spot-chain.ts"
   },
   "dependencies": {
     "@studio/agents": "workspace:*",

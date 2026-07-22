@@ -8,7 +8,8 @@
     "batch": "tsx src/batch.ts",
     "bon": "tsx src/boN.ts",
     "finalize": "tsx src/finalize.ts",
-    "batch-locked": "tsx src/batch-locked.ts"
+    "batch-locked": "tsx src/batch-locked.ts",
+    "video": "tsx src/video.ts"
   },
   "dependencies": {
     "@studio/core": "workspace:*",

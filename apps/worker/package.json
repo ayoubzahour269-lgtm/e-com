@@ -9,7 +9,8 @@
     "bon": "tsx src/boN.ts",
     "finalize": "tsx src/finalize.ts",
     "batch-locked": "tsx src/batch-locked.ts",
-    "video": "tsx src/video.ts"
+    "video": "tsx src/video.ts",
+    "result": "tsx src/result.ts"
   },
   "dependencies": {
     "@studio/agents": "workspace:*",

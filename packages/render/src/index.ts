@@ -10,6 +10,7 @@ import { FORMAT_SIZES, type CreativeSpec } from "./types.js";
 export * from "./types.js";
 export * from "./artdirector.js";
 export { composeLocked } from "./lockedCompose.js";
+export { renderBeforeAfter, type BeforeAfterSpec } from "./beforeAfter.js";
 export { closeBrowser };
 
 const SCALE = 2; // suréchantillonnage → texte arabe net

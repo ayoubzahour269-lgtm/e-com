@@ -27,7 +27,12 @@ function kieKey(): string {
   if (!m) throw new Error("KIE_API_KEY absent");
   return m[1];
 }
-async function dl(url: string, file: string) { writeFileSync(file, Buffer.from(await (await fetch(url)).arrayBuffer())); return file; }
+async function dl(url: string, file: string) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`download ${res.status} pour ${url}`);
+  writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+  return file;
+}
 
 async function main() {
   const angleIds = (process.argv[2] || "heritage").split(",");

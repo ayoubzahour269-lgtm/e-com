@@ -32,7 +32,12 @@ function kieKey(): string {
   if (!m) throw new Error("KIE_API_KEY absent");
   return m[1];
 }
-async function dl(url: string, file: string) { writeFileSync(file, Buffer.from(await (await fetch(url)).arrayBuffer())); return file; }
+async function dl(url: string, file: string) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`download ${res.status} pour ${url}`); // évite d'écrire un corps d'erreur dans le .png
+  writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+  return file;
+}
 
 async function main() {
   mkdirSync(OUT, { recursive: true });
@@ -51,14 +56,19 @@ async function main() {
   const candidates: string[] = [];
   for (let i = 0; i < N; i++) {
     process.stdout.write(`  candidat ${i + 1}/${N}… `);
-    const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt, imageUrls: [masterUrl], aspectRatio: "3:4" });
-    ledger.record({ model: gen.model, credits: gen.costCredits, taskId: gen.taskId, ok: gen.ok });
-    if (gen.ok && gen.urls[0]) {
-      const p = await dl(gen.urls[0], join(OUT, `bon-${ANGLE}-${i}.png`));
-      candidates.push(p);
-      console.log(`ok (${gen.costCredits}cr)`);
-    } else {
-      console.log(`échec (${gen.error})`);
+    // Un candidat qui échoue (exception réseau/kie, download) ne doit PAS tuer le batch.
+    try {
+      const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt, imageUrls: [masterUrl], aspectRatio: "3:4" });
+      ledger.record({ model: gen.model, credits: gen.costCredits, taskId: gen.taskId, ok: gen.ok });
+      if (gen.ok && gen.urls[0]) {
+        const p = await dl(gen.urls[0], join(OUT, `bon-${ANGLE}-${i}.png`));
+        candidates.push(p);
+        console.log(`ok (${gen.costCredits}cr)`);
+      } else {
+        console.log(`échec (${gen.error})`);
+      }
+    } catch (e) {
+      console.log(`erreur (${e instanceof Error ? e.message : String(e)})`);
     }
     writeJob({ done: i + 1, credits: ledger.total(), candidates: candidates.map((c) => c.split("/").pop()) });
   }

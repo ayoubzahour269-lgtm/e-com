@@ -18,7 +18,12 @@ function kieKey(): string {
   if (!m) throw new Error("KIE_API_KEY absent");
   return m[1];
 }
-async function dl(url: string, file: string) { writeFileSync(file, Buffer.from(await (await fetch(url)).arrayBuffer())); return file; }
+async function dl(url: string, file: string) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`download ${res.status} pour ${url}`);
+  writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+  return file;
+}
 
 async function main() {
   const angleIds = (process.argv[2] || "heritage,offer").split(",");
@@ -35,16 +40,20 @@ async function main() {
   for (const r of plan) {
     const angle = r.concept.angle;
     process.stdout.write(`■ ${angle} — scène… `);
-    const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: scenePromptFor(angle), imageUrls: [masterUrl], aspectRatio: "3:4" });
-    ledger.record({ model: gen.model, credits: gen.costCredits, taskId: gen.taskId, ok: gen.ok });
-    if (!gen.ok || !gen.urls[0]) { console.log(`échec (${gen.error})`); continue; }
-    const scenePath = await dl(gen.urls[0], join(OUT, `scene-${angle}.png`));
+    try {
+      const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: scenePromptFor(angle), imageUrls: [masterUrl], aspectRatio: "3:4" });
+      ledger.record({ model: gen.model, credits: gen.costCredits, taskId: gen.taskId, ok: gen.ok });
+      if (!gen.ok || !gen.urls[0]) { console.log(`échec (${gen.error})`); continue; }
+      const scenePath = await dl(gen.urls[0], join(OUT, `scene-${angle}.png`));
 
-    const png = await renderCreative(buildSpec(r, kit, scenePath));
-    const file = join(OUT, `CREATIVE-${angle}-4x5.png`);
-    writeFileSync(file, png);
-    delivered.push({ angle, file });
-    console.log(`✓ ${gen.costCredits}cr · créative prête`);
+      const png = await renderCreative(buildSpec(r, kit, scenePath));
+      const file = join(OUT, `CREATIVE-${angle}-4x5.png`);
+      writeFileSync(file, png);
+      delivered.push({ angle, file });
+      console.log(`✓ ${gen.costCredits}cr · créative prête`);
+    } catch (e) {
+      console.log(`erreur (${e instanceof Error ? e.message : String(e)}) — on continue`);
+    }
   }
   await closeBrowser();
 

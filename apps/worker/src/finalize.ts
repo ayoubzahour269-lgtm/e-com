@@ -22,6 +22,7 @@ async function main() {
 
   const kit = loadProductKit(REPO);
   const plan = planConcepts(kit, loadAngles(REPO), { platforms: ["meta"], angleIds: [angle] });
+  if (!plan.length) { console.error(`Angle inconnu (absent de angles.json): ${angle}`); process.exit(1); }
   const spec = buildSpec(plan[0], kit, scenePath);
 
   const png = await renderCreative(spec);

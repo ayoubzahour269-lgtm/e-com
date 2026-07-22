@@ -55,6 +55,7 @@ export class KieProvider implements GenProvider {
       try {
         const res = await fetch(url, init);
         if (res.status === 503 || res.status === 429) {
+          lastErr = new Error(`HTTP ${res.status} (throttled)`); // évite throw undefined si tout throttle
           await sleep(2000 * 2 ** i); // backoff exponentiel sur throttle
           continue;
         }
@@ -63,10 +64,12 @@ export class KieProvider implements GenProvider {
         return body;
       } catch (e) {
         lastErr = e;
+        // 4xx non-throttle (clé/params invalides) = non-retryable → échec immédiat, pas de backoff inutile.
+        if (e instanceof Error && /^HTTP 4\d\d/.test(e.message)) throw e;
         await sleep(2000 * 2 ** i);
       }
     }
-    throw lastErr;
+    throw lastErr ?? new Error("kie.ai: tentatives épuisées");
   }
 
   async credits(): Promise<number> {
@@ -106,6 +109,9 @@ export class KieProvider implements GenProvider {
       }),
     });
     const taskId = String(pick(created, ["data", "taskId"]) ?? pick(created, ["taskId"]) ?? "");
+    if (!taskId) {
+      return { ok: false, urls: [], costCredits: 0, model: req.model, error: `createTask sans taskId: ${JSON.stringify(created)}`, raw: created };
+    }
     return this.pollImage(taskId, req.model);
   }
 
@@ -149,6 +155,9 @@ export class KieProvider implements GenProvider {
       }),
     });
     const taskId = String(pick(created, ["data", "taskId"]) ?? pick(created, ["taskId"]) ?? "");
+    if (!taskId) {
+      return { ok: false, urls: [], costCredits: 0, model: req.model, error: `veo/generate sans taskId: ${JSON.stringify(created)}`, raw: created };
+    }
     const deadline = Date.now() + this.pollTimeoutMs;
     while (Date.now() < deadline) {
       await sleep(5000);
@@ -161,6 +170,10 @@ export class KieProvider implements GenProvider {
         const u = pick(info, ["data", "response", "resultUrls"]) ?? pick(info, ["response", "resultUrls"]);
         const urls = Array.isArray(u) ? u.map(String) : [];
         return { ok: true, urls, costCredits: estimateCost(req.model), model: req.model, taskId, raw: info };
+      }
+      // Branche d'échec terminal (symétrique à pollImage) : ne pas attendre le timeout complet.
+      if (flag === 2 || flag === 3 || flag === "2" || flag === "3") {
+        return { ok: false, urls: [], costCredits: 0, model: req.model, taskId, error: `veo state=fail (flag ${flag})`, raw: info };
       }
     }
     return { ok: false, urls: [], costCredits: 0, model: req.model, taskId, error: "timeout" };

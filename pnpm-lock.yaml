@@ -16,6 +16,9 @@ importers:
       '@studio/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@studio/policy':
+        specifier: workspace:*
+        version: link:../../packages/policy
       next:
         specifier: 15.1.3
         version: 15.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)

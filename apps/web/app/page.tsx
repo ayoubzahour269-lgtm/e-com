@@ -30,9 +30,10 @@ export default function Page() {
           <p className="mt-1 text-sm text-white/60">
             Agence créative encodée · produit : <span className="text-gold">{kit.brand}</span> · marché {kit.market}
           </p>
-          <a href="/review" className="mt-2 inline-block text-sm font-semibold text-gold hover:underline">
-            Revue best-of-N →
-          </a>
+          <nav className="mt-2 flex gap-4 text-sm font-semibold">
+            <a href="/concepts" className="text-gold hover:underline">Checkpoint copy →</a>
+            <a href="/review" className="text-gold hover:underline">Revue best-of-N →</a>
+          </nav>
         </div>
         <div className="flex gap-3 text-center text-xs">
           <Stat label="Concepts" value={String(plan.length)} />
@@ -88,7 +89,10 @@ export default function Page() {
               <figure key={f} className="overflow-hidden rounded-xl border border-white/10 bg-black/20">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={`/creatives/${f}`} alt={f} className="aspect-[4/5] w-full object-cover" />
-                <figcaption className="truncate px-2 py-1.5 text-[11px] text-white/40">{f.replace(/\.png$/, "")}</figcaption>
+                <figcaption className="flex items-center justify-between gap-2 px-2 py-1.5 text-[11px] text-white/40">
+                  <span className="truncate">{f.replace(/\.png$/, "")}</span>
+                  <a href={`/creatives/${f}`} download className="shrink-0 font-semibold text-gold hover:underline">↓</a>
+                </figcaption>
               </figure>
             ))}
           </div>

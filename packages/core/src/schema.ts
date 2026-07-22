@@ -86,7 +86,7 @@ export const CreativeSpec = z.object({
   id: z.string(),
   conceptId: z.string().optional(),
   format: PlatformFormat,
-  template: z.enum(["editorial", "hero_light"]),
+  template: z.enum(["editorial", "hero_light", "banner_top", "cinema"]),
   lang: z.literal("ar"),
   dir: z.literal("rtl"),
   palette: BrandPalette,

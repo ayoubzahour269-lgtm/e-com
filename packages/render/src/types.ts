@@ -33,8 +33,9 @@ export interface OfferBlock {
 export interface CreativeSpec {
   id: string;
   format: PlatformFormat;
-  /** "editorial" = texte bas sur scène sombre · "hero_light" = produit détouré, texte haut+bas · "banner_top" = scène plein cadre, texte en haut (espace négatif). */
-  template: "editorial" | "hero_light" | "banner_top";
+  /** "editorial" = texte bas sur scène sombre · "hero_light" = produit détouré, texte haut+bas ·
+   *  "banner_top" = scène claire, texte en haut · "cinema" = overlay dark-luxe (spots vidéo). */
+  template: "editorial" | "hero_light" | "banner_top" | "cinema";
   lang: "ar";
   dir: "rtl";
   palette: BrandPalette;

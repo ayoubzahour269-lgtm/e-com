@@ -12,7 +12,8 @@
     "video": "tsx src/video.ts",
     "result": "tsx src/result.ts",
     "result-matched": "tsx src/result-matched.ts",
-    "montage": "tsx src/montage.ts"
+    "montage": "tsx src/montage.ts",
+    "spot-luxe": "tsx src/spot-luxe.ts"
   },
   "dependencies": {
     "@studio/agents": "workspace:*",

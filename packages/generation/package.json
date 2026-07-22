@@ -1,0 +1,16 @@
+{
+  "name": "@studio/generation",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Couche de génération : adaptateur kie.ai (agrégateur ~343 modèles) + cost ledger + best-of-N + QC fidélité produit.",
+  "main": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

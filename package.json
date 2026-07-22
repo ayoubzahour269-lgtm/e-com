@@ -1,0 +1,10 @@
+{
+  "name": "ai-ads-studio",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "description": "AI Ads Studio — agence créative encodée (statics art-directés + typo arabe déterministe + compositing produit fidèle).",
+  "engines": {
+    "node": ">=22"
+  }
+}

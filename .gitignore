@@ -1,3 +1,12 @@
 
 # secrets locaux — jamais commités
 secrets.env
+
+# dépendances & build
+node_modules/
+dist/
+*.tsbuildinfo
+
+# sorties de rendu (générées) — les preuves de spike sont versionnées dans docs/spikes/
+packages/*/out/
+.fonttest/

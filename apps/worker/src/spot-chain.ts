@@ -95,6 +95,13 @@ const MARBLE_MOTION =
 // bouteille (huile pure, aucun libellé à inventer), puis on révèle le VRAI produit dessous.
 const ESSENCE_SHAPE_MOTION =
   "The luminous ribbon of deep translucent garnet-red oil keeps flowing and gathers together in the center of the frame, pouring down and MOLDING itself into the silhouette of a bottle — a glossy bottle-shaped column of deep ruby-red oil forming among the floating red hibiscus petals and green henna leaves; the oil surface then settles and calms into that bottle shape. Deep red realistic wet oil (not amber, not gold), warm soft light, photorealistic, seamless continuous liquid motion, mass conserved. No text.";
+// Remplace la bouteille d'huile MOULÉE (forme vide) par le VRAI produit, DANS la même scène/position.
+const ESSENCE_SHAPE_FID =
+  "Replace the bottle-shaped form of red oil in this image with THIS EXACT product bottle (second reference image), in the SAME position, upright and centered, same size, standing among the same splashing red oil, floating red hibiscus petals, green henna leaves and golden particles, with the same warm dark background and reflection below. " +
+  PLASTIC +
+  "Copy the label EXACTLY from the reference: the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal, the white ribbed cap, the deep red color. Do NOT invent, replace or garble ANY text. The bottle is large, upright, sharp and clearly readable. Photorealistic, premium beauty commercial, 9:16 vertical.";
+const ESSENCE_SHAPE_REAL_MOTION =
+  "The remaining film of oil settles and drains softly off the bottle, revealing the clean product; a soft highlight glides across it, fine golden dust drifts and a few hibiscus petals settle around it. The bottle stays perfectly still and 100% identical to the image — do not change its label, shape, text or colors. Elegant, premium, slow. No text.";
 
 function kieKey(): string {
   const m = readFileSync(join(REPO, "secrets.env"), "utf8").match(/KIE_API_KEY\s*=\s*(\S+)/);
@@ -395,6 +402,34 @@ async function essenceShapeClip() {
   await dl(gen.urls[0], join(OUT, "essence-shape-clip.mp4"));
   console.log(`✓ ${gen.costCredits}cr → essence-shape-clip.mp4`);
 }
+// essence-shape-fix <t> : dans la scène MOULÉE, remplace la bouteille d'huile vide par le VRAI produit.
+async function essenceShapeFix(t: string) {
+  const { loadProductKit } = await import("@studio/agents");
+  const kit = loadProductKit(REPO);
+  const src = join(OUT, "essence-shape-clip.mp4");
+  if (!existsSync(src)) throw new Error("essence-shape-clip.mp4 manquant");
+  const frame = join(OUT, "essence-shape-frame.png");
+  await ff(["-ss", t, "-i", src, "-frames:v", "1", frame]);
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · essence-shape-fix @ ${t}s (produit dans la scène moulée) (~4cr)`);
+  const sceneUrl = await kie.uploadFile(frame);
+  const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
+  const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: ESSENCE_SHAPE_FID, imageUrls: [sceneUrl, masterUrl], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-shape-real.png"));
+  console.log(`✓ ${gen.costCredits}cr → essence-shape-real.png`);
+}
+async function essenceShapeRealClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · essence-shape-real clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, "essence-shape-real.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: ESSENCE_SHAPE_REAL_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-shape-real-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → essence-shape-real-clip.mp4`);
+}
 // essence-morph-clip : la bouteille se dissout en ruban (départ = essence-real.png) PUIS on inverse
 // → essence-morph.mp4 = le ruban se rassemble et devient exactement le produit.
 async function essenceMorphClip() {
@@ -532,15 +567,21 @@ async function film() {
   await fuse("t2.mp4", "h2.mp4", "br2.mp4");
   await body("chain-clip-3.mp4", 4.6 + HEAD, 6.7, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
 
-  // — match-cut PROPRE : mèche brillante → ruban d'huile de l'essence (entrée du monde 2) —
+  // — match-cut PROPRE : mèche brillante → ruban d'huile de la PLANCHE INITIALE (entrée du monde 2) —
   await tailZoom("chain-clip-3.mp4", 6.7, 6.7 + TAIL, 0.55, 0.40, "tM.mp4"); // plonge dans une mèche lumineuse
-  await headZoom("essence-morph.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");          // ressort sur le ruban rouge grenat
+  await headZoom("essence-shape-clip.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");     // ressort sur le ruban d'origine
   await fuse("tM.mp4", "hM.mp4", "brM.mp4");
   await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // ————— SÉQUENCE 2 (essence) : le ruban se MOULE en peau SUR le produit lui-même, puis la coulée
-  //   se retire et révèle le produit propre dessous (morph inversé, dernière image = master fidèle).
-  await body("essence-morph.mp4", HEAD, 7.7, 1.3, "essence2.mp4");
+  // ————— SÉQUENCE 2 (planche initiale) : le ruban d'origine se MOULE en forme de bouteille, puis le
+  //   VRAI produit (composité DANS la même scène moulée) remplace la forme d'huile → révélation en place.
+  await body("essence-shape-clip.mp4", HEAD, 6.8, 1.15, "e1.mp4");        // ruban d'origine → forme moulée
+  await body("essence-shape-real-clip.mp4", 0.3, 2.9, 1.0, "eReal.mp4");  // le PRODUIT dans la même scène
+  const REVEAL = 0.5;                                                     // le produit remplace la forme d'huile en place
+  const dE1 = await durOf(P("e1.mp4"));
+  await ff(["-i", P("e1.mp4"), "-i", P("eReal.mp4"), "-filter_complex",
+    `[0:v][1:v]xfade=transition=fade:duration=${REVEAL}:offset=${(dE1 - REVEAL).toFixed(2)}[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
 
   // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
   await body("marble-clip.mp4", 0.2, 4.2, 1.0, "m1.mp4");
@@ -576,6 +617,8 @@ const run = async () => {
   if (cmd === "essence-empty") return essenceEmpty();
   if (cmd === "essence-fill-clip") return essenceFillClip();
   if (cmd === "essence-shape-clip") return essenceShapeClip();
+  if (cmd === "essence-shape-fix") return essenceShapeFix(a1);
+  if (cmd === "essence-shape-real-clip") return essenceShapeRealClip();
   if (cmd === "essence-morph-clip") return essenceMorphClip();
   if (cmd === "marble-trio") return marbleTrio();
   if (cmd === "marble-clip") return marbleClip();

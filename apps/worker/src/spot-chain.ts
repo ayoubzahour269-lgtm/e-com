@@ -50,6 +50,19 @@ const FID =
 const FID_TRIO =
   "Replace the single bottle with THREE identical bottles of the same product standing side by side in a neat row on the wooden vanity table, the center one slightly forward. Each bottle 100% identical to the reference: shape, red-white-gold label, arabic text, '250 ml', '100% Natural' seal, white cap. Keep everything else in the scene identical. Photorealistic.";
 
+// ————— Monde 3 : l'essence (le ruban d'huile + ingrédients → la bouteille se forme) —————
+// Transition PROPRE depuis le monde de la femme (match-cut mèche→ruban). Preuve du « 100% naturel ».
+const ESSENCE_STILL =
+  "Premium beauty-commercial macro, deep warm dark background with a soft golden glow. A single luminous ribbon of glossy deep red-gold hair oil flows and curves diagonally through the center of the frame like liquid silk, echoing the shape of a shining hair strand. Suspended around it in mid-air, floating in slow motion: dried deep-red hibiscus petals, green henna leaves and small natural seeds. Fine golden light particles, warm rim light, very shallow depth of field, glossy and appetizing, photorealistic, luxurious. Absolutely NO bottle, NO product, NO text. 9:16 vertical.";
+const ESSENCE_MOTION =
+  "The luminous ribbon of red-gold oil flows and weaves gracefully through the suspended hibiscus petals and henna leaves in elegant slow motion; the natural ingredients swirl and melt into the stream; then the oil gathers and pours downward and coalesces, and FROM the pouring oil a glass bottle assembles and forms — the clear glass fills from the bottom with the deep red oil, a red-white-and-gold label wraps onto it and a white ribbed cap settles on top and seals it; the finished closed bottle floats gently and glows in the warm golden light, hibiscus petals settling around it. Elegant, magical, luxurious, slow. No text.";
+
+// ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
+const MARBLE_TRIO =
+  "Place THREE identical bottles of THIS EXACT product (reference image) on a polished white-and-grey marble surface, arranged receding into DEPTH along a gentle diagonal: one bottle in the FRONT close to camera and tack-sharp, the second and third progressively further back and softer, in a shallow cinematic depth of field. Premium 3D product-photography look, warm dramatic side lighting, soft mirror reflections on the marble, a few dried hibiscus petals and henna leaves scattered for depth, deep warm dark background with a subtle golden glow. Each bottle 100% identical to the reference: shape, the deep red band with the gold wavy line, the white label, EVERY letter of the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal, white ribbed cap, deep red oil color. Do NOT invent, replace or garble ANY label text. Keep generous empty space around for later text. Photorealistic, cinematic, 9:16 vertical.";
+const MARBLE_MOTION =
+  "Slow cinematic camera pull-back combined with a gentle focus rack across depth: at first only the front bottle is sharp while the ones behind are soft; as the camera eases back the focus travels deeper and the second, then the third bottle come into crisp focus one after another, revealing three identical bottles standing on the marble. Fine golden dust drifts upward, a soft highlight glides across the glass. The bottles stay perfectly still and 100% identical to the image — do not change their labels, shapes, text or colors. Elegant, premium, slow. No text.";
+
 function kieKey(): string {
   const m = readFileSync(join(REPO, "secrets.env"), "utf8").match(/KIE_API_KEY\s*=\s*(\S+)/);
   if (!m) throw new Error("KIE_API_KEY absent");
@@ -268,6 +281,49 @@ async function fiberClip() {
   console.log(`✓ ${gen.costCredits}cr → fiber-clip.mp4`);
 }
 
+// ————— Génération des nouveaux mondes (essence + marbre) —————
+async function essenceStill() {
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · essence still (~4cr)`);
+  const gen = await kie.generateImage({ model: "google/nano-banana", prompt: ESSENCE_STILL, aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-still.png"));
+  console.log(`✓ ${gen.costCredits}cr → essence-still.png`);
+}
+async function essenceClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · essence clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, "essence-still.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: ESSENCE_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → essence-clip.mp4`);
+}
+async function marbleTrio() {
+  const { loadProductKit } = await import("@studio/agents");
+  const kit = loadProductKit(REPO);
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · marble trio (~4cr)`);
+  const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
+  const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: MARBLE_TRIO, imageUrls: [masterUrl], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "marble-trio.png"));
+  console.log(`✓ ${gen.costCredits}cr → marble-trio.png`);
+}
+async function marbleClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · marble clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, "marble-trio.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: MARBLE_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "marble-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → marble-clip.mp4`);
+}
+
 /**
  * bridge : preuve du ZOOM-THROUGH — fin du plan A accélérée en zoom vers une cible
  * (easing quadratique), entrée du plan B en dézoom symétrique, bascule xfade zoomin
@@ -311,15 +367,24 @@ async function bridge(args: string[]) {
 }
 
 /**
- * film : assemblage FILM PUR (sans texte, sans audio) — grammaire zoom-through partout.
- * Voyage : chambre → (plonge main) → fibre gainée → (ressort) → elle transformée
- * → [apparition flacon] → poussée flacon → (plonge liquide) → monde de l'huile
- * → (ressort) → trio. Un seul mouvement.
+ * film : assemblage FILM PUR (~20s, sans texte, sans audio) — TROIS MONDES reliés proprement.
+ *   Séquence 1 (figée, validée) : femme cheveux ternes → fibre gainée par la goutte → femme transformée.
+ *     (zoom-through ADOUCIS : accélération plus douce, fenêtres plus longues, fondu plus long).
+ *   → match-cut mèche brillante → RUBAN d'huile (monde de l'essence).
+ *   Séquence 2 (essence) : le ruban traverse les ingrédients (كركديه/حنّاء) → la BOUTEILLE se forme.
+ *   → coupe propre (fondu court).
+ *   Séquence 3 (marbre) : présentation produit, révélation en profondeur 1→3 (rack focus).
+ *
+ * Réglages coupe/vitesse en tête de fonction (tunables après QA des clips).
  */
 async function film() {
   const P = (n: string) => join(OUT, n);
   const durOf = async (f: string) => parseFloat((await exec("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f])).stdout.trim());
-  const TAIL = 0.6, HEAD = 0.7, XF = 0.25;
+
+  // Zoom-through ADOUCI (séq.1) : fenêtres longues, accél. douce (exp 1.5), dézoom modéré, fondu 0.35.
+  const TAIL = 0.85, HEAD = 0.9, XF = 0.35;
+  const ZAMP = 1.7, ZEXP = 1.5;          // amplitude et courbe du zoom de queue (avant : 2.4 / 2.2)
+  const HAMP = 2.4, HEXP = 0.85;         // dézoom d'entrée (avant : 2.2 / 0.7)
   const NT = Math.round(TAIL * 24), NH = Math.round(HEAD * 24);
 
   const body = async (src: string, t0: number, t1: number, speed: number, out: string) =>
@@ -327,11 +392,11 @@ async function film() {
       "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
   const tailZoom = async (src: string, t0: number, t1: number, ax: number, ay: number, out: string) =>
     ff(["-i", P(src), "-filter_complex",
-      `[0:v]trim=${t0}:${t1},setpts=PTS-STARTPTS,scale=2160:3840,zoompan=z='1+2.4*pow(on/${NT},2.2)':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
+      `[0:v]trim=${t0}:${t1},setpts=PTS-STARTPTS,scale=2160:3840,zoompan=z='1+${ZAMP}*pow(on/${NT},${ZEXP})':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
       "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
   const headZoom = async (src: string, t0: number, t1: number, ax: number, ay: number, out: string) =>
     ff(["-i", P(src), "-filter_complex",
-      `[0:v]trim=${t0}:${t1},setpts=PTS-STARTPTS,scale=2160:3840,zoompan=z='max(3.2-2.2*pow(on/${NH},0.7),1.0)':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
+      `[0:v]trim=${t0}:${t1},setpts=PTS-STARTPTS,scale=2160:3840,zoompan=z='max(${1 + HAMP}-${HAMP}*pow(on/${NH},${HEXP}),1.0)':x='iw*${ax}-(iw/zoom/2)':y='ih*${ay}-(ih/zoom/2)':d=1:s=1080x1920:fps=24[v]`,
       "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
   const fuse = async (tailF: string, headF: string, out: string) => {
     const d = await durOf(P(tailF));
@@ -346,43 +411,44 @@ async function film() {
       "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
   };
 
-  // — Monde 1 → fibre —
-  await body("chain-clip-1.mp4", 0, 3.4, 1.12, "p1.mp4");
-  await tailZoom("chain-clip-1.mp4", 3.4, 4.0, 0.40, 0.42, "t1.mp4");
+  // ————— SÉQUENCE 1 (figée) : femme → fibre → femme transformée —————
+  await body("chain-clip-1.mp4", 0, 3.2, 1.12, "p1.mp4");
+  await tailZoom("chain-clip-1.mp4", 3.2, 4.0, 0.40, 0.42, "t1.mp4");        // vers la mèche
   await headZoom("fiber-clip.mp4", 0, HEAD, 0.5, 0.5, "h1.mp4");
   await fuse("t1.mp4", "h1.mp4", "br1.mp4");
-  // — fibre (gainage) → elle transformée —
-  await body("fiber-clip.mp4", HEAD, 5.6, 1.1, "p2.mp4");
-  await tailZoom("fiber-clip.mp4", 5.6, 6.2, 0.48, 0.42, "t2.mp4");
+  await body("fiber-clip.mp4", HEAD, 5.2, 1.12, "p2.mp4");
+  await tailZoom("fiber-clip.mp4", 5.2, 6.05, 0.48, 0.42, "t2.mp4");
   await headZoom("chain-clip-3.mp4", 4.6, 4.6 + HEAD, 0.60, 0.42, "h2.mp4");
   await fuse("t2.mp4", "h2.mp4", "br2.mp4");
-  await body("chain-clip-3.mp4", 4.6 + HEAD, 7.8, 1.0, "p3.mp4");
-  await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4"], "partA.mp4");
+  await body("chain-clip-3.mp4", 4.6 + HEAD, 7.2, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
 
-  // — flacon (apparition) → liquide → trio —
-  await body("chain-clip-5.mp4", 0, 5.6, 1.15, "p4.mp4");
-  await tailZoom("chain-clip-5.mp4", 5.6, 6.2, 0.38, 0.56, "t3.mp4");
-  await headZoom("luxe-macro.mp4", 0, HEAD, 0.5, 0.5, "h3.mp4");
-  await fuse("t3.mp4", "h3.mp4", "br3.mp4");
-  await body("luxe-macro.mp4", HEAD, 2.8, 1.1, "p5.mp4");
-  await tailZoom("luxe-macro.mp4", 2.8, 3.4, 0.5, 0.5, "t4.mp4");
-  // Trio : dézoom long depuis le corps rouge du flacon avant → révélation des 3.
-  const D6 = 3.5, F6 = Math.round(D6 * 24);
-  await ff(["-loop", "1", "-i", P("chain-trio.png"), "-t", String(D6), "-filter_complex",
-    `[0:v]scale=2160:3840,zoompan=z='max(3.2-2.2*pow(on/${F6},0.6),1.0)':x='iw*0.30-(iw/zoom/2)':y='ih*0.60-(ih/zoom/2)':d=${F6}:s=1080x1920:fps=24[v]`,
-    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("trio-move.mp4")]);
-  await fuse("t4.mp4", "trio-move.mp4", "br4.mp4");
-  await concat(["p4.mp4", "br3.mp4", "p5.mp4", "br4.mp4"], "partB.mp4");
+  // — match-cut PROPRE : mèche brillante → ruban d'huile (entrée du monde essence) —
+  await tailZoom("chain-clip-3.mp4", 7.2, 8.0, 0.55, 0.40, "tM.mp4");        // plonge dans une mèche lumineuse
+  await headZoom("essence-clip.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");           // ressort sur le ruban
+  await fuse("tM.mp4", "hM.mp4", "brM.mp4");
+  await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // — Apparition du flacon (fondu court, tout le décor identique) + grade + fades —
-  const dA = await durOf(P("partA.mp4"));
-  const dB = await durOf(P("partB.mp4"));
-  const total = dA - 0.3 + dB;
-  await ff(["-i", P("partA.mp4"), "-i", P("partB.mp4"), "-filter_complex",
-    `[0:v][1:v]xfade=transition=fade:duration=0.3:offset=${(dA - 0.3).toFixed(2)}[vx];` +
-    `[vx]eq=saturation=1.05:contrast=1.02,fade=t=in:st=0:d=0.3,fade=t=out:st=${(total - 0.6).toFixed(2)}:d=0.6[v]`,
+  // ————— SÉQUENCE 2 (essence) : le ruban forme la bouteille —————
+  //   cut de fin ajusté après QA des frames (la bouteille fermée doit être visible).
+  await body("essence-clip.mp4", HEAD, 6.2, 1.1, "e1.mp4");
+
+  // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
+  await body("marble-clip.mp4", 0.2, 6.0, 1.0, "m1.mp4");
+
+  // ————— Raccords entre mondes : fondus courts propres + grade + fades globaux —————
+  const dA = await durOf(P("seqA.mp4"));       // séq.1 + entrée essence
+  const dE = await durOf(P("e1.mp4"));
+  const FADE2 = 0.4;                            // essence → marbre (coupe propre assumée)
+  // seqA (contient déjà le match-cut vers l'essence) + corps essence : chaînage direct.
+  await concat(["seqA.mp4", "e1.mp4"], "seqAB.mp4");
+  const dAB = dA + dE;
+  const dM = await durOf(P("m1.mp4"));
+  const total = dAB - FADE2 + dM;
+  await ff(["-i", P("seqAB.mp4"), "-i", P("m1.mp4"), "-filter_complex",
+    `[0:v][1:v]xfade=transition=fade:duration=${FADE2}:offset=${(dAB - FADE2).toFixed(2)}[vx];` +
+    `[vx]eq=saturation=1.05:contrast=1.02,fade=t=in:st=0:d=0.35,fade=t=out:st=${(total - 0.6).toFixed(2)}:d=0.6[v]`,
     "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-movflags", "+faststart", P("FILM-mechat.mp4")]);
-  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) → ${P("FILM-mechat.mp4")}`);
+  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) — séq1 ${dA.toFixed(1)}s · essence ${dE.toFixed(1)}s · marbre ${dM.toFixed(1)}s → ${P("FILM-mechat.mp4")}`);
 }
 
 const [cmd, a1, a2] = process.argv.slice(2);
@@ -396,9 +462,13 @@ const run = async () => {
   if (cmd === "assemble") return assemble();
   if (cmd === "fiber-still") return fiberStill();
   if (cmd === "fiber-clip") return fiberClip();
+  if (cmd === "essence-still") return essenceStill();
+  if (cmd === "essence-clip") return essenceClip();
+  if (cmd === "marble-trio") return marbleTrio();
+  if (cmd === "marble-clip") return marbleClip();
   if (cmd === "bridge") return bridge(process.argv.slice(3));
   if (cmd === "film") return film();
-  console.error("Usage: still1 | clip <n> | frame <n> <t> | place | trio | join | assemble | fiber-still | fiber-clip | bridge | film");
+  console.error("Usage: still1 | clip <n> | frame <n> <t> | place | trio | join | assemble | fiber-still | fiber-clip | essence-still | essence-clip | marble-trio | marble-clip | bridge | film");
   process.exit(1);
 };
 run().catch((e) => { console.error("ÉCHEC:", e instanceof Error ? e.message : e); process.exit(1); });

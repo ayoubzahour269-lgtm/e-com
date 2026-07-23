@@ -56,10 +56,22 @@ const ESSENCE_STILL =
   "Premium beauty-commercial macro, deep warm dark background with a soft golden glow. A single luminous ribbon of glossy deep red-gold hair oil flows and curves diagonally through the center of the frame like liquid silk, echoing the shape of a shining hair strand. Suspended around it in mid-air, floating in slow motion: dried deep-red hibiscus petals, green henna leaves and small natural seeds. Fine golden light particles, warm rim light, very shallow depth of field, glossy and appetizing, photorealistic, luxurious. Absolutely NO bottle, NO product, NO text. 9:16 vertical.";
 const ESSENCE_MOTION =
   "The luminous ribbon of red-gold oil flows and weaves gracefully through the suspended hibiscus petals and henna leaves in elegant slow motion; the natural ingredients swirl and melt into the stream; then the oil gathers and pours downward and coalesces, and FROM the pouring oil a glass bottle assembles and forms — the clear glass fills from the bottom with the deep red oil, a red-white-and-gold label wraps onto it and a white ribbed cap settles on top and seals it; the finished closed bottle floats gently and glows in the warm golden light, hibiscus petals settling around it. Elegant, magical, luxurious, slow. No text.";
+// Matière : le vrai produit est une bouteille en PLASTIQUE opaque (pas verre). Clause réutilisée.
+const PLASTIC =
+  "CRITICAL MATERIAL: the bottle is made of OPAQUE RED PLASTIC exactly like the reference — a smooth semi-matte PET plastic bottle with a solid deep-red body and a white ribbed plastic screw cap. Do NOT render it as transparent glass, do NOT add glass refraction, crystal transparency, visible internal liquid surface or a glass meniscus. Same solid plastic look as the reference. ";
+// La VRAIE bouteille (master exact) posée/flottant dans le monde chaud de l'essence (fleurs de كركديه).
+const ESSENCE_FID =
+  "Place THIS EXACT bottle (reference image) upright and centered, floating and glowing in a warm dark golden scene, surrounded by red hibiscus flowers and drifting petals with fine golden light particles, soft warm rim light, subtle glow beneath it. " +
+  PLASTIC +
+  "Copy the label EXACTLY from the reference: the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small arabic benefit lines), '250 ml', the golden '100% Natural' seal, the white ribbed cap, the deep red color. Do NOT invent, replace or garble ANY text on the label. Do not add latin text. The bottle is large, upright, sharp and clearly readable. Photorealistic, premium beauty commercial, 9:16 vertical.";
+const ESSENCE_REAL_MOTION =
+  "The closed bottle rests gently, floating in the warm golden light; a soft highlight glides slowly across the glass, fine golden dust drifts upward and a few dried hibiscus petals settle softly around it. The bottle stays perfectly still and 100% identical to the image — do not change its label, shape, text or colors. Elegant, luxurious, slow, premium. No text.";
 
 // ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
 const MARBLE_TRIO =
-  "Place THREE identical bottles of THIS EXACT product (reference image) on a polished white-and-grey marble surface, arranged receding into DEPTH along a gentle diagonal: one bottle in the FRONT close to camera and tack-sharp, the second and third progressively further back and softer, in a shallow cinematic depth of field. Premium 3D product-photography look, warm dramatic side lighting, soft mirror reflections on the marble, a few dried hibiscus petals and henna leaves scattered for depth, deep warm dark background with a subtle golden glow. Each bottle 100% identical to the reference: shape, the deep red band with the gold wavy line, the white label, EVERY letter of the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal, white ribbed cap, deep red oil color. Do NOT invent, replace or garble ANY label text. Keep generous empty space around for later text. Photorealistic, cinematic, 9:16 vertical.";
+  "Place THREE identical bottles of THIS EXACT product (reference image) on a polished white-and-grey marble surface, arranged receding into DEPTH along a gentle diagonal: one bottle in the FRONT close to camera and tack-sharp, the second and third progressively further back and softer, in a shallow cinematic depth of field. Premium 3D product-photography look, warm dramatic side lighting, soft mirror reflections on the marble, a few dried hibiscus petals and henna leaves scattered for depth, deep warm dark background with a subtle golden glow. " +
+  PLASTIC +
+  "Each bottle 100% identical to the reference: shape, the deep red band with the gold wavy line, the white label, EVERY letter of the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal, white ribbed cap, deep red color. Do NOT invent, replace or garble ANY label text. Keep generous empty space around for later text. Photorealistic, cinematic, 9:16 vertical.";
 const MARBLE_MOTION =
   "Slow cinematic camera pull-back combined with a gentle focus rack across depth: at first only the front bottle is sharp while the ones behind are soft; as the camera eases back the focus travels deeper and the second, then the third bottle come into crisp focus one after another, revealing three identical bottles standing on the marble. Fine golden dust drifts upward, a soft highlight glides across the glass. The bottles stay perfectly still and 100% identical to the image — do not change their labels, shapes, text or colors. Elegant, premium, slow. No text.";
 
@@ -301,6 +313,30 @@ async function essenceClip() {
   await dl(gen.urls[0], join(OUT, "essence-clip.mp4"));
   console.log(`✓ ${gen.costCredits}cr → essence-clip.mp4`);
 }
+// essence-fix : génère la VRAIE bouteille (master, plastique) dans le monde chaud de l'essence.
+//   Édition depuis le MASTER seul (pas la frame verre) → fidélité matière plastique préservée.
+async function essenceFix() {
+  const { loadProductKit } = await import("@studio/agents");
+  const kit = loadProductKit(REPO);
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · essence-real (master→monde essence, plastique) (~4cr)`);
+  const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
+  const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: ESSENCE_FID, imageUrls: [masterUrl], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-real.png"));
+  console.log(`✓ ${gen.costCredits}cr → essence-real.png`);
+}
+async function essenceRealClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · essence-real clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, "essence-real.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: ESSENCE_REAL_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-real-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → essence-real-clip.mp4`);
+}
 async function marbleTrio() {
   const { loadProductKit } = await import("@studio/agents");
   const kit = loadProductKit(REPO);
@@ -381,8 +417,8 @@ async function film() {
   const P = (n: string) => join(OUT, n);
   const durOf = async (f: string) => parseFloat((await exec("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f])).stdout.trim());
 
-  // Zoom-through ADOUCI (séq.1) : fenêtres longues, accél. douce (exp 1.5), dézoom modéré, fondu 0.35.
-  const TAIL = 0.85, HEAD = 0.9, XF = 0.35;
+  // Zoom-through ADOUCI (séq.1) : accél. douce (exp 1.5), dézoom modéré, fondu long → fluide.
+  const TAIL = 0.75, HEAD = 0.8, XF = 0.3;
   const ZAMP = 1.7, ZEXP = 1.5;          // amplitude et courbe du zoom de queue (avant : 2.4 / 2.2)
   const HAMP = 2.4, HEXP = 0.85;         // dézoom d'entrée (avant : 2.2 / 0.7)
   const NT = Math.round(TAIL * 24), NH = Math.round(HEAD * 24);
@@ -428,27 +464,32 @@ async function film() {
   await fuse("tM.mp4", "hM.mp4", "brM.mp4");
   await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // ————— SÉQUENCE 2 (essence) : le ruban forme la bouteille —————
-  //   cut de fin ajusté après QA des frames (la bouteille fermée doit être visible).
-  await body("essence-clip.mp4", HEAD, 6.2, 1.1, "e1.mp4");
+  // ————— SÉQUENCE 2 (essence) : le ruban coule → BLOOM → la VRAIE bouteille (master) —————
+  //   e1 : coulée qui remplit le verre, coupée AVANT que l'étiquette générique soit lisible.
+  await body("essence-clip.mp4", HEAD, 3.8, 1.1, "e1.mp4");
+  //   eReal : la vraie bouteille (master composité) repose et scintille.
+  await body("essence-real-clip.mp4", 0.3, 3.4, 1.0, "eReal.mp4");
+  //   BLOOM lumineux (fadewhite) : le « bouchage / étiquetage » se fait dans le flash → swap invisible.
+  const BLOOM = 0.45;
+  const dE1 = await durOf(P("e1.mp4"));
+  await ff(["-i", P("e1.mp4"), "-i", P("eReal.mp4"), "-filter_complex",
+    `[0:v][1:v]xfade=transition=fadewhite:duration=${BLOOM}:offset=${(dE1 - BLOOM).toFixed(2)}[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
 
   // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
-  await body("marble-clip.mp4", 0.2, 6.0, 1.0, "m1.mp4");
+  await body("marble-clip.mp4", 0.2, 5.4, 1.0, "m1.mp4");
 
-  // ————— Raccords entre mondes : fondus courts propres + grade + fades globaux —————
-  const dA = await durOf(P("seqA.mp4"));       // séq.1 + entrée essence
-  const dE = await durOf(P("e1.mp4"));
-  const FADE2 = 0.4;                            // essence → marbre (coupe propre assumée)
-  // seqA (contient déjà le match-cut vers l'essence) + corps essence : chaînage direct.
-  await concat(["seqA.mp4", "e1.mp4"], "seqAB.mp4");
-  const dAB = dA + dE;
+  // ————— Assemblage : séq1+essence chaînés → fondu propre → marbre + grade + fades globaux —————
+  await concat(["seqA.mp4", "essence2.mp4"], "seqAB.mp4");
+  const dAB = await durOf(P("seqAB.mp4"));
   const dM = await durOf(P("m1.mp4"));
+  const FADE2 = 0.4;                            // essence → marbre (coupe propre assumée)
   const total = dAB - FADE2 + dM;
   await ff(["-i", P("seqAB.mp4"), "-i", P("m1.mp4"), "-filter_complex",
     `[0:v][1:v]xfade=transition=fade:duration=${FADE2}:offset=${(dAB - FADE2).toFixed(2)}[vx];` +
     `[vx]eq=saturation=1.05:contrast=1.02,fade=t=in:st=0:d=0.35,fade=t=out:st=${(total - 0.6).toFixed(2)}:d=0.6[v]`,
     "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-movflags", "+faststart", P("FILM-mechat.mp4")]);
-  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) — séq1 ${dA.toFixed(1)}s · essence ${dE.toFixed(1)}s · marbre ${dM.toFixed(1)}s → ${P("FILM-mechat.mp4")}`);
+  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) — séq1+essence ${dAB.toFixed(1)}s · marbre ${dM.toFixed(1)}s → ${P("FILM-mechat.mp4")}`);
 }
 
 const [cmd, a1, a2] = process.argv.slice(2);
@@ -464,6 +505,8 @@ const run = async () => {
   if (cmd === "fiber-clip") return fiberClip();
   if (cmd === "essence-still") return essenceStill();
   if (cmd === "essence-clip") return essenceClip();
+  if (cmd === "essence-fix") return essenceFix();
+  if (cmd === "essence-real-clip") return essenceRealClip();
   if (cmd === "marble-trio") return marbleTrio();
   if (cmd === "marble-clip") return marbleClip();
   if (cmd === "bridge") return bridge(process.argv.slice(3));

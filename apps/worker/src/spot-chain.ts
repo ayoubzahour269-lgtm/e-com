@@ -77,7 +77,7 @@ const ESSENCE_FILL_MOTION =
 // MORPH : la bouteille se DISSOUT en ruban d'huile (départ = vrai produit). Lu à l'ENVERS au montage
 // → le ruban se rassemble et devient EXACTEMENT le produit (dernière image = master pristine, zéro invention).
 const ESSENCE_MORPH_MOTION =
-  "In elegant slow motion, the whole bottle gradually melts and dissolves from the top downward, turning entirely into a single continuous flowing ribbon of glossy red-gold oil that streams gracefully upward and swirls among the floating red hibiscus petals; the label, cap and body all melt into the liquid ribbon last, until only the flowing oil ribbon remains in the warm golden light. Smooth, seamless, magical, luxurious, continuous liquid motion. No text.";
+  "In elegant slow motion the whole bottle smoothly UNWINDS and reshapes: its solid form gradually loses the bottle silhouette and flows outward, the entire product turning into a single THICK glossy S-shaped ribbon of deep red-gold oil like flowing liquid silk, curving through the frame and swirling gracefully among floating green henna leaves and red hibiscus petals in the warm golden light, until the whole bottle has become the one continuous flowing oil ribbon. One seamless continuous liquid morph, no pouring, no splashing, no droplets — the mass is conserved as it reshapes. No text.";
 
 // ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
 const MARBLE_TRIO =

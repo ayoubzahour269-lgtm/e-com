@@ -91,6 +91,11 @@ const MARBLE_TRIO =
 const MARBLE_MOTION =
   "Slow cinematic camera pull-back combined with a gentle focus rack across depth: at first only the front bottle is sharp while the ones behind are soft; as the camera eases back the focus travels deeper and the second, then the third bottle come into crisp focus one after another, revealing three identical bottles standing on the marble. Fine golden dust drifts upward, a soft highlight glides across the glass. The bottles stay perfectly still and 100% identical to the image — do not change their labels, shapes, text or colors. Elegant, premium, slow. No text.";
 
+// Repense de la planche INITIALE (essence-still) : le ruban d'origine coule et se MOULE en forme de
+// bouteille (huile pure, aucun libellé à inventer), puis on révèle le VRAI produit dessous.
+const ESSENCE_SHAPE_MOTION =
+  "The luminous ribbon of deep translucent garnet-red oil keeps flowing and gathers together in the center of the frame, pouring down and MOLDING itself into the silhouette of a bottle — a glossy bottle-shaped column of deep ruby-red oil forming among the floating red hibiscus petals and green henna leaves; the oil surface then settles and calms into that bottle shape. Deep red realistic wet oil (not amber, not gold), warm soft light, photorealistic, seamless continuous liquid motion, mass conserved. No text.";
+
 function kieKey(): string {
   const m = readFileSync(join(REPO, "secrets.env"), "utf8").match(/KIE_API_KEY\s*=\s*(\S+)/);
   if (!m) throw new Error("KIE_API_KEY absent");
@@ -377,6 +382,19 @@ async function essenceFillClip() {
   await dl(gen.urls[0], join(OUT, "essence-fill-clip.mp4"));
   console.log(`✓ ${gen.costCredits}cr → essence-fill-clip.mp4`);
 }
+// essence-shape-clip : anime la PLANCHE INITIALE (essence-still) — le ruban se moule en forme de bouteille.
+async function essenceShapeClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · essence-shape clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  if (!existsSync(join(OUT, "essence-still.png"))) throw new Error("essence-still.png manquant");
+  const url = await kie.uploadFile(join(OUT, "essence-still.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: ESSENCE_SHAPE_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-shape-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → essence-shape-clip.mp4`);
+}
 // essence-morph-clip : la bouteille se dissout en ruban (départ = essence-real.png) PUIS on inverse
 // → essence-morph.mp4 = le ruban se rassemble et devient exactement le produit.
 async function essenceMorphClip() {
@@ -557,6 +575,7 @@ const run = async () => {
   if (cmd === "essence-real-clip") return essenceRealClip();
   if (cmd === "essence-empty") return essenceEmpty();
   if (cmd === "essence-fill-clip") return essenceFillClip();
+  if (cmd === "essence-shape-clip") return essenceShapeClip();
   if (cmd === "essence-morph-clip") return essenceMorphClip();
   if (cmd === "marble-trio") return marbleTrio();
   if (cmd === "marble-clip") return marbleClip();

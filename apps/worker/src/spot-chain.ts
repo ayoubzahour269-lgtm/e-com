@@ -532,15 +532,21 @@ async function film() {
   await fuse("t2.mp4", "h2.mp4", "br2.mp4");
   await body("chain-clip-3.mp4", 4.6 + HEAD, 6.7, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
 
-  // — match-cut PROPRE : mèche brillante → ruban d'huile de l'essence (entrée du monde 2) —
+  // — match-cut PROPRE : mèche brillante → ruban d'huile de la PLANCHE INITIALE (entrée du monde 2) —
   await tailZoom("chain-clip-3.mp4", 6.7, 6.7 + TAIL, 0.55, 0.40, "tM.mp4"); // plonge dans une mèche lumineuse
-  await headZoom("essence-morph.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");          // ressort sur le ruban en S
+  await headZoom("essence-shape-clip.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");     // ressort sur le ruban d'origine
   await fuse("tM.mp4", "hM.mp4", "brM.mp4");
   await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // ————— SÉQUENCE 2 (essence) : le ruban NE S'ARRÊTE PAS — il poursuit sa coulée, remplit
-  //   la forme du produit et se transforme en le produit FIDÈLE (morph continu, dernière image = master).
-  await body("essence-morph.mp4", HEAD, 7.7, 1.3, "essence2.mp4");
+  // ————— SÉQUENCE 2 (planche initiale repensée) : le ruban d'origine coule et SE MOULE en forme de
+  //   bouteille (huile pure), puis la coulée se pose et le VRAI produit APPARAÎT dessous (fidèle).
+  await body("essence-shape-clip.mp4", HEAD, 5.6, 1.15, "e1.mp4");   // ruban d'origine → forme bouteille (huile)
+  await body("essence-real-clip.mp4", 0.3, 2.9, 1.0, "eReal.mp4");   // le vrai produit révélé (master, fidèle)
+  const REVEAL = 0.55;                                               // fondu de révélation (la coulée se retire)
+  const dE1 = await durOf(P("e1.mp4"));
+  await ff(["-i", P("e1.mp4"), "-i", P("eReal.mp4"), "-filter_complex",
+    `[0:v][1:v]xfade=transition=fade:duration=${REVEAL}:offset=${(dE1 - REVEAL).toFixed(2)}[v]`,
+    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
 
   // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
   await body("marble-clip.mp4", 0.2, 4.2, 1.0, "m1.mp4");

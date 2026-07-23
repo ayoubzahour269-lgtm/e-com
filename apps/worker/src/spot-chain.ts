@@ -66,6 +66,14 @@ const ESSENCE_FID =
   "Copy the label EXACTLY from the reference: the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small arabic benefit lines), '250 ml', the golden '100% Natural' seal, the white ribbed cap, the deep red color. Do NOT invent, replace or garble ANY text on the label. Do not add latin text. The bottle is large, upright, sharp and clearly readable. Photorealistic, premium beauty commercial, 9:16 vertical.";
 const ESSENCE_REAL_MOTION =
   "The closed bottle rests gently, floating in the warm golden light; a soft highlight glides slowly across the glass, fine golden dust drifts upward and a few dried hibiscus petals settle softly around it. The bottle stays perfectly still and 100% identical to the image — do not change its label, shape, text or colors. Elegant, luxurious, slow, premium. No text.";
+// Effet « vide qui se remplit » sur le VRAI produit : bouteille OUVERTE (bouchon retiré) et VIDE,
+// prête à recevoir l'huile. Seule modif autorisée = le bouchon (retiré). Étiquette/forme/dimensions/plastique intactes.
+const ESSENCE_EMPTY =
+  "Show THIS EXACT product bottle (reference image) OPEN and EMPTY, floating upright and centered in a warm dark golden scene with red hibiscus flowers, drifting petals and fine golden particles, warm rim light. " +
+  PLASTIC +
+  "The bottle is IDENTICAL to the reference in shape, dimensions and label — copy the label EXACTLY: the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal. Do NOT invent or garble ANY text. The ONLY differences: the white ribbed cap is REMOVED and floats gently just above the open bottle neck, and the bottle is EMPTY inside (pale translucent empty plastic, NO red oil yet), waiting to be filled. A luminous ribbon of red-gold oil hovers just above the open mouth, about to pour in. Photorealistic, premium beauty commercial, 9:16 vertical.";
+const ESSENCE_FILL_MOTION =
+  "The luminous ribbon of red-gold oil pours down into the open empty bottle; the deep red oil fills the bottle steadily from the bottom up until it is completely full; then the white ribbed cap gently descends and settles onto the neck, sealing the bottle closed; the finished full bottle glows softly in the warm golden light as hibiscus petals settle around it. Throughout, the bottle's LABEL, SHAPE, DIMENSIONS, plastic material and every letter of the arabic text stay 100% identical to the image — do not change, move or garble the label. Elegant, magical, luxurious, slow. No text.";
 
 // ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
 const MARBLE_TRIO =
@@ -337,6 +345,30 @@ async function essenceRealClip() {
   await dl(gen.urls[0], join(OUT, "essence-real-clip.mp4"));
   console.log(`✓ ${gen.costCredits}cr → essence-real-clip.mp4`);
 }
+// essence-empty : la VRAIE bouteille ouverte + vide (bouchon retiré) prête à être remplie.
+async function essenceEmpty() {
+  const { loadProductKit } = await import("@studio/agents");
+  const kit = loadProductKit(REPO);
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · essence-empty (vraie bouteille ouverte/vide) (~4cr)`);
+  const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
+  const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: ESSENCE_EMPTY, imageUrls: [masterUrl], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-empty.png"));
+  console.log(`✓ ${gen.costCredits}cr → essence-empty.png`);
+}
+// essence-fill-clip : effet « vide qui se remplit » — l'huile remplit la vraie bouteille, le bouchon scelle.
+async function essenceFillClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · essence-fill clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, "essence-empty.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: ESSENCE_FILL_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-fill-clip.mp4"));
+  console.log(`✓ ${gen.costCredits}cr → essence-fill-clip.mp4`);
+}
 async function marbleTrio() {
   const { loadProductKit } = await import("@studio/agents");
   const kit = loadProductKit(REPO);
@@ -417,8 +449,8 @@ async function film() {
   const P = (n: string) => join(OUT, n);
   const durOf = async (f: string) => parseFloat((await exec("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f])).stdout.trim());
 
-  // Zoom-through ADOUCI (séq.1) : accél. douce (exp 1.5), dézoom modéré, fondu long → fluide.
-  const TAIL = 0.75, HEAD = 0.8, XF = 0.3;
+  // Zoom-through ADOUCI (séq.1) : accél. douce (exp 1.5), dézoom modéré → fluide, resserré pour ~20s.
+  const TAIL = 0.7, HEAD = 0.75, XF = 0.3;
   const ZAMP = 1.7, ZEXP = 1.5;          // amplitude et courbe du zoom de queue (avant : 2.4 / 2.2)
   const HAMP = 2.4, HEXP = 0.85;         // dézoom d'entrée (avant : 2.2 / 0.7)
   const NT = Math.round(TAIL * 24), NH = Math.round(HEAD * 24);
@@ -448,36 +480,36 @@ async function film() {
   };
 
   // ————— SÉQUENCE 1 (figée) : femme → fibre → femme transformée —————
-  await body("chain-clip-1.mp4", 0, 3.2, 1.12, "p1.mp4");
-  await tailZoom("chain-clip-1.mp4", 3.2, 4.0, 0.40, 0.42, "t1.mp4");        // vers la mèche
+  await body("chain-clip-1.mp4", 0, 3.0, 1.15, "p1.mp4");
+  await tailZoom("chain-clip-1.mp4", 3.0, 3.0 + TAIL, 0.40, 0.42, "t1.mp4"); // vers la mèche
   await headZoom("fiber-clip.mp4", 0, HEAD, 0.5, 0.5, "h1.mp4");
   await fuse("t1.mp4", "h1.mp4", "br1.mp4");
-  await body("fiber-clip.mp4", HEAD, 5.2, 1.12, "p2.mp4");
-  await tailZoom("fiber-clip.mp4", 5.2, 6.05, 0.48, 0.42, "t2.mp4");
+  await body("fiber-clip.mp4", HEAD, 3.95, 1.15, "p2.mp4");
+  await tailZoom("fiber-clip.mp4", 4.2, 4.2 + TAIL, 0.48, 0.42, "t2.mp4");
   await headZoom("chain-clip-3.mp4", 4.6, 4.6 + HEAD, 0.60, 0.42, "h2.mp4");
   await fuse("t2.mp4", "h2.mp4", "br2.mp4");
-  await body("chain-clip-3.mp4", 4.6 + HEAD, 7.2, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
+  await body("chain-clip-3.mp4", 4.6 + HEAD, 6.7, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
 
   // — match-cut PROPRE : mèche brillante → ruban d'huile (entrée du monde essence) —
-  await tailZoom("chain-clip-3.mp4", 7.2, 8.0, 0.55, 0.40, "tM.mp4");        // plonge dans une mèche lumineuse
+  await tailZoom("chain-clip-3.mp4", 6.7, 6.7 + TAIL, 0.55, 0.40, "tM.mp4"); // plonge dans une mèche lumineuse
   await headZoom("essence-clip.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");           // ressort sur le ruban
   await fuse("tM.mp4", "hM.mp4", "brM.mp4");
   await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // ————— SÉQUENCE 2 (essence) : le ruban coule → BLOOM → la VRAIE bouteille (master) —————
-  //   e1 : coulée qui remplit le verre, coupée AVANT que l'étiquette générique soit lisible.
-  await body("essence-clip.mp4", HEAD, 3.8, 1.1, "e1.mp4");
-  //   eReal : la vraie bouteille (master composité) repose et scintille.
-  await body("essence-real-clip.mp4", 0.3, 3.4, 1.0, "eReal.mp4");
-  //   BLOOM lumineux (fadewhite) : le « bouchage / étiquetage » se fait dans le flash → swap invisible.
-  const BLOOM = 0.45;
+  // ————— SÉQUENCE 2 (essence) : ruban/ingrédients → la VRAIE bouteille se remplit puis se scelle —————
+  //   e1 : beat ruban + ingrédients (كركديه/حنّاء), coupé AVANT toute bouteille.
+  await body("essence-clip.mp4", HEAD, 2.6, 1.1, "e1.mp4");
+  //   efill : effet « vide qui se remplit » sur le VRAI produit (bouchon retiré → huile → bouchon scelle → repos).
+  await body("essence-fill-clip.mp4", 0.3, 5.1, 1.0, "efill.mp4");
+  //   fondu doux : la vraie bouteille émerge de la scène du ruban (elle apparaît sous la coulée).
+  const BLEND = 0.4;
   const dE1 = await durOf(P("e1.mp4"));
-  await ff(["-i", P("e1.mp4"), "-i", P("eReal.mp4"), "-filter_complex",
-    `[0:v][1:v]xfade=transition=fadewhite:duration=${BLOOM}:offset=${(dE1 - BLOOM).toFixed(2)}[v]`,
+  await ff(["-i", P("e1.mp4"), "-i", P("efill.mp4"), "-filter_complex",
+    `[0:v][1:v]xfade=transition=fade:duration=${BLEND}:offset=${(dE1 - BLEND).toFixed(2)}[v]`,
     "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
 
   // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
-  await body("marble-clip.mp4", 0.2, 5.4, 1.0, "m1.mp4");
+  await body("marble-clip.mp4", 0.2, 4.2, 1.0, "m1.mp4");
 
   // ————— Assemblage : séq1+essence chaînés → fondu propre → marbre + grade + fades globaux —————
   await concat(["seqA.mp4", "essence2.mp4"], "seqAB.mp4");
@@ -507,6 +539,8 @@ const run = async () => {
   if (cmd === "essence-clip") return essenceClip();
   if (cmd === "essence-fix") return essenceFix();
   if (cmd === "essence-real-clip") return essenceRealClip();
+  if (cmd === "essence-empty") return essenceEmpty();
+  if (cmd === "essence-fill-clip") return essenceFillClip();
   if (cmd === "marble-trio") return marbleTrio();
   if (cmd === "marble-clip") return marbleClip();
   if (cmd === "bridge") return bridge(process.argv.slice(3));

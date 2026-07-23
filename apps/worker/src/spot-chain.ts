@@ -74,6 +74,10 @@ const ESSENCE_EMPTY =
   "The bottle is IDENTICAL to the reference in shape, dimensions and label — copy the label EXACTLY: the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal. Do NOT invent or garble ANY text. The ONLY differences: the white ribbed cap is REMOVED and floats gently just above the open bottle neck, and the bottle is EMPTY inside (pale translucent empty plastic, NO red oil yet), waiting to be filled. A luminous ribbon of red-gold oil hovers just above the open mouth, about to pour in. Photorealistic, premium beauty commercial, 9:16 vertical.";
 const ESSENCE_FILL_MOTION =
   "The luminous ribbon of red-gold oil pours down into the open empty bottle; the deep red oil fills the bottle steadily from the bottom up until it is completely full; then the white ribbed cap gently descends and settles onto the neck, sealing the bottle closed; the finished full bottle glows softly in the warm golden light as hibiscus petals settle around it. Throughout, the bottle's LABEL, SHAPE, DIMENSIONS, plastic material and every letter of the arabic text stay 100% identical to the image — do not change, move or garble the label. Elegant, magical, luxurious, slow. No text.";
+// MORPH : la bouteille se DISSOUT en ruban d'huile (départ = vrai produit). Lu à l'ENVERS au montage
+// → le ruban se rassemble et devient EXACTEMENT le produit (dernière image = master pristine, zéro invention).
+const ESSENCE_MORPH_MOTION =
+  "In elegant slow motion, the whole bottle gradually melts and dissolves from the top downward, turning entirely into a single continuous flowing ribbon of glossy red-gold oil that streams gracefully upward and swirls among the floating red hibiscus petals; the label, cap and body all melt into the liquid ribbon last, until only the flowing oil ribbon remains in the warm golden light. Smooth, seamless, magical, luxurious, continuous liquid motion. No text.";
 
 // ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
 const MARBLE_TRIO =
@@ -369,6 +373,22 @@ async function essenceFillClip() {
   await dl(gen.urls[0], join(OUT, "essence-fill-clip.mp4"));
   console.log(`✓ ${gen.costCredits}cr → essence-fill-clip.mp4`);
 }
+// essence-morph-clip : la bouteille se dissout en ruban (départ = essence-real.png) PUIS on inverse
+// → essence-morph.mp4 = le ruban se rassemble et devient exactement le produit.
+async function essenceMorphClip() {
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · essence-morph clip (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  if (!existsSync(join(OUT, "essence-real.png"))) throw new Error("essence-real.png manquant (lancer essence-fix)");
+  const url = await kie.uploadFile(join(OUT, "essence-real.png"));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: ESSENCE_MORPH_MOTION, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, "essence-morph-raw.mp4"));
+  // Inversion : ruban → produit (dernière image = master pristine).
+  await ff(["-i", join(OUT, "essence-morph-raw.mp4"), "-vf", "reverse", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", join(OUT, "essence-morph.mp4")]);
+  console.log(`✓ ${gen.costCredits}cr → essence-morph-raw.mp4 (dissolution) + essence-morph.mp4 (inversé : ruban→produit)`);
+}
 async function marbleTrio() {
   const { loadProductKit } = await import("@studio/agents");
   const kit = loadProductKit(REPO);
@@ -541,6 +561,7 @@ const run = async () => {
   if (cmd === "essence-real-clip") return essenceRealClip();
   if (cmd === "essence-empty") return essenceEmpty();
   if (cmd === "essence-fill-clip") return essenceFillClip();
+  if (cmd === "essence-morph-clip") return essenceMorphClip();
   if (cmd === "marble-trio") return marbleTrio();
   if (cmd === "marble-clip") return marbleClip();
   if (cmd === "bridge") return bridge(process.argv.slice(3));

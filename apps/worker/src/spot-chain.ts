@@ -85,11 +85,11 @@ const ESSENCE_MORPH_MOTION =
 
 // ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
 const MARBLE_TRIO =
-  "Place THREE identical bottles of THIS EXACT product (reference image) on a polished white-and-grey marble surface, arranged receding into DEPTH along a gentle diagonal: one bottle in the FRONT close to camera and tack-sharp, the second and third progressively further back and softer, in a shallow cinematic depth of field. Premium 3D product-photography look, warm dramatic side lighting, soft mirror reflections on the marble, a few dried hibiscus petals and henna leaves scattered for depth, deep warm dark background with a subtle golden glow. " +
+  "Place THREE identical bottles of THIS EXACT product (reference image) on a polished white-and-grey marble surface, arranged receding into DEPTH along a gentle diagonal: the HERO bottle front-center, slightly forward, large and tack-sharp; the second and third staggered behind it to the right, progressively softer in a shallow cinematic depth of field. Premium dimensional 3D product-photography look, warm dramatic low side lighting with a soft golden beam, gentle mirror reflections of the bottles on the polished marble, dried red hibiscus petals and green henna leaves artfully scattered between the bottles for depth, fine golden dust in the air, deep warm dark background with a subtle golden glow. " +
   PLASTIC +
-  "Each bottle 100% identical to the reference: shape, the deep red band with the gold wavy line, the white label, EVERY letter of the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal, white ribbed cap, deep red color. Do NOT invent, replace or garble ANY label text. Keep generous empty space around for later text. Photorealistic, cinematic, 9:16 vertical.";
+  "Each bottle 100% identical to the reference: shape, the deep red band with the gold wavy line, the white label, EVERY letter of the arabic text (المشاط للشعر and the small benefit lines), '250 ml', the golden '100% Natural' seal, white ribbed cap, deep red color. Do NOT invent, replace or garble ANY label text. Keep generous empty space in the TOP third for later text. Photorealistic, cinematic, 9:16 vertical.";
 const MARBLE_MOTION =
-  "Slow cinematic camera pull-back combined with a gentle focus rack across depth: at first only the front bottle is sharp while the ones behind are soft; as the camera eases back the focus travels deeper and the second, then the third bottle come into crisp focus one after another, revealing three identical bottles standing on the marble. Fine golden dust drifts upward, a soft highlight glides across the glass. The bottles stay perfectly still and 100% identical to the image — do not change their labels, shapes, text or colors. Elegant, premium, slow. No text.";
+  "Slow luxurious cinematic camera pull-back with a gentle focus rack across depth: at first the hero front bottle fills the attention, tack-sharp, while the ones behind are soft; as the camera eases back the focus travels deeper and the second, then the third bottle come into crisp focus one after another — revealing three identical bottles standing on the marble like a premium display. A warm beam of golden light sweeps slowly across the scene from left to right making the marble and the bottles gleam; fine golden dust drifts upward; one or two hibiscus petals fall gently and land softly on the marble. The bottles stay perfectly still and 100% identical to the image — do not change their labels, shapes, text or colors. Elegant, premium, slow, majestic. No text.";
 
 // Repense de la planche INITIALE (essence-still) : le ruban d'origine coule et se MOULE en forme de
 // bouteille (huile pure, aucun libellé à inventer), puis on révèle le VRAI produit dessous.
@@ -575,48 +575,35 @@ async function film() {
       "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P(out)]);
   };
 
-  // ————— SÉQUENCE 1 (figée) : femme → fibre → femme transformée —————
-  await body("chain-clip-1.mp4", 0, 3.0, 1.15, "p1.mp4");
-  await tailZoom("chain-clip-1.mp4", 3.0, 3.0 + TAIL, 0.40, 0.42, "t1.mp4"); // vers la mèche
+  // ————— SÉQUENCE 1 (figée) : femme → fibre → femme transformée (respiration restaurée) —————
+  await body("chain-clip-1.mp4", 0, 3.2, 1.12, "p1.mp4");
+  await tailZoom("chain-clip-1.mp4", 3.2, 3.2 + TAIL, 0.40, 0.42, "t1.mp4"); // vers la mèche
   await headZoom("fiber-clip.mp4", 0, HEAD, 0.5, 0.5, "h1.mp4");
   await fuse("t1.mp4", "h1.mp4", "br1.mp4");
-  await body("fiber-clip.mp4", HEAD, 3.95, 1.15, "p2.mp4");
+  await body("fiber-clip.mp4", HEAD, 4.2, 1.12, "p2.mp4");
   await tailZoom("fiber-clip.mp4", 4.2, 4.2 + TAIL, 0.48, 0.42, "t2.mp4");
   await headZoom("chain-clip-3.mp4", 4.6, 4.6 + HEAD, 0.60, 0.42, "h2.mp4");
   await fuse("t2.mp4", "h2.mp4", "br2.mp4");
-  await body("chain-clip-3.mp4", 4.6 + HEAD, 6.7, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
+  await body("chain-clip-3.mp4", 4.6 + HEAD, 7.2, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
 
-  // — match-cut PROPRE : mèche brillante → ruban d'huile de la PLANCHE INITIALE (entrée du monde 2) —
-  await tailZoom("chain-clip-3.mp4", 6.7, 6.7 + TAIL, 0.55, 0.40, "tM.mp4"); // plonge dans une mèche lumineuse
-  await headZoom("essence-shape-clip.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");     // ressort sur le ruban d'origine
+  // — pont zoom-through : plonge dans la mèche brillante → ressort sur le héro du marbre —
+  await tailZoom("chain-clip-3.mp4", 7.2, 7.2 + TAIL, 0.55, 0.40, "tM.mp4");
+  await headZoom("marble-clip.mp4", 0, HEAD, 0.5, 0.55, "hM.mp4");           // dézoom depuis le flacon héro
   await fuse("tM.mp4", "hM.mp4", "brM.mp4");
   await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // ————— SÉQUENCE 2 (planche initiale) : ruban d'origine (coupé AVANT toute bouteille en verre)
-  //   → la coulée continue et se transforme DIRECTEMENT en le produit (morph inversé, scène splash).
-  //   RÈGLE : la seule bouteille qui apparaît à l'écran est le produit fidèle.
-  await body("essence-shape-clip.mp4", HEAD, 3.4, 1.15, "e1.mp4");        // ruban d'origine PUR (aucune bouteille)
-  await body("essence-shape-morph.mp4", 0.9, 7.8, 1.4, "eMorph.mp4");    // coulée → LE produit (fidèle, en place)
-  const REVEAL = 0.45;                                                    // raccord ruban→ruban (même monde)
-  const dE1 = await durOf(P("e1.mp4"));
-  await ff(["-i", P("e1.mp4"), "-i", P("eMorph.mp4"), "-filter_complex",
-    `[0:v][1:v]xfade=transition=fade:duration=${REVEAL}:offset=${(dE1 - REVEAL).toFixed(2)}[v]`,
-    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
+  // ————— SÉQUENCE 3 RETRAVAILLÉE (marbre, ~7s) : pull-back + rack focus 1→3 + balayage lumière —————
+  await body("marble-clip.mp4", HEAD, 7.8, 1.0, "m1.mp4");
 
-  // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
-  await body("marble-clip.mp4", 0.2, 3.8, 1.0, "m1.mp4");
-
-  // ————— Assemblage : séq1+essence chaînés → fondu propre → marbre + grade + fades globaux —————
-  await concat(["seqA.mp4", "essence2.mp4"], "seqAB.mp4");
-  const dAB = await durOf(P("seqAB.mp4"));
+  // ————— Assemblage : chaînage direct (le pont contient déjà la bascule) + grade + fades —————
+  const dA = await durOf(P("seqA.mp4"));
   const dM = await durOf(P("m1.mp4"));
-  const FADE2 = 0.4;                            // essence → marbre (coupe propre assumée)
-  const total = dAB - FADE2 + dM;
-  await ff(["-i", P("seqAB.mp4"), "-i", P("m1.mp4"), "-filter_complex",
-    `[0:v][1:v]xfade=transition=fade:duration=${FADE2}:offset=${(dAB - FADE2).toFixed(2)}[vx];` +
-    `[vx]eq=saturation=1.05:contrast=1.02,fade=t=in:st=0:d=0.35,fade=t=out:st=${(total - 0.6).toFixed(2)}:d=0.6[v]`,
+  await concat(["seqA.mp4", "m1.mp4"], "seqAB.mp4");
+  const total = dA + dM;
+  await ff(["-i", P("seqAB.mp4"), "-filter_complex",
+    `[0:v]eq=saturation=1.05:contrast=1.02,fade=t=in:st=0:d=0.35,fade=t=out:st=${(total - 0.6).toFixed(2)}:d=0.6[v]`,
     "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-movflags", "+faststart", P("FILM-mechat.mp4")]);
-  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) — séq1+essence ${dAB.toFixed(1)}s · marbre ${dM.toFixed(1)}s → ${P("FILM-mechat.mp4")}`);
+  console.log(`✓ FILM (${total.toFixed(1)}s, muet, sans texte) — séq1 ${dA.toFixed(1)}s · marbre ${dM.toFixed(1)}s → ${P("FILM-mechat.mp4")}`);
 }
 
 const [cmd, a1, a2] = process.argv.slice(2);

@@ -76,12 +76,12 @@ const ESSENCE_FILL_MOTION =
   "The luminous ribbon of red-gold oil pours down into the open empty bottle; the deep red oil fills the bottle steadily from the bottom up until it is completely full; then the white ribbed cap gently descends and settles onto the neck, sealing the bottle closed; the finished full bottle glows softly in the warm golden light as hibiscus petals settle around it. Throughout, the bottle's LABEL, SHAPE, DIMENSIONS, plastic material and every letter of the arabic text stay 100% identical to the image — do not change, move or garble the label. Elegant, magical, luxurious, slow. No text.";
 // MORPH : la bouteille se DISSOUT en ruban d'huile (départ = vrai produit). Lu à l'ENVERS au montage
 // → le ruban se rassemble et devient EXACTEMENT le produit (dernière image = master pristine, zéro invention).
-// Mouvement (départ = vrai produit) : une nappe d'huile rouge monte et ENVELOPPE la bouteille en
-// épousant sa forme (le produit devient une forme d'huile en forme de bouteille), puis l'huile se
-// soulève et s'enroule en ruban qui s'en va. Lu à l'ENVERS → le ruban revient, coate la forme du
-// produit, puis la coulée SE RETIRE et le produit APPARAÎT progressivement dessous (dernière image = master).
+// Mouvement (départ = VRAI produit) : une fine PEAU d'huile rouge se moule SUR le produit en épousant
+// exactement sa forme et son étiquette, puis se décolle et s'enroule en ruban qui s'en va. Lu à l'ENVERS
+// → le ruban revient, se MOULE en peau sur le produit, puis la coulée SE RETIRE et révèle le produit
+// propre dessous (dernière image = master pristine → fidélité garantie, moulage sur le produit lui-même).
 const ESSENCE_MORPH_MOTION =
-  "In elegant slow motion, a flowing sheet of DEEP TRANSLUCENT GARNET-RED hair oil — the exact dark ruby-red of the oil inside the product (NOT amber, NOT orange, NOT gold, NOT caramel, NOT metallic) — sweeps upward and completely coats and envelops the bottle, hugging its exact silhouette so the product briefly becomes a glossy bottle-shaped form of pure flowing red oil; then the oil peels off and lifts upward, unwinding into a swirling S-shaped ribbon of red oil that flows away among floating green henna leaves and red hibiscus petals in soft warm light. Glossy wet realistic oil, real-liquid physics, seamless continuous motion, mass conserved, no splashing. Photorealistic. No text.";
+  "Start on the exact product bottle. In elegant slow motion a thin glossy skin of DEEP TRANSLUCENT GARNET-RED oil — the exact dark ruby-red of the oil inside the product (NOT amber, NOT orange, NOT gold, NOT caramel, NOT metallic) — forms and molds TIGHTLY ONTO the bottle, perfectly hugging its exact shape and wrapping over its label like a wet coat of oil; then this oil skin lifts and peels off the bottle and unwinds upward into a single thick S-shaped ribbon of deep red oil that swirls away among floating green henna leaves and red hibiscus petals, until the bottle is gone and only the flowing red oil ribbon remains in the warm soft light. Glossy wet realistic oil, real-liquid physics, seamless continuous motion, mass conserved, no splashing. Photorealistic. No text.";
 
 // ————— Monde 4 : le marbre (présentation produit, révélation en profondeur 1→3) —————
 const MARBLE_TRIO =
@@ -532,21 +532,15 @@ async function film() {
   await fuse("t2.mp4", "h2.mp4", "br2.mp4");
   await body("chain-clip-3.mp4", 4.6 + HEAD, 6.7, 1.0, "p3.mp4");            // elle heureuse, cheveux soyeux
 
-  // — match-cut PROPRE : mèche brillante → ruban d'huile de la PLANCHE INITIALE (entrée du monde 2) —
+  // — match-cut PROPRE : mèche brillante → ruban d'huile de l'essence (entrée du monde 2) —
   await tailZoom("chain-clip-3.mp4", 6.7, 6.7 + TAIL, 0.55, 0.40, "tM.mp4"); // plonge dans une mèche lumineuse
-  await headZoom("essence-shape-clip.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");     // ressort sur le ruban d'origine
+  await headZoom("essence-morph.mp4", 0, HEAD, 0.5, 0.5, "hM.mp4");          // ressort sur le ruban rouge grenat
   await fuse("tM.mp4", "hM.mp4", "brM.mp4");
   await concat(["p1.mp4", "br1.mp4", "p2.mp4", "br2.mp4", "p3.mp4", "brM.mp4"], "seqA.mp4");
 
-  // ————— SÉQUENCE 2 (planche initiale repensée) : le ruban d'origine coule et SE MOULE en forme de
-  //   bouteille (huile pure), puis la coulée se pose et le VRAI produit APPARAÎT dessous (fidèle).
-  await body("essence-shape-clip.mp4", HEAD, 5.6, 1.15, "e1.mp4");   // ruban d'origine → forme bouteille (huile)
-  await body("essence-real-clip.mp4", 0.3, 2.9, 1.0, "eReal.mp4");   // le vrai produit révélé (master, fidèle)
-  const REVEAL = 0.55;                                               // fondu de révélation (la coulée se retire)
-  const dE1 = await durOf(P("e1.mp4"));
-  await ff(["-i", P("e1.mp4"), "-i", P("eReal.mp4"), "-filter_complex",
-    `[0:v][1:v]xfade=transition=fade:duration=${REVEAL}:offset=${(dE1 - REVEAL).toFixed(2)}[v]`,
-    "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
+  // ————— SÉQUENCE 2 (essence) : le ruban se MOULE en peau SUR le produit lui-même, puis la coulée
+  //   se retire et révèle le produit propre dessous (morph inversé, dernière image = master fidèle).
+  await body("essence-morph.mp4", HEAD, 7.7, 1.3, "essence2.mp4");
 
   // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
   await body("marble-clip.mp4", 0.2, 4.2, 1.0, "m1.mp4");

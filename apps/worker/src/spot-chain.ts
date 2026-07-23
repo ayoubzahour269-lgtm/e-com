@@ -595,8 +595,8 @@ async function film() {
   // ————— SÉQUENCE 2 (planche initiale) : ruban d'origine (coupé AVANT toute bouteille en verre)
   //   → la coulée continue et se transforme DIRECTEMENT en le produit (morph inversé, scène splash).
   //   RÈGLE : la seule bouteille qui apparaît à l'écran est le produit fidèle.
-  await body("essence-shape-clip.mp4", HEAD, 3.6, 1.15, "e1.mp4");        // ruban d'origine PUR (aucune bouteille)
-  await body("essence-shape-morph.mp4", 0.2, 7.8, 1.25, "eMorph.mp4");    // coulée → LE produit (fidèle, en place)
+  await body("essence-shape-clip.mp4", HEAD, 3.4, 1.15, "e1.mp4");        // ruban d'origine PUR (aucune bouteille)
+  await body("essence-shape-morph.mp4", 0.9, 7.8, 1.4, "eMorph.mp4");    // coulée → LE produit (fidèle, en place)
   const REVEAL = 0.45;                                                    // raccord ruban→ruban (même monde)
   const dE1 = await durOf(P("e1.mp4"));
   await ff(["-i", P("e1.mp4"), "-i", P("eMorph.mp4"), "-filter_complex",

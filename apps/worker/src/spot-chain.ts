@@ -575,8 +575,8 @@ async function film() {
 
   // ————— SÉQUENCE 2 (planche initiale) : le ruban d'origine se MOULE en forme de bouteille, puis le
   //   VRAI produit (composité DANS la même scène moulée) remplace la forme d'huile → révélation en place.
-  await body("essence-shape-clip.mp4", HEAD, 6.8, 1.15, "e1.mp4");        // ruban d'origine → forme moulée
-  await body("essence-shape-real-clip.mp4", 0.3, 2.9, 1.0, "eReal.mp4");  // le PRODUIT dans la même scène
+  await body("essence-shape-clip.mp4", HEAD, 6.4, 1.15, "e1.mp4");        // ruban d'origine → forme moulée
+  await body("essence-shape-real-clip.mp4", 0.3, 2.5, 1.0, "eReal.mp4");  // le PRODUIT dans la même scène
   const REVEAL = 0.5;                                                     // le produit remplace la forme d'huile en place
   const dE1 = await durOf(P("e1.mp4"));
   await ff(["-i", P("e1.mp4"), "-i", P("eReal.mp4"), "-filter_complex",
@@ -584,7 +584,7 @@ async function film() {
     "-map", "[v]", "-an", "-pix_fmt", "yuv420p", "-c:v", "libx264", P("essence2.mp4")]);
 
   // ————— SÉQUENCE 3 (marbre) : révélation en profondeur 1→3 —————
-  await body("marble-clip.mp4", 0.2, 4.2, 1.0, "m1.mp4");
+  await body("marble-clip.mp4", 0.2, 3.8, 1.0, "m1.mp4");
 
   // ————— Assemblage : séq1+essence chaînés → fondu propre → marbre + grade + fades globaux —————
   await concat(["seqA.mp4", "essence2.mp4"], "seqAB.mp4");

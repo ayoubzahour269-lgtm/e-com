@@ -104,6 +104,9 @@ Deux échecs constatés en test réel et leur correctif :
    **sans le flacon étiqueté** (sinon il se déforme ; ou compositer le vrai flacon en post).
 
 ## 4. Réalisme matière & anti-AI-look
+- **Cohérence logique (sinon ça sent l'IA)** : un flacon **fermé ne verse pas** → toute application
+  montre le **bouchon retiré / goulot ouvert** (ou on verse dans la paume). Vérifier aussi :
+  présence/absence du bouchon cohérente avec l'action, gravité, contact main-objet, ombres portées.
 - **Huile** : « thin, light, translucent red, low viscosity like a fine serum — NOT thick, NOT honey,
   NOT syrup ». Sinon les modèles rendent du miel.
 - **Visages** : les minimiser (de profil, partiels, de dos, mains) — un visage animé long = risque

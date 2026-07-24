@@ -15,15 +15,16 @@
 |---|---|---|---|---|---|---|---|
 | 1 | 0-2s | MCU visage + peigne | Elle regarde, inquiète, un peigne plein de cheveux | cheveux réalistes dans le peigne | `nano-edit` | ancre | léger (mèches qui tombent) — `kling`/`seedance` |
 | 2 | 2-5s | MCU elle tient le flacon | Elle prend le flacon, va l'ouvrir | — | `nano-edit` | ancre + flacon | push-in sur still (0 crédit) |
-| 3 | 5-9s | **MACRO** cuir chevelu | Gouttes rouges qui tombent sur la raie | **gouttes rondes, gravité, huile fine** | `nano-edit` | flacon | i2v gouttes — `kling`/`seedance` (qualité) |
+| 3 | 5-9s | **MACRO** cuir chevelu | Gouttes rouges sur la raie — **flacon OUVERT, bouchon retiré** | **gouttes rondes, gravité, goulot ouvert** | `nano-edit` | flacon | i2v gouttes — `kling`/`seedance` (qualité) |
 | 4 | 9-12s | Massage (mains) | Elle masse le cuir chevelu | mains cohérentes | `nano-edit` | ancre | i2v léger |
 | 5 | 12-15s | Résultat + offre | Cheveux brillants + sourire → 3 flacons + prix | — | `nano-edit` + `composite --pack3` | ancre + flacon | push-in |
 
 ## Génération (ordre exact)
 1. **Ancre** : `kie_gen.py image --model nano-edit --ref creative/bottle_straight.png --prompt "<femme + salle de bain + flacon>" --out out/sb_anchor.png`.
 2. **Chaque plan** : `--ref out/sb_anchor.png` (+ `--ref creative/bottle_straight.png` si le flacon est visible).
-3. **Plan physique (3)** : MACRO serré **sans visage**, une seule action → physique correcte
-   (voir prompt « SB3b » dans l'historique : *small round droplets, thin oil, gravity, NOT a string, NOT honey*).
+3. **Plan physique (3)** : MACRO serré **sans visage**, **flacon OUVERT (bouchon retiré, on verse par le
+   goulot)** — un flacon fermé qui verse = incohérence IA. Prompt : *open bottle, cap removed, oil pouring
+   from the open neck, small round droplets, thin oil, gravity, NOT a string, NOT honey*.
 4. **Planche** : `tools/storyboard.py --frame "out/sb1.png::HOOK" --frame ... --out out/storyboard_board.png`.
 
 ## Mouvement & montage

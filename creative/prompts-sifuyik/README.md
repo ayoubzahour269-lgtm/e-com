@@ -14,6 +14,10 @@ Extraction complète des articles **gratuits** de https://sifuyik.substack.com/a
 
 Les prompts viraux gratuits couvrent les numéros **#250 à #610** ; les numéros #1–#249 et les trous dans la série sont des posts payants.
 
+## ⭐ Adaptés à ton produit
+
+- [`ADAPTES-MECHAT-HUILE.md`](ADAPTES-MECHAT-HUILE.md) — les formats viraux de Sifu Yik (grille 6×6, vidéo transformation, ASMR Seedance, First Frame → Image-to-Video, storyboard) **réécrits pour زيت المشاط الأحمر** (huile capillaire, KSA), en respectant la doctrine créa du `docs/HANDOFF.md` : 5 concepts vidéo + 2 concepts image + copy arabe (فصحى) par angle + plan de test.
+
 ## Organisation
 
 - `viral-video-prompts/` — les prompts « VIRAL VIDEO PROMPT » numérotés, regroupés par tranche de 100. Chaque prompt contient typiquement un **First Frame Image Prompt** (image de départ) + un **Image-to-Video Prompt** structuré (Theme / Visuals / Camera / Style / Action + Sound Design) pour des outils type Veo, Seedance ou Kling.

@@ -48,8 +48,9 @@ def norm_clip(src, dur, out):
               f"zoompan=z='min(zoom+0.0009,1.12)':d={frames}:"
               f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s={W}x{H}:fps={FPS},"
               f"setsar=1,format=yuv420p")
-        run([FF, "-y", "-loop", "1", "-t", f"{dur}", "-i", src, "-vf", vf, "-r", str(FPS),
-             "-c:v", "libx264", "-preset", "ultrafast", "-crf", "20", out])
+        run([FF, "-y", "-loop", "1", "-i", src, "-vf", vf, "-frames:v", str(frames),
+             "-r", str(FPS), "-c:v", "libx264", "-preset", "ultrafast", "-crf", "20",
+             "-pix_fmt", "yuv420p", out])
 
 
 def main():

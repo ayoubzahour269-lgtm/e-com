@@ -150,6 +150,23 @@ frame inconsistency, oversaturation, magenta cast, watermark, captions, on-scree
 
 ---
 
+### 5.4 Checklist de prompt EXHAUSTIF (tout détail compte — même « insignifiant »)
+Chaque prompt image renseigne CHAQUE ligne (un détail manquant = l'IA invente, souvent mal) :
+- **Format & rendu** : `vertical 9:16` · `amateur smartphone photo, candid UGC` (ou `photorealistic editorial`) · léger grain · mise au point imparfaite.
+- **Sujet** : qui/quoi, précis — âge, genre, **type khaleeji/Golfe**, expression, direction du regard.
+- **Tenue/accessoires** : couleur du foulard, vêtement, bijoux discrets.
+- **Produit + ÉTAT EXACT** : `the red-and-white bottle from the reference kept EXACTLY as-is` · **bouchon ON ou OFF cohérent avec l'action** · niveau de remplissage.
+- **Action** : UNE action claire, ce que font les deux mains, points de contact.
+- **Physique matière** : `thin, translucent, low-viscosity, like a fine serum` · quantité (`a few small round drops`) · sens (`straight down by gravity`) · `NOT honey, NOT syrup`.
+- **Mains/anatomie** : `natural hands, correct fingers`.
+- **Décor/fond** : lieu exact (`plain home bathroom, white tiles, mirror`), accessoires, flou d'arrière-plan.
+- **Lumière** : source + direction + chaleur + moment (`warm evening window light, soft`).
+- **Caméra/cadre** : taille de plan (`extreme macro`/`MCU`), angle, profondeur de champ, **zone vide réservée au titre** (haut/bas).
+- **Couleur/grade** : `warm garnet-and-gold, natural, no oversaturation, no magenta`.
+- **Négatifs** : `No text, no logo, no watermark` (+ `no extra fingers, no warped label, no morphing`).
+
+Le filtre `prompt_lint` (§7) vérifie automatiquement les points critiques **avant** l'appel API.
+
 ## 6. Specs plateforme (rappel express)
 Toutes : **9:16, 1080×1920, sound-on + sous-titres**, produit tôt, une idée, CTA + prix + COD.
 
@@ -164,6 +181,8 @@ Toutes : **9:16, 1080×1920, sound-on + sous-titres**, produit tôt, une idée, 
 ---
 
 ## 7. Workflow bout-en-bout (checklist de prod)
+> **Filtre pré-vol** : `kie_gen.py` passe chaque prompt dans `prompt_lint` (logique/physique) AVANT de
+> dépenser — un blocage = 0 crédit. `--force` pour outrepasser, `--strict` pour bloquer aussi sur les WARN.
 1. Choisir 1 concept dans `BATCH-STOPSCROLL-01.md` + ses 3 hooks.
 2. `nano-banana-edit` × 3-4 → garder la moins-IA (`tools/kie_gen.py --image`).
 3. Compositer la vraie bouteille (`tools/composite.py`).

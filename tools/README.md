@@ -33,6 +33,16 @@ i2v simple → `seedance-fast` · i2v humain qualité → `kling`/`seedance` · 
 texte latin net → `gpt-image`/`ideogram`. Tu peux aussi passer un **ID brut** (`--model bytedance/seedance-2`)
 et des champs spécifiques via `--input-json '{...}'` (cf. `docs.kie.ai/market/<provider>/<model>`).
 
+## Filtre logique/physique (pré-vol — anti-gaspillage de crédits)
+`kie_gen.py` passe **chaque** prompt dans `prompt_lint.py` AVANT tout appel API. Si une règle dure est
+violée (flacon fermé qui verse, huile-miel, texte arabe, produit sans référence…), la génération est
+**annulée sans dépenser** (message + correctif proposé). `--force` pour outrepasser · `--strict` pour
+traiter les avertissements comme des blocages.
+```bash
+python tools/prompt_lint.py --prompt "..." --kind image --ref   # tester un prompt à la main
+```
+Assembler une planche storyboard : `python tools/storyboard.py --frame "img::label" ... --out out/board.png`.
+
 ## Workflow (un plan de créa — ex. C1 · plan S2 de `BATCH-STOPSCROLL-01.md`)
 ```bash
 # 1) Still UGC — --model auto met nano-edit dès qu'il y a une réf produit (génère-en 3-4, garde la meilleure)

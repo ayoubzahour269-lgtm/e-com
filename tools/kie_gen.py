@@ -36,6 +36,8 @@ except ImportError:
 API_BASE = "https://api.kie.ai/api/v1"
 UPLOAD_URL = "https://kieai.redpandaai.co/api/file-stream-upload"
 REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import prompt_lint  # filtre logique/physique pré-vol (évite le gaspillage de crédits)
 
 # Registry : alias -> modèle.  ep = endpoint (jobs|veo).  img = nom du champ image (i2i / i2v).
 # ⚠ Les IDs exacts évoluent : vérifier sur docs.kie.ai/market/<provider>/<model>.
@@ -269,6 +271,8 @@ def print_models():
 def cmd_image(a, key):
     label = pick_auto("image", has_ref=bool(a.ref)) if a.model == "auto" else a.model
     label, m = resolve_model(label, "image")
+    if not prompt_lint.gate(a.prompt, "image", has_ref=bool(a.ref), strict=a.strict, force=a.force):
+        sys.exit("BLOQUE par le filtre logique/physique — aucun credit depense. Corrige le prompt (ou --force).")
     print(f"→ image via {label} ({m['id']})")
     refs = [upload_reference(key, r) for r in a.ref]
     size_key = "image_size" if "nano-banana" in m["id"] else "aspect_ratio"
@@ -289,6 +293,8 @@ def cmd_video(a, key):
     else:
         label = a.model
     label, m = resolve_model(label, "video")
+    if not prompt_lint.gate(a.prompt, "video", has_ref=bool(a.ref or a.image), strict=a.strict, force=a.force):
+        sys.exit("BLOQUE par le filtre logique/physique — aucun credit depense. Corrige le prompt (ou --force).")
     print(f"→ video via {label} ({m['id']})")
     starts = list(a.image) + [upload_reference(key, r) for r in a.ref]
     if m["ep"] == "veo":
@@ -319,6 +325,8 @@ def main():
     pi.add_argument("--size", default="9:16", help="9:16 / 3:4 / 1:1 / 16:9 …")
     pi.add_argument("--input-json", default=None, help="JSON fusionné dans input (champs spécifiques)")
     pi.add_argument("--out", default="out/image.png")
+    pi.add_argument("--strict", action="store_true", help="filtre logique: WARN -> BLOCK")
+    pi.add_argument("--force", action="store_true", help="outrepasser le filtre logique/physique")
 
     pv = sub.add_parser("video", help="Générer une vidéo (image-to-video conseillé)")
     pv.add_argument("--prompt", required=True)
@@ -330,6 +338,8 @@ def main():
     pv.add_argument("--audio", action="store_true", help="auto → modèle avec audio natif (veo3)")
     pv.add_argument("--input-json", default=None, help="JSON fusionné dans input")
     pv.add_argument("--out", default="out/video.mp4")
+    pv.add_argument("--strict", action="store_true", help="filtre logique: WARN -> BLOCK")
+    pv.add_argument("--force", action="store_true", help="outrepasser le filtre logique/physique")
 
     a = p.parse_args()
 

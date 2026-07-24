@@ -56,8 +56,17 @@ def render(image_path, text, out_path, pos="bottom", size=None, color=(255, 255,
     font = ImageFont.truetype(fp, size)
     dkw = _draw_kwargs()
 
-    bbox = ImageDraw.Draw(img).textbbox((0, 0), text, font=font, **dkw)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    # Auto-ajustement : réduire la taille jusqu'à tenir dans 90% de la largeur
+    measure = ImageDraw.Draw(img)
+    bbox = measure.textbbox((0, 0), text, font=font, **dkw)
+    tw = bbox[2] - bbox[0]
+    max_w = int(W * 0.90)
+    if tw > max_w:
+        size = max(12, int(size * max_w / tw))
+        font = ImageFont.truetype(fp, size)
+        bbox = measure.textbbox((0, 0), text, font=font, **dkw)
+        tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
     x = (W - tw) // 2 - bbox[0]
     if pos == "top":
         y = int(H * margin_frac) - bbox[1]

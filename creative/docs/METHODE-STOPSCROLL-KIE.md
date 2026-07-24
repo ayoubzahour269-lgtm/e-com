@@ -86,6 +86,23 @@ Reprise de `../../docs/HANDOFF.md §3` — c'est ce qui a résolu « Kie = flaco
 
 ---
 
+## 3B. Continuité & physique — la méthode storyboard
+Deux échecs constatés en test réel et leur correctif :
+
+**Continuité** (le flacon ou la femme changent d'un plan à l'autre) :
+1. Générer **une image-ancre** qui fixe personnage + décor + produit (`nano-edit` + réf flacon).
+2. **Référencer l'ancre** (`--ref out/anchor.png`) dans CHAQUE plan → même visage, même décor.
+   Ajouter la réf flacon quand il apparaît. On peut chaîner (plan N référence plan N-1).
+3. Assembler la planche : `python tools/storyboard.py --frame "img::label" …`.
+   Exemple complet et joué : `STORYBOARD-C1-RITUEL.md`.
+
+**Physique** (huile en filet, mains/objets incohérents) :
+1. Action liquide/complexe → **macro serré, UNE seule action, PAS de visage** : moins d'éléments à
+   réconcilier = physique correcte (gouttes rondes, gravité).
+2. Prompt la matière : « small round droplets, thin oil, gravity, NOT a long string, NOT honey ».
+3. **Mouvement** → modèles **qualité** (`kling`/`seedance`/`veo3`), jamais les *fast*, et sur des plans
+   **sans le flacon étiqueté** (sinon il se déforme ; ou compositer le vrai flacon en post).
+
 ## 4. Réalisme matière & anti-AI-look
 - **Huile** : « thin, light, translucent red, low viscosity like a fine serum — NOT thick, NOT honey,
   NOT syrup ». Sinon les modèles rendent du miel.

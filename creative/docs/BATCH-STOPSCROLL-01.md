@@ -7,6 +7,14 @@
 > Offre verrouillée : **٣ قوارير × 250 مل · ١٣٩ ر.س ~~١٨٥~~ · الدفع عند الاستلام · توصيل ٢-٥ أيام**.
 > Claims policy-safe : `يقلّل التساقط الملحوظ` (jamais `يوقف/يعالج`), avant/après = coiffure + `صورة توضيحية`.
 
+### Modèles Kie par type de plan (cf. `METHODE-STOPSCROLL-KIE.md §1.1` · `python tools/kie_gen.py models`)
+- **Still produit / application** (plans AVEC la bouteille) → `nano-banana-edit` (réf `../bottle_straight.png`).
+- **Scène/portrait UGC · plan-problème · ingrédients** (plans SANS produit) → `seedream` ou `imagen4`.
+- **i2v mouvement simple** (peigne, main, pétales, sway cheveux) → `seedance-fast` (ou `veo3-fast`).
+- **i2v humain réaliste** (femme C5, main-dans-cheveux) → `kling` ou `seedance`.
+- **Plan avec audio natif / VO** → `veo3`. **Poster / offre à texte latin** → `gpt-image` / `ideogram`.
+- Astuce : `--model auto` applique ces choix ; génère 3-4 variantes d'image et garde la moins-« IA ».
+
 Diversité (anti-Andromeda) : les 5 concepts sont **structurellement différents** (douleur · secret ·
 transformation · ingrédient · témoignage). Ne pas lancer 10 skins d'un seul.
 

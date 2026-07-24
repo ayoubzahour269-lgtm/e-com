@@ -18,21 +18,43 @@ Les créas d'avant visaient un **spot cinématique de luxe** (macro slow-mo, sty
 
 ---
 
-## 1. Les 3 blocs Kie (et quand utiliser chacun)
+## 1. Le pipeline en 3 blocs — avec le BON modèle à chaque fois
+Un stop-scroller se fabrique en 3 temps ; à chaque temps on choisit le **meilleur modèle Kie** selon la
+complexité. **Kie = 300+ modèles derrière une seule API** — ne PAS tout faire avec veo3 + nano-banana.
 
-| Bloc | Modèle Kie | Coût | Rôle | Force / limite |
-|---|---|---|---|---|
-| **A. Image UGC** | `google/nano-banana-edit` | ~4 cr | Créer un **still réaliste** intégrant TA vraie bouteille (image de réf) | ★ Contrôlable, fidèle produit. À privilégier. |
-| **B. Micro-vidéo** | `veo3_fast` (image-to-video) | ~60 cr / 8s | Ajouter **UN** petit mouvement crédible au still A | Fragile : + on demande de mouvement, + ça casse. **Jamais de visage qui parle.** |
-| **C. Montage** | *(CapCut / ffmpeg, hors Kie)* | 0 | Hook texte + son tendance + coupes + end-card | C'est **ici** que naît le stop-scroll, pas dans Kie. |
+| Bloc | Rôle | Modèle par défaut | Quand monter en gamme |
+|---|---|---|---|
+| **A. Image** | Still réaliste (scène + produit) | `nano-banana-edit` (réf produit) · `seedream` (scène) | `imagen4`/`seedream` si photoréalisme critique |
+| **B. Mouvement** | UN petit mouvement crédible (i2v) | `seedance-fast` ou `veo3-fast` | `kling`/`seedance` (humain) · `veo3` (cinéma+audio) |
+| **C. Montage** | Hook texte + son + coupes + end-card | *(CapCut / ffmpeg, hors Kie)* | — |
+
+### 1.1 Matrice de sélection — le cœur : bon modèle = bon résultat
+**Image** (API `jobs/createTask`) :
+| Besoin | Champion | Fallback |
+|---|---|---|
+| Still produit **fidèle** (réf bouteille) | `nano-banana-edit` | `seedream` (i2i) |
+| Scène UGC **photoréaliste** (peau/cheveux) | `seedream` · `imagen4` | `nano-banana` |
+| Ingrédients / nature morte luxe | `seedream` · `imagen4` | `flux` |
+| Poster / texte latin net | `gpt-image` · `ideogram` | — |
+| Upscale HD | Topaz · Recraft | — |
+
+**Vidéo** (par complexité) :
+| Besoin | Champion | Fallback | Coût |
+|---|---|---|---|
+| i2v **simple/subtil** (main, flacon, cheveux) | `seedance-fast` | `veo3-fast` | $ |
+| i2v **réaliste qualité** (humain/cheveux) | `kling` · `seedance` | Veo 3.1 | $$ |
+| **Cinéma + audio natif** (foley/VO) | `veo3` | `kling` | $$$ |
+| **Multi-shot** ~15 s | `kling` | `seedance` | $$ |
+
+> Le pipeline `../../tools/kie_gen.py` connaît ces alias (`python tools/kie_gen.py models`) et
+> `--model auto` choisit le champion selon le contexte. IDs exacts : `docs.kie.ai/market/<provider>/<model>`.
 
 **Workflow credit-smart (économise tes crédits) :**
-1. Génère **3-4 variantes** du still en `nano-banana-edit` (4 cr chacune) → garde la **moins-IA**.
+1. Génère **3-4 variantes** du still (`--model auto`, ~4 cr) → garde la **moins-IA**.
 2. Composite dessus **ta vraie bouteille** détourée (`../bottle_straight.png`) — voir §3.
-3. **Seulement sur le still gagnant**, lance **1** clip `veo3_fast` (mouvement minimal).
-   → Souvent, un simple **push-in (Ken Burns)** sur l'image + texte + son suffit : **0 crédit veo3**,
-   et ça a l'air **moins faux** qu'une vidéo IA. Réserve veo3 aux plans où le mouvement vend (cheveux,
-   coulée d'huile, main qui incline le flacon).
+3. **Seulement sur le still gagnant**, lance **1** clip i2v (`seedance-fast`/`veo3-fast`, mouvement minimal).
+   → Souvent, un simple **push-in (Ken Burns)** + texte + son suffit : **0 crédit vidéo**, et ça a l'air
+   **moins faux** qu'une vidéo IA. Réserve les modèles vidéo aux plans où le mouvement vend vraiment.
 
 ---
 

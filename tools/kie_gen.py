@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 """
-kie_gen.py — client Kie AI pour la génération de créas (زيت المشاط الأحمر).
+kie_gen.py — client Kie AI MULTI-MODÈLES pour la génération de créas (زيت المشاط الأحمر).
 
-Encode la doctrine (voir creative/docs/METHODE-STOPSCROLL-KIE.md) :
-  - images via google/nano-banana-edit avec référence bouteille (fidélité produit garantie)
-  - vidéo via veo3_fast en image-to-video (UN mouvement minimal)
-  - jamais de texte arabe généré par l'IA (le poser avec arabic_text.py)
+Kie agrège 300+ modèles derrière UNE API asynchrone unifiée :
+  POST /api/v1/jobs/createTask  {model, input}  ->  GET /api/v1/jobs/recordInfo?taskId=...
+(Exception : la famille Veo garde son endpoint dédié /veo/generate + /veo/record-info.)
 
-Auth : variable d'env KIE_API_KEY, ou ligne KIE_API_KEY=... dans secrets.env (racine repo).
+On choisit le MEILLEUR modèle selon le type de créa ET sa complexité :
+  python tools/kie_gen.py models      # imprime la matrice de sélection
+Doctrine (creative/docs/METHODE-STOPSCROLL-KIE.md) : flacon JAMAIS généré (réf obligatoire),
+huile = sérum fin translucide, JAMAIS de texte arabe généré par l'IA.
+
+Auth : env KIE_API_KEY, ou ligne KIE_API_KEY=... dans secrets.env (racine repo). Lancer depuis la racine.
 
 Exemples :
-  python tools/kie_gen.py credit
-  python tools/kie_gen.py image --prompt "..." --ref creative/bottle_straight.png --out out/s2.png
-  python tools/kie_gen.py video --prompt "..." --ref out/s2.png --out out/s2.mp4
-  python tools/kie_gen.py demo
+  python tools/kie_gen.py image --model auto --ref creative/bottle_straight.png --prompt "..." --out out/s2.png
+  python tools/kie_gen.py image --model seedream --prompt "..." --out out/scene.png
+  python tools/kie_gen.py video --model seedance-fast --ref out/s2.png --prompt "..." --out out/s2.mp4
+  python tools/kie_gen.py video --model veo3 --ref out/s3.png --prompt "..." --out out/s3.mp4
+  python tools/kie_gen.py image --model bytedance/seedream-v4-edit --input-json '{"num_images":2}' --prompt "..."
 """
 import argparse
 import json
@@ -31,6 +36,61 @@ except ImportError:
 API_BASE = "https://api.kie.ai/api/v1"
 UPLOAD_URL = "https://kieai.redpandaai.co/api/file-stream-upload"
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+# Registry : alias -> modèle.  ep = endpoint (jobs|veo).  img = nom du champ image (i2i / i2v).
+# ⚠ Les IDs exacts évoluent : vérifier sur docs.kie.ai/market/<provider>/<model>.
+#   Un alias inconnu passé à --model est traité comme un ID BRUT sur l'endpoint jobs → le tool
+#   reste valable même quand Kie ajoute/renomme un modèle.
+MODELS = {
+    # ---- IMAGES (endpoint jobs) ----
+    "nano-edit": dict(id="google/nano-banana-edit", ep="jobs", kind="image", img="image_urls",
+                      note="Still produit FIDÈLE (réf bouteille) — édition avec référence"),
+    "nano":      dict(id="google/nano-banana", ep="jobs", kind="image", img="image_urls",
+                      note="Image simple/rapide (pas cher)"),
+    "nano-pro":  dict(id="nano-banana-pro", ep="jobs", kind="image", img="image_urls",
+                      note="2K art-directed — IGNORE souvent la réf produit"),
+    "seedream":  dict(id="bytedance/seedream-v4-edit", ep="jobs", kind="image", img="image_urls",
+                      note="Scène/portrait/produit photoréaliste (T2I + édition)"),
+    "imagen4":   dict(id="google/imagen4", ep="jobs", kind="image", img="image_urls",
+                      note="Photoréalisme haute fidélité (T2I)"),
+    "flux":      dict(id="flux-2/pro-text-to-image", ep="jobs", kind="image", img="image_urls",
+                      note="Graphismes commerciaux nets"),
+    "gpt-image": dict(id="gpt-image-2-text-to-image", ep="jobs", kind="image", img="image_urls",
+                      note="Rendu de TEXTE net (latin) + identity lock"),
+    "ideogram":  dict(id="ideogram/v3-text-to-image", ep="jobs", kind="image", img="image_urls",
+                      note="Typographie lisible / logos"),
+    # ---- VIDÉO ----
+    "seedance-fast": dict(id="bytedance/seedance-2-fast", ep="jobs", kind="video", img="image_urls",
+                          note="i2v mouvement simple/subtil — pas cher ($)"),
+    "seedance":      dict(id="bytedance/seedance-2", ep="jobs", kind="video", img="image_urls",
+                          note="i2v réaliste qualité ($$)"),
+    "kling":         dict(id="kling/v3", ep="jobs", kind="video", img="image_urls",
+                          note="i2v réaliste + multi-shot + audio natif, ~15s ($$)"),
+    "veo3-fast":     dict(id="veo3_fast", ep="veo", kind="video", img="imageUrls",
+                          note="i2v rapide avec audio ($)"),
+    "veo3":          dict(id="veo3", ep="veo", kind="video", img="imageUrls",
+                          note="Cinématique + AUDIO natif (foley/VO) ($$$)"),
+}
+
+
+def resolve_model(name, kind_hint):
+    """Retourne (label, meta) pour un alias du registry OU un ID brut (routé sur jobs, sauf veo*)."""
+    if name in MODELS:
+        return name, MODELS[name]
+    ep = "veo" if name.startswith("veo") else "jobs"
+    return name, dict(id=name, ep=ep, kind=kind_hint,
+                      img=("imageUrls" if ep == "veo" else "image_urls"), note="(ID brut)")
+
+
+def pick_auto(kind, has_ref=False, quality=False, audio=False):
+    """--model auto : choisit le champion selon le type de créa et sa complexité."""
+    if kind == "image":
+        return "nano-edit" if has_ref else "seedream"
+    if audio:
+        return "veo3"
+    if quality:
+        return "kling"
+    return "seedance-fast"
 
 
 def load_api_key():
@@ -106,20 +166,16 @@ def upload_reference(key, path):
         data = {"uploadPath": "user-uploads"}
         r = requests.post(UPLOAD_URL, headers=_headers(key, False), files=files, data=data, timeout=120)
     d = _unwrap(r)
-    urls = _find_urls(d)
     url = d.get("downloadUrl") if isinstance(d, dict) else None
-    url = url or (urls[0] if urls else None)
+    url = url or (_find_urls(d)[0] if _find_urls(d) else None)
     if not url:
         raise RuntimeError(f"Upload sans downloadUrl: {d}")
     return url
 
 
-def create_image(key, prompt, image_urls=None, model="google/nano-banana-edit",
-                 image_size="9:16", output_format="png"):
-    inp = {"prompt": prompt, "output_format": output_format, "image_size": image_size}
-    if image_urls:
-        inp["image_urls"] = image_urls
-    body = {"model": model, "input": inp}
+# ---- API unifiée (jobs) : couvre nano, seedream, seedance, kling, flux, gpt-image, ideogram… ----
+def create_job(key, model_id, input_obj):
+    body = {"model": model_id, "input": input_obj}
     r = requests.post(f"{API_BASE}/jobs/createTask", headers=_headers(key), json=body, timeout=60)
     d = _unwrap(r)
     task_id = d.get("taskId") or d.get("task_id") or d.get("id")
@@ -128,7 +184,7 @@ def create_image(key, prompt, image_urls=None, model="google/nano-banana-edit",
     return task_id
 
 
-def poll_image(key, task_id, timeout=300, interval=6):
+def poll_job(key, task_id, timeout=600, interval=6):
     deadline = time.time() + timeout
     while time.time() < deadline:
         r = requests.get(f"{API_BASE}/jobs/recordInfo", headers=_headers(key, False),
@@ -143,10 +199,11 @@ def poll_image(key, task_id, timeout=300, interval=6):
         if state in ("fail", "failed", "error", "3"):
             raise RuntimeError(f"Job échoué: {d.get('failMsg') or d}")
         time.sleep(interval)
-    raise TimeoutError(f"Timeout image task {task_id}")
+    raise TimeoutError(f"Timeout job {task_id}")
 
 
-def create_video(key, prompt, image_urls=None, model="veo3_fast", aspect_ratio="9:16"):
+# ---- Endpoint dédié Veo ----
+def create_video_veo(key, prompt, image_urls=None, model="veo3_fast", aspect_ratio="9:16"):
     body = {"prompt": prompt, "model": model, "aspectRatio": aspect_ratio}
     if image_urls:
         body["imageUrls"] = image_urls if isinstance(image_urls, list) else [image_urls]
@@ -158,7 +215,7 @@ def create_video(key, prompt, image_urls=None, model="veo3_fast", aspect_ratio="
     return task_id
 
 
-def poll_video(key, task_id, timeout=600, interval=10):
+def poll_video_veo(key, task_id, timeout=600, interval=10):
     deadline = time.time() + timeout
     while time.time() < deadline:
         r = requests.get(f"{API_BASE}/veo/record-info", headers=_headers(key, False),
@@ -173,7 +230,7 @@ def poll_video(key, task_id, timeout=600, interval=10):
         if flag in ("2", "3", "fail", "failed", "error"):
             raise RuntimeError(f"Vidéo échouée: {d}")
         time.sleep(interval)
-    raise TimeoutError(f"Timeout vidéo task {task_id}")
+    raise TimeoutError(f"Timeout vidéo {task_id}")
 
 
 def download(url, dest):
@@ -187,60 +244,106 @@ def download(url, dest):
     return dest
 
 
+def _merge_json(base, raw):
+    if raw:
+        try:
+            base.update(json.loads(raw))
+        except ValueError as e:
+            sys.exit(f"--input-json invalide: {e}")
+    return base
+
+
+def print_models():
+    print("Modèles Kie — sélection par type de créa (voir docs.kie.ai/market pour les IDs exacts)\n")
+    for kind in ("image", "video"):
+        print(f"[{kind.upper()}]")
+        for alias, m in MODELS.items():
+            if m["kind"] == kind:
+                print(f"  {alias:<14} {m['id']:<28} {m['note']}")
+        print()
+    print("Astuce : --model auto choisit le champion (image+réf→nano-edit, image→seedream,")
+    print("         vidéo→seedance-fast, --quality→kling, --audio→veo3). Un ID brut est accepté.")
+
+
+# ---------------------------------- CLI ----------------------------------
+def cmd_image(a, key):
+    label = pick_auto("image", has_ref=bool(a.ref)) if a.model == "auto" else a.model
+    label, m = resolve_model(label, "image")
+    print(f"→ image via {label} ({m['id']})")
+    refs = [upload_reference(key, r) for r in a.ref]
+    size_key = "image_size" if "nano-banana" in m["id"] else "aspect_ratio"
+    inp = {"prompt": a.prompt, size_key: a.size}
+    if "nano-banana" in m["id"]:
+        inp["output_format"] = "png"
+    if refs:
+        inp[m["img"]] = refs
+    _merge_json(inp, a.input_json)
+    tid = create_job(key, m["id"], inp)
+    print(f"  taskId={tid} … polling")
+    print(f"✓ {download(poll_job(key, tid)[0], a.out)}")
+
+
+def cmd_video(a, key):
+    if a.model == "auto":
+        label = pick_auto("video", quality=a.quality, audio=a.audio)
+    else:
+        label = a.model
+    label, m = resolve_model(label, "video")
+    print(f"→ video via {label} ({m['id']})")
+    starts = list(a.image) + [upload_reference(key, r) for r in a.ref]
+    if m["ep"] == "veo":
+        tid = create_video_veo(key, a.prompt, starts or None, m["id"], a.size)
+        print(f"  taskId={tid} … polling (1-3 min)")
+        print(f"✓ {download(poll_video_veo(key, tid)[0], a.out)}")
+    else:
+        inp = {"prompt": a.prompt, "aspect_ratio": a.size}
+        if starts:
+            inp[m["img"]] = starts
+        _merge_json(inp, a.input_json)
+        tid = create_job(key, m["id"], inp)
+        print(f"  taskId={tid} … polling (1-3 min)")
+        print(f"✓ {download(poll_job(key, tid)[0], a.out)}")
+
+
 def main():
-    p = argparse.ArgumentParser(description="Client Kie AI — génération créas Mashat")
+    p = argparse.ArgumentParser(description="Client Kie AI multi-modèles — créas Mashat")
     sub = p.add_subparsers(dest="cmd", required=True)
 
+    sub.add_parser("models", help="Lister les modèles + quand les utiliser")
     sub.add_parser("credit", help="Afficher les crédits restants")
 
     pi = sub.add_parser("image", help="Générer une image")
     pi.add_argument("--prompt", required=True)
+    pi.add_argument("--model", default="auto", help="alias (voir `models`), ID brut, ou 'auto'")
     pi.add_argument("--ref", action="append", default=[], help="Image(s) de référence (chemin local)")
-    pi.add_argument("--model", default="google/nano-banana-edit")
-    pi.add_argument("--size", default="9:16", choices=["1:1", "3:4", "9:16", "16:9"])
+    pi.add_argument("--size", default="9:16", help="9:16 / 3:4 / 1:1 / 16:9 …")
+    pi.add_argument("--input-json", default=None, help="JSON fusionné dans input (champs spécifiques)")
     pi.add_argument("--out", default="out/image.png")
 
     pv = sub.add_parser("video", help="Générer une vidéo (image-to-video conseillé)")
     pv.add_argument("--prompt", required=True)
+    pv.add_argument("--model", default="auto", help="alias (voir `models`), ID brut, ou 'auto'")
     pv.add_argument("--image", action="append", default=[], help="URL(s) image de départ (i2v)")
-    pv.add_argument("--ref", action="append", default=[], help="Image locale à uploader comme départ")
-    pv.add_argument("--model", default="veo3_fast", choices=["veo3_fast", "veo3"])
+    pv.add_argument("--ref", action="append", default=[], help="Image locale à uploader (i2v)")
+    pv.add_argument("--size", default="9:16", help="aspect ratio")
+    pv.add_argument("--quality", action="store_true", help="auto → modèle qualité (kling)")
+    pv.add_argument("--audio", action="store_true", help="auto → modèle avec audio natif (veo3)")
+    pv.add_argument("--input-json", default=None, help="JSON fusionné dans input")
     pv.add_argument("--out", default="out/video.mp4")
 
-    sub.add_parser("demo", help="Vérifier crédit + générer une image de test → out/demo.png")
-
     a = p.parse_args()
-    key = load_api_key()
 
+    if a.cmd == "models":
+        print_models()
+        return
+
+    key = load_api_key()
     if a.cmd == "credit":
         print(json.dumps(check_credit(key), ensure_ascii=False, indent=2))
-
     elif a.cmd == "image":
-        refs = [upload_reference(key, r) for r in a.ref]
-        print(f"→ createTask ({a.model}, {a.size}), refs={len(refs)}")
-        tid = create_image(key, a.prompt, refs or None, a.model, a.size)
-        print(f"  taskId={tid} … polling")
-        out = download(poll_image(key, tid)[0], a.out)
-        print(f"✓ {out}")
-
+        cmd_image(a, key)
     elif a.cmd == "video":
-        starts = list(a.image) + [upload_reference(key, r) for r in a.ref]
-        print(f"→ veo/generate ({a.model}), starts={len(starts)}")
-        tid = create_video(key, a.prompt, starts or None, a.model)
-        print(f"  taskId={tid} … polling (1-3 min)")
-        out = download(poll_video(key, tid)[0], a.out)
-        print(f"✓ {out}")
-
-    elif a.cmd == "demo":
-        print("Crédits:", json.dumps(check_credit(key), ensure_ascii=False))
-        tid = create_image(
-            key,
-            "Amateur smartphone photo, a small brass bowl of thin translucent red hair oil on a "
-            "neutral cloth, warm natural light, realistic, no text, no logo.",
-            None, "google/nano-banana", "9:16")
-        print("taskId:", tid, "… polling")
-        out = download(poll_image(key, tid)[0], "out/demo.png")
-        print(f"✓ démo OK → {out}")
+        cmd_video(a, key)
 
 
 if __name__ == "__main__":

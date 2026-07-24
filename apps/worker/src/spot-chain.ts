@@ -107,6 +107,40 @@ const ESSENCE_SHAPE_REAL_MOTION =
 const ESSENCE_SHAPE_MORPH_MOTION =
   "In elegant slow motion the whole product bottle gradually melts and dissolves from the top downward, its cap and label melting last, turning entirely into a single continuous flowing ribbon of DEEP TRANSLUCENT GARNET-RED oil (NOT amber, NOT gold, NOT caramel) that streams upward and swirls gracefully among the splashing oil, floating red hibiscus petals and green henna leaves, until only the flowing red oil ribbon and the splash remain in the warm golden light. Realistic wet oil, real-liquid physics, one seamless continuous morph, mass conserved. Photorealistic. No text.";
 
+// ————— SPOT-RITUAL : la planche storyboard 6 plans (produit → usage → résultat → offre) —————
+// Monde : chambre/coiffeuse luxe crème & or, miroir doré, marbre beige, lumière chaude.
+const WORLD_R =
+  "Elegant warm luxury bedroom vanity, cream and gold tones, ornate gold-framed mirror, beige marble vanity top, soft warm golden light, red hibiscus flowers and green leaves as decor, photorealistic premium beauty commercial, cinematic shallow depth of field. ";
+const FID_R =
+  "CRITICAL: the bottle is THIS EXACT product (reference image) — opaque red PET plastic bottle, white ribbed cap, deep red band with gold wavy line, white label with the arabic text (المشاط للشعر and the small benefit lines), '250 ml', golden '100% Natural' seal. Copy the label EXACTLY, do NOT invent, replace or garble ANY text, do not add latin text, label clearly readable facing the camera. ";
+interface RitualShot { n: number; still: string; motion: string; refs: "master" | "r2" | "r2+master"; }
+const RITUAL: RitualShot[] = [
+  {
+    n: 2,
+    still: WORLD_R + "A beautiful young woman with long dark hair, wearing an elegant cream silk robe, sits at the vanity and holds the bottle in her hands, looking at it with a soft pleased smile; TWO more identical bottles stand on the marble top beside a red hibiscus flower; her reflection soft in the gold mirror behind. " + FID_R + "9:16 vertical.",
+    motion: "She gently lifts the bottle a little closer and admires it, tilting it very slightly, a soft smile growing; warm light glints across the glass and the mirror; subtle elegant motion only. The bottle stays 100% identical to the image — do not change its label or shape. No text.",
+    refs: "master",
+  },
+  {
+    n: 3,
+    still: WORLD_R + "Extreme close-up macro: her elegant hands over the marble vanity top — one hand tilts the OPEN bottle (white cap removed, lying on the marble nearby), pouring a thin glossy stream of deep translucent garnet-red oil into her open palm; the label faces the camera, sharp and readable; a red hibiscus flower blurred beside. " + FID_R + "9:16 vertical.",
+    motion: "The thin stream of deep red oil pours slowly into her palm, pooling in a small glossy puddle; her palm tilts slightly, the oil catches the warm light; macro, sensual, slow, premium. The bottle and its label stay 100% identical to the image. No text.",
+    refs: "master",
+  },
+  {
+    n: 4,
+    still: WORLD_R + "The SAME woman (same face, same cream silk robe, same room) applies the oil through the lengths of her long dark hair with one hand, fingers gliding through the strands, eyes softly closed enjoying the ritual; she holds the bottle in her other hand, label toward camera. " + FID_R + "9:16 vertical.",
+    motion: "Her hand glides slowly down through the hair lengths spreading the oil, the strands begin to gleam in the warm light; she breathes softly, serene; elegant slow motion. The bottle stays 100% identical to the image. No text.",
+    refs: "r2+master",
+  },
+  {
+    n: 5,
+    still: WORLD_R + "The SAME woman (same face, same cream silk robe) combs her now glossy, silky, radiant long dark hair with an elegant golden comb in front of the ornate gold mirror, smiling happily at her reflection; no bottle in this shot; warm intimate glow. 9:16 vertical.",
+    motion: "The comb glides smoothly through her silky shiny hair, the strands flow and gleam with life in the warm light; she turns her head slightly and smiles at her reflection with quiet joy. Elegant, warm, slow. No text.",
+    refs: "r2",
+  },
+];
+
 function kieKey(): string {
   const m = readFileSync(join(REPO, "secrets.env"), "utf8").match(/KIE_API_KEY\s*=\s*(\S+)/);
   if (!m) throw new Error("KIE_API_KEY absent");
@@ -488,6 +522,65 @@ async function marbleClip() {
   console.log(`✓ ${gen.costCredits}cr → marble-clip.mp4`);
 }
 
+// ritual-still <n> : génère le still du plan n de la planche (identité chaînée sur le plan 2).
+async function ritualStill(n: number) {
+  const shot = RITUAL.find((s) => s.n === n);
+  if (!shot) throw new Error(`Plan ritual inconnu: ${n} (2|3|4|5)`);
+  const { loadProductKit } = await import("@studio/agents");
+  const kit = loadProductKit(REPO);
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · ritual still ${n} (~4cr)`);
+  const urls: string[] = [];
+  if (shot.refs.includes("r2")) {
+    const r2 = join(OUT, "ritual-2.png");
+    if (!existsSync(r2)) throw new Error("ritual-2.png manquant (générer le plan 2 d'abord)");
+    urls.push(await kie.uploadFile(r2));
+  }
+  if (shot.refs.includes("master")) urls.push(await kie.uploadFile(join(REPO, kit.canonical.masterDetoured)));
+  const gen = await kie.generateImage({ model: "google/nano-banana-edit", prompt: shot.still, imageUrls: urls, aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, `ritual-${n}.png`));
+  console.log(`✓ ${gen.costCredits}cr → ritual-${n}.png`);
+}
+// ritual-fix <n> : passe de fidélité — remplace la/les bouteilles du still par le master EXACT,
+// tout le reste de la scène (femme, décor, lumière, mains) strictement identique.
+async function ritualFix(n: number) {
+  const { loadProductKit } = await import("@studio/agents");
+  const kit = loadProductKit(REPO);
+  const still = join(OUT, `ritual-${n}.png`);
+  if (!existsSync(still)) throw new Error(`ritual-${n}.png manquant`);
+  const kie = new KieProvider({ apiKey: kieKey() });
+  console.log(`Solde ${await kie.credits()} · ritual-fix ${n} (~4cr)`);
+  const sceneUrl = await kie.uploadFile(still);
+  const masterUrl = await kie.uploadFile(join(REPO, kit.canonical.masterDetoured));
+  const gen = await kie.generateImage({
+    model: "google/nano-banana-edit",
+    prompt:
+      "Replace EVERY bottle in this scene with THIS EXACT product bottle (second reference image), keeping each bottle's position, scale, angle and the hands holding them EXACTLY as they are. Keep EVERYTHING else in the scene pixel-identical: the woman, her face, her hair, her robe, the room, the mirror, the marble, the flowers, the light. " +
+      PLASTIC +
+      "Copy the label EXACTLY from the reference — the deep red band with the gold wavy line, the white label, the arabic text (المشاط للشعر and the small arabic benefit lines), '250 ml', the golden '100% Natural' seal, the white ribbed cap. Do NOT invent, replace or garble ANY text on any label. Do not add latin text. Labels sharp and readable. Photorealistic.",
+    imageUrls: [sceneUrl, masterUrl],
+    aspectRatio: "9:16",
+  });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, `ritual-${n}.png`));
+  console.log(`✓ ${gen.costCredits}cr → ritual-${n}.png (fidélité master)`);
+}
+// ritual-clip <n> : anime le still du plan n (veo3_fast, 60cr).
+async function ritualClip(n: number) {
+  const shot = RITUAL.find((s) => s.n === n);
+  if (!shot) throw new Error(`Plan ritual inconnu: ${n}`);
+  const kie = new KieProvider({ apiKey: kieKey(), pollTimeoutMs: 8 * 60_000 });
+  const bal = await kie.credits();
+  console.log(`Solde ${bal} · ritual clip ${n} (~60cr)`);
+  if (bal < 60) throw new Error(`Solde insuffisant (${bal} < 60)`);
+  const url = await kie.uploadFile(join(OUT, `ritual-${n}.png`));
+  const gen = await kie.generateVideo({ model: "veo3_fast", prompt: shot.motion, imageUrls: [url], aspectRatio: "9:16" });
+  if (!gen.ok || !gen.urls[0]) throw new Error(`échec: ${gen.error}`);
+  await dl(gen.urls[0], join(OUT, `ritual-clip-${n}.mp4`));
+  console.log(`✓ ${gen.costCredits}cr → ritual-clip-${n}.mp4`);
+}
+
 /**
  * bridge : preuve du ZOOM-THROUGH — fin du plan A accélérée en zoom vers une cible
  * (easing quadratique), entrée du plan B en dézoom symétrique, bascule xfade zoomin
@@ -626,6 +719,9 @@ const run = async () => {
   if (cmd === "essence-shape-clip") return essenceShapeClip();
   if (cmd === "essence-shape-fix") return essenceShapeFix(a1);
   if (cmd === "essence-shape-morph-clip") return essenceShapeMorphClip();
+  if (cmd === "ritual-still") return ritualStill(Number(a1));
+  if (cmd === "ritual-fix") return ritualFix(Number(a1));
+  if (cmd === "ritual-clip") return ritualClip(Number(a1));
   if (cmd === "essence-shape-real-clip") return essenceShapeRealClip();
   if (cmd === "essence-morph-clip") return essenceMorphClip();
   if (cmd === "marble-trio") return marbleTrio();

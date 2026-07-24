@@ -21,6 +21,9 @@ Pipeline kie.ai (voir HANDOFF §1.2) : image `POST /api/v1/jobs/createTask` (`go
 
 ## Concept 1 — « رحلة القطرة » (ASMR versement) · adapté de #315 ASMR Seedance 2.0
 
+> ✅ **Produit et livré** : `creative/videos/C1-rihlat-alqatra-mechat.mp4` (10 s, 9:16, 1080×1920, audio). Pipeline réel : first frame `google/nano-banana` → `veo3_fast` (8 s + foley) → finition ffmpeg (grade doux, upscale 1080p, poussière d'or, hook arabe PIL, carton offre depuis `hero_pack.png`, transition hblur). Poster : `creative/statics/C1-rihlat-alqatra-poster.jpg`. ⚠️ Piège rencontré et corrigé : le blend `screen` de la poussière d'or entre un flux yuv et rgb → **virage magenta** ; fix = forcer `format=gbrp` sur les deux flux avant `blend`, puis `format=yuv420p`.
+
+
 **Angle** : satisfaction sensorielle + naturel de la texture. **Hook (≤2 s)** : `شوفي وش كيصير للشعرة لما توصلها القطرة الحمراء 🩸`
 
 **First Frame Image Prompt** (décor + main, SANS bouteille — la bouteille est compositée en post, ou fournir `bottle_straight.png` en 2ᵉ référence à nano-banana-edit) :

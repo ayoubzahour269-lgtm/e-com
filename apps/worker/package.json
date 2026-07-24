@@ -14,7 +14,8 @@
     "result-matched": "tsx src/result-matched.ts",
     "montage": "tsx src/montage.ts",
     "spot-luxe": "tsx src/spot-luxe.ts",
-    "spot-chain": "tsx src/spot-chain.ts"
+    "spot-chain": "tsx src/spot-chain.ts",
+    "spot-seedance": "tsx src/spot-seedance.ts"
   },
   "dependencies": {
     "@studio/agents": "workspace:*",

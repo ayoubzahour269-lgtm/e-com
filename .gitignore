@@ -19,3 +19,8 @@ apps/web/review-selected.png
 apps/web/review-finalized.png
 apps/web/*.png
 apps/*/out/
+
+# Seedance pipeline runtime artefacts
+apps/worker/assets/planches/
+apps/worker/assets/frames/
+apps/worker/output/

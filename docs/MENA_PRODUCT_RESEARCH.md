@@ -200,3 +200,56 @@ Treat that as the baseline every new-niche launch must beat.
 - [Best Muslim electronics for smart spirituality 2026 — Alibaba](https://electronics.alibaba.com/product/muslim-electronic)
 - [Ramadan 2027 in Saudi Arabia — dates & timings (Wego)](https://blog.wego.com/ramadan-in-saudi-arabia/)
 - [Saudi obesity treatment trends 2026 — Saudi Healthcare Consulting](https://saudihealthcareconsulting.com/insights/article/saudi-obesity-treatment-boom-the-fierce-rise-of-glp-1-drugs-bariatric-surgery-and-wellness-clinics)
+
+---
+
+## 9. Liste opérationnelle — 5+ produits gagnants par niche (juillet 2026)
+
+### 🦵 Genoux / dos / support
+| Produit | Signal | Marché | Prix cible |
+|---|---|---|---|
+| Patchs douleur genoux/articulations (herbes japonaises) | 336 ads, saturation FAIBLE (UAE) | UAE→KSA | 89–129 SAR |
+| Gel lombaire anti-douleur | 680+ ads, 2 sellers scaling (KSA) | KSA | 79–119 SAR |
+| Masseur genou chauffant + lumière rouge | 6 243 recherches/sem, +6,65% WoW; 48% listings $20–50 | KSA+UAE | 199–299 SAR |
+| Masseur nuque/épaules simulation main | 242 ads, sat. faible (UAE); angle raideur clim | UAE | 149–199 SAR |
+| Correcteur de posture / ceinture dorsale | Top premiers tests DS 2026; omniprésent Amazon.sa/noon COD | KSA | 69–99 SAR |
+| Traction cervicale (neck stretcher) | MASGRE 6D: 23k ventes/mois TikTok Shop @$45–75 | KSA/UAE | 129–179 SAR |
+
+### 🕌 Religieux
+| Produit | Signal | Prix cible |
+|---|---|---|
+| Horloge Azan digitale (WiFi) | #1 catégorie; Masjidal 1 400 ventes/mois @$259 | 149–399 SAR |
+| Bague zikr connectée / compteur OLED | Tendance hardware #1 "smart spirituality" 2026 | 59–99 SAR |
+| Stylo lecteur Coran | Top-seller confirmé | 129–199 SAR |
+| Tapis de prière intelligent / mousse épaisse | Top-seller; croise la niche genoux | 99–249 SAR |
+| Compteur tasbih + azan portable (AL-FAJIA) | Best-sellers multiples variantes | 49–79 SAR |
+| Bundle cadeau (tasbih+mini Coran+compteur) | Marché bascule vers ready-to-gift | 149–249 SAR |
+
+### ✨ Rides / anti-âge
+| Produit | Signal | Marché |
+|---|---|---|
+| Crème raffermissante cou | 190+ ads (UAE) | UAE (GHAD requis KSA) |
+| Masque collagène coréen | 10k+ unités/mois Temu (1 seul masque); viral TikTok | UAE/KSA |
+| Masque LED / wand lumière rouge | Best-sellers Amazon devices; Medicube viral | UAE |
+| Appareil microcourant lifting | Catégorie +11–13%/an GCC | UAE |
+| Savon botanique exfoliant anti-taches | 336 ads, sat. faible (UAE) | UAE/KSA |
+| Sérum PDRN | Ingrédient montant 2026 | UAE |
+
+### ⚖️ "Perte de poids" — version conforme uniquement (rien d'ingérable)
+| Produit | Signal | Note |
+|---|---|---|
+| Bodysuit sculptant / shapewear | 980+ ads (UAE) — plus gros volume du rapport | 2 tailles (retours COD) |
+| Waist trainer / corset | 150+ produits actifs Jumia EG; catégorie noon EG COD | Égypte volume |
+| Ceinture sauna / sudation | 60+ listings Jumia EG | Vendre "sport", pas "maigrir" |
+| Ceinture EMS abdominale | Génération 2026 multi-zones | Zéro claim brûle-graisse |
+| Bande V-shape menton | Actif noon Égypte | Croise anti-âge |
+
+### 💊 Santé générale / beauté fonctionnelle
+| Produit | Signal | Marché |
+|---|---|---|
+| Roll-on blanchissant anti-transpirant | 2 000+ ads (Égypte) | Égypte |
+| Routine anti-chute (lotion+shampoing) | 1 300+ ads (Égypte) | Égypte + 2e SKU Mechat |
+| Shampoing Batana anti-chute | 320+ ads, sat. faible (UAE) | UAE |
+| Coussin chauffant menstruel | 217 ads, sat. faible (Égypte) | Égypte/KSA |
+| Peigne lisseur chauffant (TYMO) | 800+ ads (KSA) | KSA |
+| Masseur plantaire | Top 10 wellness TikTok 2026 | KSA/UAE |

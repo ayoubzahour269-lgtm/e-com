@@ -253,3 +253,37 @@ Treat that as the baseline every new-niche launch must beat.
 | Coussin chauffant menstruel | 217 ads, sat. faible (Égypte) | Égypte/KSA |
 | Peigne lisseur chauffant (TYMO) | 800+ ads (KSA) | KSA |
 | Masseur plantaire | Top 10 wellness TikTok 2026 | KSA/UAE |
+
+---
+
+## 10. Classement révisé — hypothèse "aucune contrainte de policy publicitaire"
+
+> Demande utilisateur : ignorer les restrictions Meta/TikTok/Snapchat (capacité à diffuser
+> n'importe quelle créa). Note factuelle conservée une seule fois : les policies plateformes
+> sont un risque de compte publicitaire ; la SFDA (KSA) est une contrainte **légale** sur les
+> allégations minceur des produits ingérables. L'Égypte est nettement plus permissive.
+
+| # | Niche | Score révisé | Changement |
+|---|-------|--------------|-----------|
+| 1 | Genoux / dos / support | 9/10 | Inchangé — meilleur ratio demande/concurrence |
+| 2 | Perte de poids | 8/10 (était 2/10) | Débloquée : demande massive + créas avant/après |
+| 3 | Rides / anti-âge | 8/10 (était 6/10) | Avant/après restauré = format winner historique |
+| 4 | Religieux | 7/10 | Excellent mais avantage relatif réduit |
+| 5 | Santé générale | 6/10 | Limité par le coût unitaire, pas la pub |
+
+### Perte de poids — produits qui tournent (région, 2026)
+| Produit | Signal | Marché | Prix cible |
+|---|---|---|---|
+| Keto ACV gummies (BHB + vinaigre de cidre) | Listings COD actifs Amazon.sa ; format #1 mondial | KSA/UAE | 129–179 SAR |
+| Capsules coupe-faim type Chitocal/Chromax (garcinia+chrome) | Best-sellers pharmacie Égypte (Chefaa) | Égypte | 300–500 EGP |
+| Café / thé minceur | Catégories entières actives Amazon.sa + Amazon.eg en COD | Égypte+KSA | 89–129 SAR |
+| Ceinture sauna / sudation | 60+ listings Jumia Égypte | Égypte | 250–400 EGP |
+| Ceinture EMS abdominale | Vendue partout en COD (noon, etc.) | KSA/UAE | 149–229 SAR |
+| Bodysuit sculptant | 980+ ads actives (UAE) — plus gros signal mesuré | UAE/KSA | 129–199 SAR |
+
+**Playbook COD du vertical :** consommable (gummies/café, réachat J+30 via call center)
++ upsell physique (ceinture) sur la même landing.
+
+### Anti-âge — ordre d'attaque révisé
+Avant/après débloqué → crème cou (190+ ads UAE) et masque collagène (10k+ ventes/mois Temu)
+passent devant les devices. Funnel : vidéo avant/après → advertorial → COD. AOV 150–250 SAR (UAE).

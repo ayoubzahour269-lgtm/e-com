@@ -127,3 +127,41 @@ Pour chaque produit : le **signal** (preuve qu'il tourne), un **lien marché** (
 | CodPartner | Global COD | [codpartner.com](https://codpartner.com/) |
 
 **Rappel unit economics :** taux de livraison COD nouveau vendeur ≈ 60–65% → un produit doit être rentable à 0,62 × CA avec shipping payé sur ~100% des envois. Call de confirmation obligatoire avant dispatch.
+
+---
+
+## 🤝 Plateformes d'affiliation COD pour ces produits
+
+### Modèle 1 — Affiliation COD clé en main (produit + call center + livraison fournis, commission par commande livrée)
+| Plateforme | Zone | Notes |
+|---|---|---|
+| [Taager](https://www.taager.com) | Égypte, KSA, UAE, Maroc | 2 500+ produits, 65k+ vendeurs, zéro capital |
+| [COD Network](https://cod.network/en/affiliate-network) | MENA + Golfe | Payout min $100 Golfe / $20 Maroc |
+| [CodPartner](https://codpartner.com/affiliate) | GCC complet (dont Oman) | Marge libre, entrepôt gratuit si sourcing via eux |
+| [KSA Drop](https://ksadrop.com/) | KSA + UAE | 95% stock local |
+| [Zambeel](https://www.myzambeel.com/) | GCC | Payouts hebdomadaires |
+| [M5AZN](https://m5azn.com/en) | KSA | Plateforme locale |
+| [Gulf COD](https://gulfcod.com/) | GCC | — |
+| [COD Dropshipping](https://www.coddropshipping.com/) | UAE + KSA | Section produits KSA dédiée |
+
+### Modèle 2 — Réseaux CPA nutra COD (offres santé/minceur/beauté, landing + call center arabe fournis, payout par lead confirmé)
+| Réseau | Notes |
+|---|---|
+| [AdCombo](https://adcombo.com) | Leader COD nutra depuis 2014, geos MENA, landings 40+ langues |
+| [TerraLeads](https://terraleads.com/) | 3 281+ offres, call centers natifs, Golfe ciblé |
+| [Dr.Cash](https://dr.cash) | Top 5 nutra, flows COD tier 2/3 |
+
+### Modèle 3 — Affiliation classique (5–15% sur marketplaces)
+[Noon Affiliate](https://www.noon.com) · Amazon Associates ([.sa](https://www.amazon.sa)/[.ae](https://www.amazon.ae)/[.eg](https://www.amazon.eg)) · [ArabClicks](https://www.arabclicks.com) · [Linkaraby](https://portal.linkaraby.com/)
+
+### Mapping niche → plateforme
+| Niche | Plateforme recommandée |
+|---|---|
+| Genoux / dos / support | Taager, CodPartner (chercher "دعامة الركبة") |
+| Perte de poids / nutra | AdCombo, TerraLeads |
+| Anti-âge | AdCombo/TerraLeads (claims), Taager (devices) |
+| Religieux | Taager, COD Network ("ساعة أذان") |
+| Maison / auto / gadgets | CodPartner, KSA Drop, Zambeel |
+| Oman | CodPartner |
+
+**Setup de départ conseillé :** Taager + CodPartner + AdCombo (gratuits) — croiser leurs catalogues avec la liste ci-dessus.

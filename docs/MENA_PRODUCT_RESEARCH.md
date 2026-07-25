@@ -287,3 +287,111 @@ Treat that as the baseline every new-niche launch must beat.
 ### Anti-âge — ordre d'attaque révisé
 Avant/après débloqué → crème cou (190+ ads UAE) et masque collagène (10k+ ventes/mois Temu)
 passent devant les devices. Funnel : vidéo avant/après → advertorial → COD. AOV 150–250 SAR (UAE).
+
+---
+
+## 11. LISTE MAÎTRESSE — tous les winning products validés (juillet 2026)
+
+Signaux GCC (Qatar/Koweït) = transférables KSA/UAE/Oman. Classement par force du signal.
+
+### Signaux 1 000+ ads actives
+| Produit | Signal | Source |
+|---|---|---|
+| Gilet compression invisible homme | 4 000+ ads | Qatar |
+| Peigne masseur scalp lumière rouge + spray huile | 2 800+ ads | Qatar |
+| Roll-on blanchissant anti-transpirant | 2 000+ ads | Égypte |
+| Lunettes photochromiques anti-lumière bleue | 1 800+ ads | Koweït |
+| Spray anti-gecko/lézards | 1 580+ ads | Koweït |
+| Corset sculptant "Royal French" | 1 500+ ads | Qatar |
+| Moule à glaçons one-press | 1 380+ ads | Koweït |
+| Routine anti-chute cheveux | 1 300+ ads | Égypte |
+| Coussin dorsal gel rafraîchissant | 1 020+ ads | Koweït |
+| Chaussures cuir artisanales homme | 5 000+ ads | Égypte |
+
+### Douleur / articulations / support
+| Produit | Signal |
+|---|---|
+| ⭐ Genouillère à ressorts "soutien prière" | 153 ads, sat. FAIBLE (Qatar) — angle prière validé, quasi vierge |
+| Patchs genoux herbes japonaises | 336 ads, sat. faible (UAE) |
+| Gel lombaire | 680+ ads, scaling (KSA) |
+| Masseur genou chaleur + lumière rouge | +6,65%/sem recherches; Carrefour UAE |
+| Masseur nuque simulation main | 242 ads (UAE) |
+| Traction cervicale (MASGRE 6D) | 23k ventes/mois TikTok Shop |
+| Correcteur de posture | Omniprésent noon/Amazon.sa COD |
+
+### Minceur / sculptant
+| Produit | Signal |
+|---|---|
+| Gilet compression homme | 4 000+ ads (Qatar) — angle homme sous-exploité |
+| Corset / waist trainer | 1 500+ Qatar + catégories Jumia/noon EG |
+| Bodysuit sculptant femme | 980+ ads (UAE) |
+| Keto ACV gummies | COD actif Amazon.sa |
+| Café/thé minceur | Catégories actives Amazon.sa/.eg |
+| Ceinture EMS / sauna | Partout en COD |
+
+### Beauté / cheveux
+| Produit | Signal |
+|---|---|
+| Peigne masseur scalp | 2 800+ ads (Qatar) |
+| Peigne lisseur chauffant | 800+ ads (KSA) |
+| Coloration mousse HALAL | 705 ads, sat. faible (Koweït) |
+| Shampoing Batana | 320+ ads (UAE) |
+| Crème cou anti-âge | 190+ ads (UAE) |
+| Masque collagène coréen | 10k+ ventes/mois Temu |
+| Savon anti-taches | 336 ads (UAE) |
+| Masque LED / microcourant | Best-sellers devices |
+
+### Religieux
+| Produit | Signal |
+|---|---|
+| Horloge Azan WiFi | Masjidal 1 400 ventes/mois @$259 |
+| Bague zikr / compteur OLED | Tendance hardware #1 2026 |
+| Stylo lecteur Coran | Top-seller |
+| Tapis prière intelligent/épais | Top-seller + croise genoux |
+| Tasbih + azan portable | Best-sellers |
+| Bundle cadeau religieux | Marché → ready-to-gift |
+
+### Santé divers
+| Produit | Signal |
+|---|---|
+| Lunettes anti-lumière bleue | 1 800+ ads (Koweït) |
+| Gouttes anti-acouphènes | 705 ads, sat. faible (Koweït) |
+| Coussin chauffant menstruel | 217 ads (Égypte) |
+| Masseur plantaire | Top 10 wellness TikTok |
+| Mini purificateur d'air | $13→$40 |
+| Compléments halal | Trending TikTok Shop KSA |
+
+### Maison / cuisine
+| Produit | Signal |
+|---|---|
+| Spray anti-gecko | 1 580+ ads (Koweït) |
+| Moule à glaçons one-press | 1 380+ ads (Koweït) |
+| Plateau chauffant électrique | High velocity KSA + Égypte |
+| Mop auto-essorant | $9→$30, démos virales |
+| Nettoyeur vapeur portable | $24→$90 |
+| Sacs conservation réutilisables | $1,23→$30 |
+
+### Auto
+| Produit | Signal |
+|---|---|
+| Housse voiture réfléchissante | 252 ads (KSA), cabines 60°C+ |
+| Pare-soleil magnétique | Tendance KSA |
+| Coussin siège gel | 1 020+ ads (Koweït) |
+| Gonfleur pneus portable | Best-seller KSA |
+
+### Mode / homme / parfum
+| Produit | Signal |
+|---|---|
+| Chaussures marche mesh homme | 800+ ads (KSA) |
+| Chaussures cuir croco | 600+ ads (KSA) |
+| Sandales cloud | 272 ads (KSA) |
+| Pantalon waffle homme | 870+ ads (Qatar) |
+| Loungewear "spécial clim" | 740+ ads (Qatar) |
+| Montre OLEVS | 220+ ads (UAE) |
+| Parfum homme "Crown" / dupes Lattafa | 420+ ads (Koweït) |
+| Abaya butterfly / hijab grip headband | Viral TikTok 2026 |
+
+### Top 3 recommandés pour test immédiat
+1. **Genouillère "soutien prière"** — angle validé (Qatar, 153 ads), quasi vierge en KSA
+2. **Gilet compression homme** — 4 000 ads au Qatar, personne en KSA/Égypte
+3. **Spray anti-gecko** — problème régional, consommable (réachat), zéro concurrence glamour

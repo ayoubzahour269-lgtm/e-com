@@ -395,3 +395,37 @@ Signaux GCC (Qatar/Koweït) = transférables KSA/UAE/Oman. Classement par force 
 1. **Genouillère "soutien prière"** — angle validé (Qatar, 153 ads), quasi vierge en KSA
 2. **Gilet compression homme** — 4 000 ads au Qatar, personne en KSA/Égypte
 3. **Spray anti-gecko** — problème régional, consommable (réachat), zéro concurrence glamour
+
+---
+
+## 12. Prospection élargie — produits avec ads actives 1 mois+, ventes soutenues, faible concurrence (fin juillet 2026)
+
+Critère : longévité de campagne (un seller ne paie pas 4+ semaines une ad qui perd), saturation faible (1–3 sellers), volume soutenu.
+
+| Produit | Marché | Ads | Longévité | Saturation |
+|---|---|---|---|---|
+| Crème apaisante articulations/muscles | Jordanie | 280+ | "activité continue et stable", 1 seller | FAIBLE |
+| Crème colocynthe (حنظل) articulations | Algérie | 150+ | plusieurs semaines | FAIBLE |
+| Genouillère/chevillère orthopédique | Algérie | 859 | scaling focalisé | FAIBLE |
+| Complément articulaire bosse de chameau | Maroc | 365 | continu | FAIBLE |
+| Coffret 5 parfums femme | Maroc | 424 | ~6 semaines | FAIBLE |
+| Dentifrice blanchissant "My Smile" | Maroc | 194 | continu | FAIBLE |
+| Complément prostate | Algérie | 140+ | variations multiples | FAIBLE |
+| Casque lumière rouge pousse cheveux | Maroc | 84 | émergent | FAIBLE |
+| Patchs LED contour yeux | Maroc | 71 | émergent | FAIBLE |
+| Masseur anti-cellulite (cupping/roller) | Maroc | 65 | continu | FAIBLE |
+| Pare-soleil rétractable réfléchissant | Jordanie + Algérie | 210+ / 174 | saisonnier soutenu | FAIBLE ×2 marchés |
+| Refroidisseur d'air USB portable | Jordanie | 350+ | saisonnier | FAIBLE |
+| Gel anti-cicatrices | Algérie | 93 | ciblage niche | FAIBLE |
+
+**Macro-signal : la douleur articulaire est validée dans 6 marchés simultanément**
+(patchs UAE sat. faible · gel KSA en scaling · crème Jordanie continue · genouillère Algérie en scaling ·
+complément chameau Maroc continu · genouillère prière Qatar sat. faible) — chacun avec 1–3 sellers max.
+C'est une tendance régionale de fond, pas un produit à la mode.
+
+**Croisement juin→juillet (présents dans les 2 mois = 1 mois+ d'activité)** : correcteurs de posture
+(6 trimestres de croissance de recherche consécutifs), masques lumière rouge, ventilateurs de cou,
+liners air fryer — mais tous à saturation moyenne/haute, à éviter selon le filtre concurrence.
+
+⚠️ Bahreïn/Oman : volume d'ads dominé par un seul réseau de stores génériques dupliqués — signaux
+non fiables pour la détection produit (validé par le rapport lui-même).

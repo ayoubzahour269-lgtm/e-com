@@ -28,7 +28,7 @@
 #bm img{max-width:100%;height:auto;display:block}
 #bm .wrap{max-width:560px;margin-inline:auto;padding-inline:22px}
 #bm section{padding-block:clamp(64px,14vw,110px);position:relative}
-#bm h1,#bm h2{font-family:var(--disp);font-weight:800;line-height:1.28;text-wrap:balance;letter-spacing:-.01em}
+#bm h1,#bm h2{font-family:var(--disp);font-weight:800;line-height:1.28;text-wrap:balance;letter-spacing:normal}
 #bm h2{font-size:clamp(27px,7vw,36px);margin-bottom:14px}
 #bm .lead{color:var(--sage);font-size:16.5px}
 #bm .eyebrow{display:block;font-family:var(--body);font-weight:600;font-size:11.5px;letter-spacing:.32em;color:var(--gold);margin-bottom:18px}
@@ -41,6 +41,7 @@
   transition:background 1.2s ease}
 
 /* ============================ REVEALS ============================ */
+#bm .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;user-select:none}
 #bm.js .w{display:inline-block;opacity:0;transform:translateY(.42em);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.75,.3,1)}
 #bm.js .rv.in .w{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){#bm.js .w{opacity:1;transform:none;transition:none}}
@@ -87,6 +88,7 @@
 #hero .price-line .p{font-family:var(--disp);font-weight:900;font-size:44px;line-height:1;color:var(--ivory)}
 #hero .price-line .p small{font-size:15px;font-weight:600;color:var(--sage)}
 #hero .price-line .old{color:var(--faint);text-decoration:line-through;font-size:17px}
+#hero .price-line .ship{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--leaf,#9AA79B);border:1px solid var(--edge);border-radius:999px;padding:5px 12px}
 #hero .price-line .off{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--gold);border:1px solid rgba(217,172,85,.4);border-radius:999px;padding:5px 12px}
 
 /* ============================ CTA ============================ */
@@ -101,6 +103,7 @@
 @keyframes sh{0%,58%{inset-inline-start:-80px}88%,100%{inset-inline-start:130%}}
 @media (prefers-reduced-motion:reduce){#bm .cta .sh{display:none}}
 #bm .cta-note{text-align:center;font-size:12.5px;margin-top:12px;color:var(--sage)}
+#bm .cta-note b{color:var(--gold-soft);font-weight:600}
 #bm .cta-ghost{display:flex;align-items:center;justify-content:center;min-height:54px;border:1px solid var(--edge);border-radius:14px;color:var(--ivory);font-family:var(--disp);font-weight:800;font-size:15.5px;text-decoration:none;background:var(--glass)}
 
 /* ============================ TICKER ============================ */
@@ -214,7 +217,10 @@
 #offer .err{display:none;color:var(--danger);font-size:12px;margin-top:6px;font-weight:600}
 #offer .field.bad input{border-color:var(--danger)}
 #offer .field.bad .err{display:block}
-#offer .total{display:flex;justify-content:space-between;align-items:center;font-family:var(--disp);font-weight:800;font-size:17px;border-top:1px dashed var(--edge);margin-top:22px;padding-top:16px}
+#offer .ship-line{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--sage);margin-top:20px}
+#offer .ship-line .free{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--gold)}
+#offer .no-extra{font-size:12px;color:var(--faint);margin-top:8px;text-align:center}
+#offer .total{display:flex;justify-content:space-between;align-items:center;font-family:var(--disp);font-weight:800;font-size:17px;border-top:1px dashed var(--edge);margin-top:12px;padding-top:16px}
 #offer .cta{margin-top:16px}
 #offer .success{display:none;text-align:center;padding:30px 8px}
 #offer .success .ic{width:60px;height:60px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
@@ -237,7 +243,7 @@
 #final{text-align:center;padding-bottom:150px}
 #final h2{font-size:clamp(30px,9vw,44px);font-weight:900}
 #final .sub2{color:var(--sage);font-size:14.5px;margin-bottom:28px}
-#final .wordmark{font-family:var(--disp);font-weight:900;font-size:clamp(34px,11vw,58px);letter-spacing:-.02em;line-height:1;margin-top:56px;opacity:.5}
+#final .wordmark{font-family:var(--mono);font-weight:500;font-size:clamp(22px,6.5vw,34px);letter-spacing:.24em;line-height:1;margin-top:56px;opacity:.5}
 #final footer{margin-top:44px;font-size:11px;color:var(--faint);letter-spacing:.06em}
 
 /* Appareil modeste : on retire le flou d'arrière-plan (multi-passes GPU) et on opacifie */
@@ -278,9 +284,10 @@
         <span class="p num">110<small> ر.س</small></span>
         <span class="old num"><bdi>199 ر.س</bdi></span>
         <span class="off num">وفّري 45%</span>
+        <span class="ship">شامل الشحن</span>
       </div>
       <a class="cta rv d3" href="#offer"><span class="sh"></span>اطلبي الآن — الدفع عند الاستلام</a>
-      <p class="cta-note rv d3 num">توصيل 2–5 أيام في كل السعودية · مكالمة تأكيد قبل الشحن</p>
+      <p class="cta-note rv d3 num"><b>الشحن مجاني</b> · التوصيل خلال 2–5 أيام · لا رسوم إضافية عند الاستلام</p>
     </div>
   </div>
 </section>
@@ -467,7 +474,9 @@
           <input type="text" id="f-city" autocomplete="address-level2" required>
           <p class="err">فضلاً أدخلي مدينتكِ</p>
         </div>
-        <div class="total"><span>الإجمالي — عند الاستلام</span><span class="num" id="total">110 ر.س</span></div>
+        <div class="ship-line"><span>الشحن</span><span class="free">مجاني</span></div>
+        <div class="total"><span>الإجمالي — يُدفع للمندوب</span><span class="num" id="total">110 ر.س</span></div>
+        <p class="no-extra num">هذا هو المبلغ النهائي — لا رسوم إضافية ولا ضريبة مضافة عند الباب.</p>
         <button type="submit" class="cta" id="submit"><span class="sh"></span>تأكيد الطلب — الدفع عند الاستلام</button>
         <p class="cta-note">لا دفع إلكتروني · نتصل بكِ خلال 24 ساعة للتأكيد</p>
       </form>
@@ -482,6 +491,7 @@
         <li><span class="d">◆</span>عبوتا Bubble Mousse نباتية — 500 مل</li>
         <li><span class="d">◆</span>هدية: أداة تطبيق الصبغة</li>
         <li><span class="d">◆</span>قفازات مع كل عبوة</li>
+        <li><span class="d">◆</span>شحن مجاني لكل مدن المملكة</li>
         <li><span class="d">◆</span>فحص الطلب أمام المندوب قبل الدفع</li>
       </ul>
     </div>
@@ -518,7 +528,7 @@
 <div id="progress" aria-hidden="true"></div>
 <div id="sticky" aria-hidden="true">
   <div class="in">
-    <div class="pr"><div class="n1" id="st-n">عبوتان + هدية</div><div class="n2 num" id="st-p">110 ر.س</div></div>
+    <div class="pr"><div class="n1" id="st-n">عبوتان + هدية · شحن مجاني</div><div class="n2 num" id="st-p">110 ر.س</div></div>
     <a class="cta" href="#offer">اطلبي الآن</a>
   </div>
 </div>
@@ -568,10 +578,17 @@ if(cv&&!reduced){
 }
 
 /* ---------- Split par mot : chaque titre se révèle mot à mot ---------- */
-if(!reduced){
+function doSplit(){
+  var NAMEABLE={H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,A:1,BUTTON:1,SUMMARY:1,LABEL:1};
   bm.querySelectorAll('#hero h1, #bm h2, #truth p').forEach(function(el){
-    var i=0;
-    el.setAttribute('aria-label', el.textContent.replace(/\s+/g,' ').trim());
+    var i=0, source=el.textContent.replace(/\s+/g,' ').trim();
+    if(NAMEABLE[el.tagName]){
+      el.setAttribute('aria-label', source);
+    } else {
+      /* rôle générique : on ajoute un doublon lisible par lecteur d'écran, invisible à l'œil */
+      var sr=document.createElement('span');sr.className='sr-only';sr.textContent=source;
+      el.appendChild(sr);
+    }
     (function walk(node){
       Array.prototype.slice.call(node.childNodes).forEach(function(n){
         if(n.nodeType===3){
@@ -582,11 +599,12 @@ if(!reduced){
             sp.style.transitionDelay=(i++*0.055)+'s';frag.appendChild(sp);
           });
           node.replaceChild(frag,n);
-        } else if(n.nodeType===1){ walk(n) }
+        } else if(n.nodeType===1&&n.className!=='sr-only'){ walk(n) }
       });
     })(el);
   });
 }
+if(!reduced){ (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(doSplit) }
 
 /* ---------- Reveals ---------- */
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.14});

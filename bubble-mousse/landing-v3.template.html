@@ -24,7 +24,7 @@
 }
 #bm *{margin:0;padding:0;box-sizing:border-box}
 #bm ::selection{background:var(--gold);color:#141005}
-#bm img{max-width:100%;display:block}
+#bm img{max-width:100%;height:auto;display:block}
 #bm .wrap{max-width:560px;margin-inline:auto;padding-inline:22px}
 #bm section{padding-block:clamp(64px,14vw,110px);position:relative}
 #bm h1,#bm h2{font-family:var(--disp);font-weight:800;line-height:1.28;text-wrap:balance;letter-spacing:-.01em}
@@ -40,6 +40,13 @@
   transition:background 1.2s ease}
 
 /* ============================ REVEALS ============================ */
+#bm .w{display:inline-block;opacity:0;transform:translateY(.42em);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.75,.3,1)}
+#bm .rv.in .w{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#bm .w{opacity:1;transform:none;transition:none}}
+
+/* barre de progression — le "clock" unique rendu visible */
+#progress{position:fixed;top:0;inset-inline:0;height:2px;z-index:80;background:linear-gradient(90deg,var(--gold-soft),var(--gold));transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
+
 #bm .rv{opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform .9s cubic-bezier(.19,.8,.26,1)}
 #bm .rv.in{opacity:1;transform:none}
 #bm .rv.d1{transition-delay:.08s} #bm .rv.d2{transition-delay:.16s} #bm .rv.d3{transition-delay:.24s}
@@ -104,6 +111,8 @@
 /* ============================ SHADES ============================ */
 #shades .strip{border-radius:18px;overflow:hidden;border:1px solid var(--edge);margin-block:26px 18px;position:relative}
 #shades .strip img{width:100%;aspect-ratio:11/6;object-fit:cover}
+#shades .strip .spot{position:absolute;top:6px;bottom:6px;width:25%;left:0;z-index:2;border:1.5px solid var(--gold);border-radius:12px;
+  box-shadow:0 0 0 999px rgba(6,9,7,.62);transition:left .75s cubic-bezier(.2,.75,.3,1)}
 #shades .strip::after{content:"";position:absolute;inset:0;background:rgba(var(--amb),.28);mix-blend-mode:soft-light;transition:background 1.2s ease}
 #shades .chips{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 #shades .chip{font-family:var(--body);border:1px solid var(--edge);border-radius:12px;background:var(--glass);color:var(--sage);padding:12px 4px 11px;cursor:pointer;text-align:center;transition:border-color .25s,color .25s,background .25s}
@@ -114,8 +123,8 @@
 
 /* ============================ FULL-BLEED CLAIMS ============================ */
 #bm .bleed{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--edge)}
-#bm .bleed img{width:100%}
-#bm .bleed .cap{position:absolute;inset-inline:0;bottom:0;padding:52px 22px 20px;background:linear-gradient(180deg,transparent,rgba(8,11,9,.88) 62%)}
+#bm .bleed img{width:100%;aspect-ratio:4/3;object-fit:cover}
+#bm .bleed .cap{position:absolute;inset-inline:0;bottom:0;padding:64px 20px 18px;background:linear-gradient(180deg,transparent,rgba(8,11,9,.55) 42%,rgba(8,11,9,.93) 78%)}
 #bm .bleed .cap h3{font-family:var(--disp);font-weight:800;font-size:21px;margin-bottom:4px}
 #bm .bleed .cap p{font-size:13px;color:var(--sage)}
 
@@ -174,7 +183,7 @@
 #reviews .todo{border:1px dashed var(--danger);color:var(--danger);border-radius:14px;padding:13px 16px;margin-top:16px;font-size:12.5px;font-weight:600}
 
 /* ============================ OFFER ============================ */
-#offer .card{border:1px solid var(--edge);border-radius:22px;background:var(--ground-2);padding:26px 20px;margin-top:26px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+#offer .card{border:1px solid var(--edge);border-radius:22px;background:rgba(13,18,14,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:26px 20px;margin-top:26px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
 #offer .opt{position:relative;display:block;border:1.5px solid var(--edge);border-radius:14px;padding:15px 16px;margin-top:12px;cursor:pointer;background:var(--glass);transition:border-color .2s,background .2s}
 #offer .opt input{position:absolute;opacity:0}
 #offer .opt .r1{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -215,6 +224,7 @@
 #final{text-align:center;padding-bottom:150px}
 #final h2{font-size:clamp(30px,9vw,44px);font-weight:900}
 #final .sub2{color:var(--sage);font-size:14.5px;margin-bottom:28px}
+#final .wordmark{font-family:var(--disp);font-weight:900;font-size:clamp(34px,11vw,58px);letter-spacing:-.02em;line-height:1;margin-top:56px;opacity:.5}
 #final footer{margin-top:44px;font-size:11px;color:var(--faint);letter-spacing:.06em}
 
 /* ============================ STICKY ============================ */
@@ -271,7 +281,7 @@
     <span class="eyebrow">٤ درجات طبيعية</span>
     <h2>اختاري درجتكِ… وتتبدّل الصفحة معكِ</h2>
     <p class="lead">نفس التركيبة النباتية لكل الدرجات — حدّدي لونكِ وسنؤكده معكِ هاتفياً.</p>
-    <div class="strip"><img src="{{IMG:shades}}" width="1100" height="600" alt="أربع خصلات شعر بالدرجات المتوفرة" loading="lazy"></div>
+    <div class="strip"><span class="spot" id="spot" aria-hidden="true"></span><img src="{{IMG:shades}}" width="1100" height="600" alt="أربع خصلات شعر بالدرجات المتوفرة" loading="lazy"></div>
     <div class="chips" role="radiogroup" aria-label="درجة اللون">
       <button type="button" class="chip on" data-shade="black" data-name="أسود طبيعي" data-amb="16,26,20"><span class="dot" style="background:radial-gradient(circle at 35% 30%,#3A3A38,#101010)"></span><span class="nm">أسود طبيعي</span></button>
       <button type="button" class="chip" data-shade="chestnut" data-name="بني كستنائي" data-amb="38,22,10"><span class="dot" style="background:radial-gradient(circle at 35% 30%,#7A4A28,#33200F)"></span><span class="nm">بني كستنائي</span></button>
@@ -475,11 +485,13 @@
     <h2><span class="gold-t">لونكِ يعود الليلة.</span></h2>
     <p class="sub2 num">عبوتان + هدية أداة التطبيق — 110 ر.س بدل <s>199</s> · الدفع عند الاستلام</p>
     <a class="cta" href="#offer"><span class="sh"></span>اطلبي الآن</a>
+    <div class="wordmark gold-t" aria-hidden="true">BUBBLE MOUSSE</div>
     <footer>BUBBLE MOUSSE · جميع الحقوق محفوظة · سياسة الاستبدال</footer>
   </div>
 </section>
 
 <!-- ============================ STICKY ============================ -->
+<div id="progress" aria-hidden="true"></div>
 <div id="sticky" aria-hidden="true">
   <div class="in">
     <div class="pr"><div class="n1" id="st-n">عبوتان + هدية</div><div class="n2 num" id="st-p">110 ر.س</div></div>
@@ -520,9 +532,46 @@ if(cv&&!reduced){
   })(0);
 }
 
+/* ---------- Split par mot : chaque titre se révèle mot à mot ---------- */
+if(!reduced){
+  bm.querySelectorAll('#hero h1, #bm h2, #truth p').forEach(function(el){
+    var i=0;
+    (function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType===3){
+          var parts=n.textContent.split(/(\s+)/), frag=document.createDocumentFragment();
+          parts.forEach(function(p){
+            if(!p.trim()){frag.appendChild(document.createTextNode(p));return}
+            var sp=document.createElement('span');sp.className='w';sp.textContent=p;
+            sp.style.transitionDelay=(i++*0.055)+'s';frag.appendChild(sp);
+          });
+          node.replaceChild(frag,n);
+        } else if(n.nodeType===1){ walk(n) }
+      });
+    })(el);
+  });
+}
+
 /* ---------- Reveals ---------- */
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.14});
 bm.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+
+/* ---------- Le clock unique : une seule boucle pilote parallax + progression ---------- */
+var bgEl=document.querySelector('#hero .bg'), prog=document.getElementById('progress'), heroH=innerHeight;
+addEventListener('resize',function(){heroH=innerHeight});
+if(!reduced){
+  var lastY=-1;
+  (function clock(){
+    var y=scrollY;
+    if(y!==lastY){
+      lastY=y;
+      if(y<heroH*1.2&&bgEl) bgEl.style.transform='translate3d(0,'+(y*0.22)+'px,0) scale(1.08)';
+      var max=document.documentElement.scrollHeight-innerHeight;
+      prog.style.transform='scaleX('+(max>0?Math.min(y/max,1):0)+')';
+    }
+    requestAnimationFrame(clock);
+  })();
+}
 
 /* ---------- Compteur 25 ---------- */
 var ck=document.getElementById('clock');
@@ -545,6 +594,8 @@ chips.forEach(function(c){c.addEventListener('click',function(){
   bm.style.setProperty('--amb',c.dataset.amb);
   bm.dataset.shade=c.dataset.shade;
   if(sel)sel.value=c.dataset.name;
+  var spot=document.getElementById('spot');
+  if(spot)spot.style.left=(Array.prototype.indexOf.call(chips,c)*25)+'%';
 })});
 
 /* ---------- Offre ---------- */

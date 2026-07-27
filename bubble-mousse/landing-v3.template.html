@@ -41,17 +41,17 @@
   transition:background 1.2s ease}
 
 /* ============================ REVEALS ============================ */
-#bm .w{display:inline-block;opacity:0;transform:translateY(.42em);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.75,.3,1)}
-#bm .rv.in .w{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){#bm .w{opacity:1;transform:none;transition:none}}
+#bm.js .w{display:inline-block;opacity:0;transform:translateY(.42em);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.75,.3,1)}
+#bm.js .rv.in .w{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#bm.js .w{opacity:1;transform:none;transition:none}}
 
 /* barre de progression — le "clock" unique rendu visible */
 #progress{position:fixed;top:0;inset-inline:0;height:2px;z-index:80;background:linear-gradient(90deg,var(--gold-soft),var(--gold));transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
 
-#bm .rv{opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform .9s cubic-bezier(.19,.8,.26,1)}
-#bm .rv.in{opacity:1;transform:none}
-#bm .rv.d1{transition-delay:.08s} #bm .rv.d2{transition-delay:.16s} #bm .rv.d3{transition-delay:.24s}
-@media (prefers-reduced-motion:reduce){#bm .rv{opacity:1;transform:none;transition:none}}
+#bm.js .rv{opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform .9s cubic-bezier(.19,.8,.26,1)}
+#bm.js .rv.in{opacity:1;transform:none}
+#bm.js .rv.d1{transition-delay:.08s} #bm.js .rv.d2{transition-delay:.16s} #bm.js .rv.d3{transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){#bm.js .rv{opacity:1;transform:none;transition:none}}
 
 /* ============================ HERO ============================ */
 #hero{min-height:100svh;display:flex;flex-direction:column;padding-block:0;overflow:hidden;background:var(--ground)}
@@ -96,7 +96,11 @@
 #bm .cta-ghost{display:flex;align-items:center;justify-content:center;min-height:54px;border:1px solid var(--edge);border-radius:14px;color:var(--ivory);font-family:var(--disp);font-weight:800;font-size:15.5px;text-decoration:none;background:var(--glass)}
 
 /* ============================ TICKER ============================ */
-#ticker{border-block:1px solid var(--edge-soft);padding-block:14px;overflow:hidden;background:var(--ground-2)}
+#ticker{border-block:1px solid var(--edge-soft);padding-block:14px;overflow:hidden;background:var(--ground-2);position:relative}
+#ticker:hover .tk,#ticker:focus-within .tk,#ticker.paused .tk{animation-play-state:paused}
+#tk-pause{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);z-index:2;width:26px;height:26px;border-radius:50%;
+  border:1px solid var(--edge);background:rgba(10,14,11,.85);color:var(--sage);font-family:var(--mono);font-size:10px;cursor:pointer;line-height:1}
+#tk-pause:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #ticker .tk{display:flex;gap:38px;width:max-content;white-space:nowrap;animation:tk 30s linear infinite;font-size:12px;font-weight:600;letter-spacing:.22em;color:var(--sage)}
 #ticker .tk span{display:flex;align-items:center;gap:38px}
 #ticker .tk i{font-style:normal;color:var(--gold);font-size:8px}
@@ -237,6 +241,8 @@
 #sticky .cta{min-height:48px;font-size:15px;flex:1;box-shadow:none}
 </style>
 
+<script>document.getElementById("bm").classList.add("js")</script>
+
 <!-- ============================ HERO ============================ -->
 <section id="hero">
   <div class="bg"></div><div class="amb"></div><div class="veil"></div>
@@ -263,7 +269,7 @@
 </section>
 
 <!-- ============================ TICKER ============================ -->
-<div id="ticker" aria-hidden="true"><div class="tk" id="tk">
+<div id="ticker"><button type="button" id="tk-pause" aria-label="إيقاف الشريط المتحرك">II</button><div class="tk" id="tk" aria-hidden="true">
   <span>نباتية ١٠٠٪<i>◆</i>بلا أمونيا<i>◆</i>عطر يبقى ٩٦ ساعة<i>◆</i>النتيجة في ٢٥ دقيقة<i>◆</i>هدية: أداة التطبيق<i>◆</i>الدفع عند الاستلام<i>◆</i></span>
 </div></div>
 
@@ -503,7 +509,9 @@
 <script>
 (function(){
 var bm=document.getElementById('bm');
-var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var mqReduce=matchMedia('(prefers-reduced-motion: reduce)');
+var reduced=mqReduce.matches;
+mqReduce.addEventListener('change',function(e){reduced=e.matches;bm.classList.toggle('reduced',e.matches)});
 
 /* ---------- Canvas héro : bulles d'or qui respirent + attraction curseur ---------- */
 var cv=document.getElementById('fx');
@@ -537,13 +545,14 @@ if(cv&&!reduced){
 if(!reduced){
   bm.querySelectorAll('#hero h1, #bm h2, #truth p').forEach(function(el){
     var i=0;
+    el.setAttribute('aria-label', el.textContent.replace(/\s+/g,' ').trim());
     (function walk(node){
       Array.prototype.slice.call(node.childNodes).forEach(function(n){
         if(n.nodeType===3){
           var parts=n.textContent.split(/(\s+)/), frag=document.createDocumentFragment();
           parts.forEach(function(p){
             if(!p.trim()){frag.appendChild(document.createTextNode(p));return}
-            var sp=document.createElement('span');sp.className='w';sp.textContent=p;
+            var sp=document.createElement('span');sp.className='w';sp.textContent=p;sp.setAttribute('aria-hidden','true');
             sp.style.transitionDelay=(i++*0.055)+'s';frag.appendChild(sp);
           });
           node.replaceChild(frag,n);
@@ -584,8 +593,14 @@ new IntersectionObserver(function(es,obs){es.forEach(function(e){
   (function st(t){var p=Math.min((t-t0)/1100,1);p=1-Math.pow(1-p,3);ck.textContent=Math.round(T*p);if(p<1)requestAnimationFrame(st)})(t0);
 })},{threshold:.6}).observe(ck);
 
-/* ---------- Ticker ---------- */
+/* ---------- Ticker : dupliqué + pause pilotable ---------- */
 var tk=document.getElementById('tk');tk.innerHTML+=tk.innerHTML;
+var tkBtn=document.getElementById('tk-pause'),tkBox=document.getElementById('ticker');
+tkBtn.addEventListener('click',function(){
+  var p=tkBox.classList.toggle('paused');
+  tkBtn.textContent=p?'\u25B6':'II';
+  tkBtn.setAttribute('aria-label',p?'تشغيل الشريط المتحرك':'إيقاف الشريط المتحرك');
+});
 
 /* ---------- Teintes : le monde change ---------- */
 var chips=bm.querySelectorAll('#shades .chip');

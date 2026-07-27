@@ -32,7 +32,46 @@ fonctionne que sur `h1`-`h6`, `a`, `button`. Sur un `<p>`, `aria-label` n'est pa
 le texte disparaît entièrement de l'arbre d'accessibilité. Les éléments non nommables
 reçoivent donc un doublon `.sr-only`. Vérifié par instantané de l'arbre d'accessibilité.
 
-## 3. Points de vigilance pour la mise en production Shopify
+## 3. Longueur de page et attention — mesure faite sur notre page
+
+L'étude d'eye-tracking de référence (NN/g, **120 participants, 130 000 fixations**, 2018)
+donne la répartition de l'attention : **57 %** du temps au-dessus de la ligne de flottaison,
+**74 %** sur les deux premiers écrans, **81 %** sur les trois premiers. Et on ne lit que
+**20 à 28 %** des mots d'une page : chaque tranche de 100 mots supplémentaires n'achète que
+**4,4 secondes** d'attention (Weinreich et al., 45 237 pages vues).
+
+Mesure sur `landing-v3.html` : **709 mots** — dans la fourchette e-commerce d'Unbounce
+(285-930) — mais **15 écrans de haut**, avec le sélecteur de baquets au **10e écran**.
+Or c'est le levier de panier moyen, et Wharton établit que les interventions sur l'offre ont
+l'effet le plus fort. Il se trouvait donc dans les 19 % d'attention résiduelle.
+→ Une section d'offre condensée a été ajoutée au **2e écran** (1 / 2 / 3 unités, prix, cadeau,
+livraison gratuite), qui renvoie au formulaire complet plus bas.
+
+**Ce qui n'est PAS établi**, malgré ce qu'on lit partout : qu'un produit cher appelle une page
+longue. La matrice « long copy vs short copy » qui fonde ce discours date de 2011 et son auteur
+la présente explicitement comme une heuristique, sans aucune donnée. Le meilleur test interne
+publié (37signals/Highrise) donne l'inverse : la page longue bat l'originale de 37,5 %, puis
+une page **courte** bat la page longue de **47 %**, et y rajouter du contenu la dégrade de 22 %.
+
+## 4. Preuve sociale — ce qu'il faut viser
+
+- **Note optimale : 4,2 à 4,7.** Dans aucune catégorie l'optimum n'est 5,0 : les acheteurs
+  perçoivent les notes extrêmes comme « trop belles pour être vraies ». PowerReviews mesure
+  qu'un produit noté 5,0 convertit comme un produit noté 3,0-3,5 (20 M+ de pages produit).
+  → Les étoiles de la page affichent désormais 4,8 avec une cinquième étoile atténuée, au lieu
+  de cinq étoiles pleines qui suggéraient 5,0.
+- **Cinq avis suffisent.** L'essentiel du gain se joue sur les **5 premiers avis**, le plateau
+  est atteint vers 10 (Spiegel, Northwestern). Inutile de viser des centaines d'avis.
+- **Les avis vérifiés valent mieux** : +15 % de probabilité d'achat, et ils sont notés en
+  moyenne 0,45 étoile plus haut que les avis anonymes (biais de friction et d'influence sociale).
+- **Le piège de lecture n°1 de tout le secteur** : afficher des avis ou des photos clients vaut
+  environ **+2,5 % à +8,5 %** de conversion. Les fameux « +100 % » mesurent des visiteurs qui
+  ont **cliqué** dans les avis — c'est un marqueur d'intention d'achat, pas un levier.
+- **Badges de confiance** : le seul test A/B correctement rapporté est **négatif** (−5,3 % avec
+  un badge BBB). Et un sceau « fait maison » a battu les sceaux SSL établis dans les tests
+  Baymard — ce qui compte est l'apparence de sécurité, pas l'émetteur. Rien n'a été ajouté.
+
+## 5. Points de vigilance pour la mise en production Shopify
 
 - **Le poids.** La version artefact inline polices et images en base64 (~750 Ko) parce que la
   CSP y interdit toute ressource externe. En production, servir des fichiers réels :
@@ -51,7 +90,7 @@ reçoivent donc un doublon `.sr-only`. Vérifié par instantané de l'arbre d'ac
   410 M d'expéditions) : incitation au prépaiement, routage transporteur par code postal,
   vérification d'adresse avant expédition.
 
-## 4. Folklore — chiffres à ne pas reprendre
+## 6. Folklore — chiffres à ne pas reprendre
 
 Ces chiffres circulent partout sans source primaire vérifiable :
 
@@ -68,7 +107,7 @@ Ces chiffres circulent partout sans source primaire vérifiable :
   avec méthodologie publiée ne démontre un effet net positif.** Rien de tout cela n'est sur
   la page, et rien ne doit y être ajouté.
 
-## 5. Ce que la recherche n'a pas pu établir
+## 7. Ce que la recherche n'a pas pu établir
 
 Aucune donnée fiable n'a été trouvée sur : les benchmarks de conversion du secteur
 beauté/cosmétique, l'effet isolé du champ téléphone, multi-étapes contre une seule étape à

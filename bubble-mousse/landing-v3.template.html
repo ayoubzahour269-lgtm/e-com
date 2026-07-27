@@ -83,6 +83,7 @@
 #hero .sub b{color:var(--ivory);font-weight:600}
 #hero .meta{display:flex;align-items:center;gap:14px;margin-bottom:18px;font-size:13px;color:var(--sage)}
 #hero .meta .stars{color:var(--gold);letter-spacing:3px;font-size:13px}
+#hero .meta .stars .half{color:var(--faint)}
 #hero .meta .sep{width:1px;height:14px;background:var(--edge)}
 #hero .price-line{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
 #hero .price-line .p{font-family:var(--disp);font-weight:900;font-size:44px;line-height:1;color:var(--ivory)}
@@ -117,6 +118,21 @@
 #ticker .tk i{font-style:normal;color:var(--gold);font-size:8px}
 @keyframes tk{to{transform:translateX(50%)}}
 @media (prefers-reduced-motion:reduce){#ticker .tk{animation:none}}
+
+/* ============================ OFFRE RAPIDE ============================ */
+#quick{padding-block:clamp(48px,10vw,72px)}
+#quick .q-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:22px}
+#quick .q-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;
+  border:1.5px solid var(--edge);border-radius:14px;padding:18px 6px 14px;background:var(--glass);
+  text-decoration:none;color:var(--sage);transition:border-color .2s,background .2s}
+#quick .q-card.on{border-color:var(--gold);background:rgba(217,172,85,.07);color:var(--ivory)}
+#quick .q-card .q-n{font-family:var(--disp);font-weight:900;font-size:26px;line-height:1;color:var(--ivory)}
+#quick .q-card .q-l{font-size:11px;line-height:1.4;text-align:center}
+#quick .q-card .q-p{font-family:var(--disp);font-weight:800;font-size:15px;color:var(--gold);margin-top:4px}
+#quick .q-card .q-p::after{content:" ر.س";font-family:var(--body);font-size:10px;font-weight:600;color:var(--sage)}
+#quick .q-card .q-b{position:absolute;top:-10px;inset-inline-start:50%;transform:translateX(50%);
+  background:linear-gradient(115deg,var(--gold-soft),var(--gold));color:#161006;font-family:var(--mono);
+  font-size:9px;font-weight:500;letter-spacing:.06em;border-radius:999px;padding:2px 9px;white-space:nowrap}
 
 /* ============================ EDITORIAL ============================ */
 #truth p{font-family:var(--disp);font-weight:800;font-size:clamp(26px,7.6vw,38px);line-height:1.45;color:var(--faint)}
@@ -296,6 +312,21 @@
 <div id="ticker"><button type="button" id="tk-pause" aria-label="إيقاف الشريط المتحرك">II</button><div class="tk" id="tk" aria-hidden="true">
   <span>نباتية ١٠٠٪<i>◆</i>بلا أمونيا<i>◆</i>عطر يبقى ٩٦ ساعة<i>◆</i>النتيجة في ٢٥ دقيقة<i>◆</i>هدية: أداة التطبيق<i>◆</i>الدفع عند الاستلام<i>◆</i></span>
 </div></div>
+
+<!-- ============================ OFFRE RAPIDE (au 2e écran) ============================ -->
+<section id="quick">
+  <div class="wrap rv">
+    <span class="eyebrow">العرض</span>
+    <h2>عبوتان + الهدية بـ <span class="gold-t num">110 ر.س</span></h2>
+    <p class="lead">بدل <s class="num">199 ر.س</s> · شحن مجاني · الدفع عند الاستلام</p>
+    <div class="q-grid">
+      <a class="q-card" href="#offer"><span class="q-n num">1</span><span class="q-l">عبوة</span><span class="q-p num">65</span></a>
+      <a class="q-card on" href="#offer"><span class="q-b">الأكثر طلباً</span><span class="q-n num">2</span><span class="q-l">عبوتان + هدية</span><span class="q-p num">110</span></a>
+      <a class="q-card" href="#offer"><span class="q-n num">3</span><span class="q-l">عبوات + هدية</span><span class="q-p num">150</span></a>
+    </div>
+    <a class="cta" href="#offer" style="margin-top:18px"><span class="sh"></span>اطلبي الآن — الدفع عند الاستلام</a>
+  </div>
+</section>
 
 <!-- ============================ EDITORIAL ============================ -->
 <section id="truth" class="aura">

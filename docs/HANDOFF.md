@@ -59,7 +59,8 @@ curl -s -g "https://theme-kit-access.shopifyapps.com/cli/admin/api/2024-10/theme
 - **Vidéos (veo)** : `POST https://api.kie.ai/api/v1/veo/generate` body `{"prompt":"...","model":"veo3_fast","aspectRatio":"9:16","imageUrls":["..."]}` → poll `GET .../api/v1/veo/record-info?taskId=...` (successFlag 0=pending 1=ok ; URL dans response.resultUrls[0]).
   - `veo3_fast` ~60 cr/clip 8s · `veo3` (qualité) plus cher. Sortie 720×1280 24fps **AVEC AUDIO généré** (foley!) — l'exploiter au montage.
 - **Upload de fichiers** (pour donner une référence) : `POST https://kieai.redpandaai.co/api/file-stream-upload` (Bearer, multipart `file=@x.png`, `uploadPath=user-uploads`) → `data.downloadUrl`.
-- Helper existant : `scratchpad/kie.sh` (fonctions create_job/poll_job) — recréer au besoin, 10 lignes.
+- **Helper** : `./scripts/kie.sh credit|upload|image|video|job|vjob` — lit `KIE_API_KEY` dans `secrets.env`
+  (gitignoré), crée le job et poll jusqu'au résultat (affiche l'URL finale sur stdout, le `taskId` sur stderr).
 
 ### 1.3 GitHub / Git
 - Repo : `ayoubzahour269-lgtm/e-com` · Branche de travail : `claude/landing-page-videos-animations-4f7v6f`

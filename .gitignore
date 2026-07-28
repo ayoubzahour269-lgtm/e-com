@@ -1,3 +1,6 @@
 
 # secrets locaux — jamais commités
 secrets.env
+
+# sources générées volumineuses (régénérables via creative/bubble/generate.sh)
+creative/bubble/gen/*.png

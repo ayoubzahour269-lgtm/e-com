@@ -71,6 +71,17 @@ curl -s -g "https://theme-kit-access.shopifyapps.com/cli/admin/api/2024-10/theme
 - Formulaire : Form display → Embedded → Custom selector → **`#easysell-form-here`** (l'ancre existe dans `shopify/sections/landing-order.liquid`, avec fallback /cart/add auto si EasySell absent).
 - Offre quantité à configurer : 2 packs = 259 ر.س.
 
+### 1.4bis Landing Bubble Mousse (2e produit, KSA)
+- Source unique : `bubble.html` (racine) → portée en section par `creative/bubble/port_to_shopify.py`
+  vers `shopify/sections/landing-bubble.liquid` + `shopify/layout/landing-bubble.liquid` +
+  `shopify/templates/product.bubble-landing.json`. **Ne jamais éditer le .liquid à la main.**
+- Aperçu : `<url-produit>?view=bubble-landing` · QA : `python3 creative/bubble/qa.py <dossier>`
+- Pipeline média : `creative/bubble/generate.sh` (kie.ai) → `compose.py` (flacon détouré) →
+  `process.py` (webp) → `scripts/shopify.sh putbin`.
+- **Piège CDN mesuré** : Shopify ré-encode tout WebP à canal alpha en **PNG** (×9 en poids :
+  33 Ko → 756 Ko). Les visuels produit sont donc aplatis sur la couleur de fond de leur section.
+- Prompts de remplacement haute définition : `docs/PROMPTS-HIGGSFIELD.md`.
+
 ### 1.5 Landing page live
 - URL : `https://dw0dwe-bp.myshopify.com/products/عرض-3-زيت-المشاط-الأحمر-طبيعي-100?view=mechat`
 - L'URL produit SANS ?view redirige automatiquement : snippet dans `layout/theme.liquid` du thème Horizon, keyé sur SKU `SA04050100M300` (backup original : `shopify/backup/theme.liquid.orig`).

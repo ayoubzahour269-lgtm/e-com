@@ -22,6 +22,10 @@ On ne se connecte PAS à l'Admin API classique. On passe par le **proxy Theme Ki
   - `X-Shopify-Shop: dw0dwe-bp.myshopify.com`
 - **Thèmes** : Horizon (LIVE) id `188180398382` · Development (CLI, vierge) id `188183183662`
 
+**Helper** : `./scripts/shopify.sh check|themes|list|get|put|putbin|del` — lit les identifiants dans
+`secrets.env` (gitignoré, copier depuis `secrets.env.example`), gère le `-g`, l'encodage base64 et
+le retry/backoff sur les 503. Les curl ci-dessous restent la référence bas niveau.
+
 **Lister les thèmes**
 ```bash
 curl -s "https://theme-kit-access.shopifyapps.com/cli/admin/api/2024-10/themes.json" \

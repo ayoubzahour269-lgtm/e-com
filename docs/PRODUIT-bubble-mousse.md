@@ -41,6 +41,17 @@
 
 Les visuels fournis montrent en plus : شال · قفازين · قبعة استحمام · واقيين للأذن.
 
+### 4.1 Éléments ajoutés par les visuels de référence (2e lot)
+- **Offre packagée** : « **عروض 3 عبوات** » — le visuel principal vend un **lot de 3 flacons**.
+- **Cadeau** : « **هدية زجاجة زيت** » — flacon applicateur à peigne (bleu) offert,
+  argumenté « لتطبيق الزيت بسهولة ودقة ». Remplace/complète la « مجموعة أدوات الصبغ » du texte.
+- **Composition mise en avant (HERBAL ESSENCES)** :
+  Ginseng Extract · Saponin Extract · Ginseng Extract *(doublon, cf. §6.6)* · Fo-ti Extract
+  (هي شو وو / Polygonum multiflorum) · Black Sesame Extract
+- **Badges packaging** : يغطي الشيب تماماً · سريع المفعول · مستخلصات طبيعية ·
+  آمن ولطيف على فروة الرأس · لون أسود طبيعي يدوم طويلاً · خالٍ من الأمونيا
+- **Promesse visuelle secondaire** : « شعر أسود صحي ولامع » + « يحافظ على البصيلات »
+
 ## 5. Mode d'emploi (طريقة الاستخدام)
 1. ضعي الرغوة على الشعر مثل الشامبو بلطف
 2. وزعيها بالتساوي لتغطية الشعر بالكامل
@@ -61,3 +72,11 @@ Les visuels fournis montrent en plus : شال · قفازين · قبعة است
    Formuler « تركيبة نباتية خالية من الأمونيا » plutôt qu'un « naturel » absolu invérifiable.
 5. **Manquent pour construire une offre** : prix d'achat, prix de vente cible, marché (KSA ?),
    stock par couleur. (Marché/paiement tranchés : KSA + COD EasySell.)
+6. **« Ginseng Extract » listé deux fois** sur le visuel HERBAL ESSENCES, avec deux icônes
+   différentes (la première ressemble à un champignon type ganoderma/reishi). Erreur de traduction
+   du fournisseur très probable — ne pas recopier le doublon tel quel dans la copy.
+7. **Cadeau vs contenu du pack** — le texte annonce « مجموعة أدوات صبغ », les visuels annoncent
+   « هدية زجاجة زيت » (flacon applicateur). Trancher lequel est réellement expédié : promettre les
+   deux sans stock = litiges COD.
+8. **« يغطي الشيب تماماً » est un claim absolu** — « تماماً » est difficile à tenir et risqué en
+   modération. Préférer « تغطية متساوية وواضحة للشيب » (déjà dans le texte source).

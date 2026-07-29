@@ -1,0 +1,696 @@
+<!doctype html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بابل موس — صبغة شعر رغوية نباتية تغطي الشيب في ٢٥ دقيقة</title>
+<meta name="description" content="صبغة رغوية بخلاصات نباتية تغطي الشعر الأبيض تغطية متساوية في ٢٥ دقيقة، تُستعمل كالشامبو، خالية من الأمونيا. عرض ٣ عبوات + زجاجة الزيت هدية — الدفع عند الاستلام.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/bubble-pack3.webp">
+
+<!-- TRACKING — remplacer les ID puis décommenter. Les événements se déclenchent sur l'état
+     de succès du formulaire (voir js plus bas), jamais au clic du bouton.
+<script>!function(f,b,e,v,n,t,s){...}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','<META_PIXEL_ID>'); fbq('track','PageView');</script>
+<script>!function(w,d,t){...}(window,document,'ttq'); ttq.load('<TIKTOK_PIXEL_ID>'); ttq.page();</script>
+<script>snaptr('init','<SNAP_PIXEL_ID>'); snaptr('track','PAGE_VIEW');</script>
+-->
+
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ivory:#F3EFE4; --surface:#FBF9F3; --forest:#17331F; --leaf:#5B9B4A;
+  --brass:#B98A2E; --brass-hi:#D8AC4E; --ink:#14120E; --muted:#6B6455; --line:#E2DACB;
+  --radius:18px; --shadow:0 12px 30px rgba(20,18,14,.10); --shadow-lg:0 20px 48px rgba(20,18,14,.16);
+  --display:'Reem Kufi',system-ui,sans-serif; --body:'Tajawal',system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--display);line-height:1.35;margin:0;font-weight:700;text-wrap:balance}
+p{margin:0}
+:focus-visible{outline:3px solid var(--brass);outline-offset:3px;border-radius:6px}
+.bm-wrap{max-width:1120px;margin-inline:auto;padding-inline:20px}
+.bm-center{text-align:center}
+.bm-eyebrow{font-size:13px;letter-spacing:2px;color:var(--brass);font-weight:700}
+.bm-h2{font-size:clamp(25px,5.5vw,38px)}
+.bm-lead{color:var(--muted);font-size:16px;max-width:56ch;margin-inline:auto}
+.bm-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ============ SIGNATURE : LISIÈRE DE MOUSSE ============ */
+.bm-foam{display:block;width:100%;height:38px;line-height:0}
+.bm-foam svg{width:100%;height:100%;display:block}
+@media (min-width:768px){.bm-foam{height:54px}}
+
+/* ============ CTA ============ */
+.bm-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;
+  padding:14px 26px;border:none;border-radius:var(--radius);cursor:pointer;
+  background:linear-gradient(135deg,var(--brass-hi),var(--brass) 52%,#8F6A18);
+  color:#22190A;font-family:var(--body);font-size:17px;font-weight:700;
+  box-shadow:0 8px 22px rgba(185,138,46,.34);transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.bm-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(185,138,46,.46)}
+.bm-cta:active{transform:translateY(0)}
+.bm-cta-note{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+@media (min-width:768px){.bm-cta{width:auto;min-width:340px}}
+
+/* ============ ANNONCE + HEADER ============ */
+.bm-announce{background:var(--forest);color:#E6DFC9;font-size:13px;text-align:center;padding:9px 16px}
+.bm-head{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:10px 20px;background:rgba(251,249,243,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bm-logo{display:flex;flex-direction:column;line-height:1.1}
+.bm-logo b{font-family:var(--display);font-size:20px;color:var(--forest)}
+.bm-logo span{font-size:10px;letter-spacing:4px;color:var(--brass)}
+.bm-pill{padding:9px 18px;border-radius:999px;background:var(--forest);color:#F3EFE4;font-size:14px;font-weight:700;white-space:nowrap}
+
+/* ============ HERO ============ */
+.bm-hero{position:relative;overflow:hidden;background:var(--surface)}
+.bm-hero-bg{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:.30}
+.bm-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(251,249,243,.55),rgba(251,249,243,.94))}
+.bm-hero-in{position:relative;z-index:2;display:grid;gap:var(--s3);padding:var(--s4) 20px var(--s5);max-width:1120px;margin-inline:auto}
+.bm-badge{display:inline-flex;align-items:center;gap:8px;align-self:start;padding:7px 15px;border-radius:999px;
+  background:rgba(91,155,74,.12);border:1px solid rgba(91,155,74,.32);color:#39662C;font-size:13px;font-weight:700}
+.bm-h1{font-size:clamp(29px,6.8vw,46px);letter-spacing:-.5px;max-width:15ch;text-wrap:balance}
+.bm-h1 em{font-style:normal;color:var(--brass);display:block}
+.bm-hero p.bm-sub{color:var(--muted);font-size:17px;max-width:46ch;margin-top:var(--s2)}
+.bm-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px;margin:var(--s3) 0 var(--s2)}
+.bm-price b{font-family:var(--display);font-size:40px;color:var(--forest);line-height:1}
+.bm-price b small{font-size:17px;font-weight:500}
+.bm-price s{color:#9C9483;font-size:18px}
+.bm-price i{font-style:normal;background:#8F1F1F;color:#fff;font-size:13px;font-weight:700;padding:4px 11px;border-radius:999px}
+.bm-hero-proof{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:var(--s3);font-size:14px;color:#4A4536}
+.bm-hero-proof span{display:flex;align-items:center;gap:6px}
+.bm-hero-visual{position:relative;justify-self:center;width:100%;max-width:420px}
+.bm-hero-visual img{width:100%;border-radius:22px;box-shadow:var(--shadow-lg)}
+.bm-gift{position:absolute;inset-inline-start:0;bottom:8%;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:9px 14px;box-shadow:var(--shadow);font-size:13px;font-weight:700;color:var(--forest)}
+.bm-gift b{color:var(--brass)}
+@media (min-width:900px){
+  .bm-hero-in{grid-template-columns:1.05fr .95fr;align-items:center;gap:var(--s5);padding-block:var(--s6)}
+  .bm-hero-visual{max-width:none}
+}
+
+/* ============ BANDEAU CONFIANCE ============ */
+.bm-trust{background:var(--forest);color:#DFD8C2}
+.bm-trust ul{list-style:none;margin:0;padding:var(--s3) 20px;display:grid;grid-template-columns:repeat(2,1fr);
+  gap:14px;max-width:1120px;margin-inline:auto}
+.bm-trust li{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500}
+.bm-trust svg{flex:none;width:20px;height:20px;stroke:var(--brass-hi);fill:none;stroke-width:2}
+@media (min-width:768px){.bm-trust ul{grid-template-columns:repeat(4,1fr)}}
+
+/* ============ SECTIONS ============ */
+section{scroll-margin-top:70px}
+.bm-sec{padding:var(--s5) 0}
+.bm-sec-head{display:grid;gap:10px;justify-items:center;text-align:center;margin-bottom:var(--s4)}
+.bm-rule{width:64px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--brass-hi),var(--brass))}
+
+/* Problème */
+.bm-problem{background:var(--surface)}
+.bm-problem-grid{display:grid;gap:var(--s2)}
+.bm-pain{background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s3)}
+.bm-pain b{display:block;font-family:var(--display);font-size:18px;color:var(--forest);margin-bottom:6px}
+.bm-pain span{color:var(--muted);font-size:15px}
+@media (min-width:768px){.bm-problem-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* Révélateur avant/après */
+.bm-reveal{position:relative;max-width:520px;margin-inline:auto;border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow-lg);background:var(--surface);aspect-ratio:3/4}
+.bm-reveal img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bm-reveal .bm-after{clip-path:inset(0 0 0 var(--split,50%))}
+.bm-reveal-tag{position:absolute;top:12px;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;
+  background:rgba(20,18,14,.68);color:#fff;z-index:3}
+.bm-reveal-tag.r{inset-inline-end:12px}.bm-reveal-tag.l{inset-inline-start:12px}
+.bm-reveal-bar{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 12px rgba(0,0,0,.4);
+  left:var(--split,50%);transform:translateX(-50%);z-index:4;pointer-events:none}
+.bm-reveal-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff,rgba(255,255,255,.72) 58%,rgba(255,255,255,.42));
+  border:2px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.28);display:grid;place-items:center;color:var(--forest);font-size:15px}
+.bm-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:5;margin:0;direction:ltr}
+.bm-illus{text-align:center;font-size:12px;color:var(--muted);margin-top:12px}
+
+/* Essences */
+.bm-essences{background:var(--forest);color:#E8E1CB}
+.bm-essences .bm-h2,.bm-essences .bm-eyebrow{color:#fff}
+.bm-essences .bm-eyebrow{color:var(--brass-hi)}
+.bm-essences .bm-lead{color:rgba(232,225,203,.75)}
+.bm-ess-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s2)}
+.bm-ess{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:var(--radius);
+  padding:var(--s2);text-align:center}
+.bm-ess img{width:88px;height:88px;border-radius:50%;object-fit:cover;margin:0 auto 12px}
+.bm-ess b{display:block;font-family:var(--display);font-size:17px;color:#fff}
+.bm-ess span{font-size:13px;color:rgba(232,225,203,.72);line-height:1.7}
+@media (min-width:768px){.bm-ess-grid{grid-template-columns:repeat(4,1fr)}.bm-ess img{width:104px;height:104px}}
+
+/* Bénéfices */
+.bm-ben-grid{display:grid;gap:12px}
+.bm-ben{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:var(--s2) var(--s3)}
+.bm-ben i{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(91,155,74,.16);color:#39662C;
+  display:grid;place-items:center;font-style:normal;font-size:14px;font-weight:700;margin-top:3px}
+.bm-ben b{display:block;font-family:var(--display);font-size:17px;color:var(--forest)}
+.bm-ben span{font-size:14.5px;color:var(--muted)}
+@media (min-width:768px){.bm-ben-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* Étapes */
+.bm-steps{background:var(--surface)}
+.bm-step-grid{display:grid;gap:var(--s3)}
+.bm-step figure{margin:0}
+.bm-step img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow)}
+.bm-step figcaption{margin-top:14px}
+.bm-step .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brass);
+  color:#22190A;font-weight:700;font-size:15px;margin-bottom:8px}
+.bm-step b{display:block;font-family:var(--display);font-size:18px;color:var(--forest)}
+.bm-step span{font-size:14.5px;color:var(--muted)}
+.bm-timer{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:var(--s4);
+  background:var(--ivory);border:1px dashed var(--brass);border-radius:var(--radius);padding:16px;font-weight:700;color:var(--forest)}
+@media (min-width:768px){.bm-step-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* Contenu du lot */
+.bm-box{display:grid;gap:var(--s4);align-items:center}
+.bm-box-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.bm-box-list li{display:flex;gap:12px;align-items:flex-start;font-size:16px}
+.bm-box-list i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--brass);color:#22190A;
+  display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:700;margin-top:4px}
+.bm-box-list b{color:var(--forest)}
+.bm-box-list small{display:block;color:var(--muted);font-size:13.5px}
+.bm-colors{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--s3)}
+.bm-swatch{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);
+  border-radius:999px;padding:7px 14px;font-size:13.5px}
+.bm-swatch span{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+@media (min-width:768px){.bm-box{grid-template-columns:1fr 1fr}}
+
+/* Garantie (à la place de faux avis) */
+.bm-guarantee{background:var(--forest);color:#E8E1CB}
+.bm-guarantee .bm-wrap{display:grid;gap:var(--s3);padding-block:var(--s5);text-align:center;justify-items:center}
+.bm-guarantee h2{color:#fff;font-size:clamp(23px,5vw,34px)}
+.bm-guarantee p{color:rgba(232,225,203,.8);max-width:56ch}
+.bm-gua-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:100%;margin-top:var(--s2)}
+.bm-gua{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:16px}
+.bm-gua b{display:block;font-family:var(--display);color:var(--brass-hi);font-size:20px}
+.bm-gua span{font-size:13.5px;color:rgba(232,225,203,.72)}
+@media (min-width:768px){.bm-gua-grid{grid-template-columns:repeat(4,1fr)}}
+
+/* Commande */
+.bm-order{background:var(--surface)}
+.bm-order-grid{display:grid;gap:var(--s4)}
+.bm-offer{background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s3)}
+.bm-offer h3{font-size:20px;color:var(--forest);margin-bottom:var(--s2)}
+.bm-qty{display:grid;gap:10px}
+.bm-qty label{position:relative;display:flex;align-items:center;gap:12px;border:2px solid var(--line);
+  background:var(--surface);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .16s,box-shadow .16s}
+.bm-qty label:has(input:checked){border-color:var(--brass);box-shadow:0 0 0 3px rgba(185,138,46,.16)}
+.bm-qty input{accent-color:var(--brass);width:20px;height:20px;flex:none}
+.bm-qty .t{flex:1}
+.bm-qty .t b{display:block;font-family:var(--display);font-size:17px;color:var(--forest)}
+.bm-qty .t small{color:var(--muted);font-size:13px}
+.bm-qty .p{text-align:end;font-weight:700;color:var(--forest);white-space:nowrap}
+.bm-qty .p s{display:block;font-weight:400;font-size:13px;color:#9C9483}
+.bm-tag{position:absolute;top:-11px;inset-inline-start:14px;background:var(--brass);color:#22190A;font-size:11px;
+  font-weight:700;padding:3px 10px;border-radius:999px}
+.bm-total{display:flex;align-items:baseline;justify-content:space-between;margin-top:var(--s3);
+  padding-top:var(--s2);border-top:1px dashed var(--line);font-weight:700;color:var(--forest)}
+.bm-total b{font-family:var(--display);font-size:28px}
+
+.bm-form{background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s3)}
+.bm-field{display:grid;gap:6px;margin-bottom:14px}
+.bm-field label{font-size:14px;font-weight:700;color:var(--forest)}
+.bm-field input,.bm-field select,.bm-field textarea{font-family:var(--body);font-size:16px;padding:14px 15px;
+  border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);width:100%}
+.bm-field input:focus,.bm-field select:focus,.bm-field textarea:focus{border-color:var(--brass);outline:none;
+  box-shadow:0 0 0 3px rgba(185,138,46,.16)}
+.bm-field .err{font-size:13px;color:#A81E1E;display:none}
+.bm-field[data-invalid] .err{display:block}
+.bm-field[data-invalid] input,.bm-field[data-invalid] select{border-color:#A81E1E}
+.bm-form-note{font-size:13px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.8}
+.bm-ok{display:none;text-align:center;padding:var(--s4) var(--s2)}
+.bm-ok b{display:block;font-family:var(--display);font-size:24px;color:var(--forest);margin-bottom:10px}
+.bm-ok p{color:var(--muted)}
+.bm-sent .bm-ok{display:block}
+.bm-sent form,.bm-sent #easysell-form-here{display:none}
+@media (min-width:900px){.bm-order-grid{grid-template-columns:.9fr 1.1fr;align-items:start}}
+
+/* FAQ */
+.bm-faq{max-width:780px}
+.bm-faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px}
+.bm-faq summary{font-family:var(--display);font-weight:600;font-size:16px;color:var(--forest);cursor:pointer;list-style:none;
+  display:flex;justify-content:space-between;gap:12px;align-items:center}
+.bm-faq summary::-webkit-details-marker{display:none}
+.bm-faq summary::after{content:"+";color:var(--brass);font-size:22px;line-height:1;flex:none}
+.bm-faq details[open] summary::after{content:"–"}
+.bm-faq p{margin-top:12px;font-size:15px;color:var(--muted)}
+
+/* Footer + sticky */
+.bm-final{background:var(--forest);color:#E8E1CB;text-align:center;padding:var(--s5) 20px calc(var(--s5) + 70px)}
+.bm-final h2{color:#fff;font-size:clamp(24px,5.5vw,36px);margin-bottom:var(--s2)}
+.bm-final p{color:rgba(232,225,203,.78);max-width:50ch;margin:0 auto var(--s3)}
+.bm-final .bm-cta{margin-inline:auto;max-width:480px}
+.bm-foot{background:#0F2416;color:rgba(232,225,203,.55);text-align:center;font-size:12px;padding:22px 20px 90px;line-height:2}
+.bm-sticky{position:fixed;inset-inline:0;bottom:0;z-index:50;display:flex;align-items:center;gap:12px;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(251,249,243,.97);
+  border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(20,18,14,.14);
+  transform:translateY(115%);transition:transform .28s var(--ease)}
+.bm-sticky[data-on]{transform:none}
+.bm-sticky .pr{display:flex;flex-direction:column;line-height:1.25}
+.bm-sticky .pr b{font-family:var(--display);font-size:19px;color:var(--forest)}
+.bm-sticky .pr s{font-size:12px;color:#9C9483}
+.bm-sticky .bm-cta{flex:1;min-height:48px;font-size:15.5px;max-width:420px;margin-inline-start:auto}
+.bm-wa{position:fixed;inset-inline-start:16px;bottom:84px;z-index:49;width:52px;height:52px;border-radius:50%;
+  background:#1FAF54;display:grid;place-items:center;box-shadow:0 8px 20px rgba(31,175,84,.4)}
+.bm-wa svg{width:28px;height:28px;fill:#fff}
+
+/* Reveals */
+[data-reveal]{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+[data-reveal].in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  [data-reveal]{opacity:1;transform:none}
+    .bm-sticky{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bm-announce">توصيل إلى جميع مدن المملكة — الدفع عند الاستلام</div>
+
+<header class="bm-head">
+  <div class="bm-logo"><b>بابل موس</b><span>BEIROU</span></div>
+  <a href="#order" class="bm-pill">اطلبي الآن</a>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="bm-hero">
+  <img class="bm-hero-bg" src="assets/bubble-hero-bg.webp" alt="" aria-hidden="true">
+  <div class="bm-hero-in">
+    <div>
+      <span class="bm-badge">◆ خلاصات نباتية — خالٍ من الأمونيا</span>
+      <h1 class="bm-h1">غطّي الشيب في ٢٥ دقيقة<em>واستعمليها كالشامبو</em></h1>
+      <p class="bm-sub">صبغة رغوية بخلاصات الجنسنغ والفو-تي والسمسم الأسود، تغطي الشعر الأبيض تغطيةً متساوية من الجذور إلى الأطراف — بلا أمونيا وبلا خطوات معقّدة.</p>
+      <div class="bm-price">
+        <b data-price-now>299 <small>ر.س</small></b>
+        <s data-price-was>499 ر.س</s>
+        <i data-price-off>خصم 40٪</i>
+      </div>
+      <a href="#order" class="bm-cta">اطلبي الآن — الدفع عند الاستلام</a>
+      <p class="bm-cta-note">عرض ٣ عبوات + زجاجة الزيت هدية</p>
+      <div class="bm-hero-proof">
+        <span>✓ تأكيد هاتفي قبل الشحن</span>
+        <span>✓ توصيل ٢–٥ أيام</span>
+        <span>✓ الدفع عند الاستلام</span>
+      </div>
+    </div>
+    <div class="bm-hero-visual">
+      <img src="assets/bubble-pack3.webp" width="900" height="1075" alt="عرض ٣ عبوات من صبغة الشعر الرغوية النباتية بابل موس، ٥٠٠ مل لكل عبوة" fetchpriority="high">
+      <div class="bm-gift">هدية: <b>زجاجة الزيت</b> للتطبيق الدقيق</div>
+    </div>
+  </div>
+</section>
+
+<div class="bm-trust">
+  <ul>
+    <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>تغطية متساوية للشيب</li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>٢٥ دقيقة فقط</li>
+    <li><svg viewBox="0 0 24 24"><path d="M12 3s7 4 7 9a7 7 0 0 1-14 0c0-5 7-9 7-9Z"/></svg>خالٍ من الأمونيا</li>
+    <li><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>الدفع عند الاستلام</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLÈME ============ -->
+<section class="bm-problem bm-sec">
+  <div class="bm-wrap">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">لماذا بابل موس</span>
+      <h2 class="bm-h2">الجذور البيضاء تعود دائمًا قبل موعدها</h2>
+      <p class="bm-lead">تقفين أمام المرآة صباحًا فترين الخط الأبيض عند المفرق مرة أخرى. الصالون بعيد وموعده متأخر، وعلبة الصبغة العادية تعني رائحة نفّاذة وقفازات وخطوات لا تنتهي.</p>
+    </div>
+    <div class="bm-problem-grid">
+      <div class="bm-pain" data-reveal><b>وقت لا تملكينه</b><span>مواعيد الصالون وساعات الانتظار من أجل جذور تظهر من جديد بعد أسابيع.</span></div>
+      <div class="bm-pain" data-reveal><b>رائحة تزعجك</b><span>الأمونيا ورائحتها النفّاذة التي تبقى في المنزل وفي الشعر بعد الغسيل.</span></div>
+      <div class="bm-pain" data-reveal><b>نتيجة غير متساوية</b><span>خصلات تأخذ اللون وأخرى لا، وبقع أفتح عند الأطراف أو الجذور.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="bm-foam" aria-hidden="true"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="#FBF9F3" d="M0,60 L0,32 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 a30,30 0 0 1 60,0 L1440,60 Z" transform="scale(1,-1) translate(0,-60)"/></svg></div>
+
+<!-- ============ RÉVÉLATEUR (interaction signature) ============ -->
+<section class="bm-sec" id="reveal">
+  <div class="bm-wrap">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">الفرق بعينيك</span>
+      <h2 class="bm-h2">اسحبي لترَي التغطية</h2>
+      <div class="bm-rule"></div>
+      <p class="bm-lead">حرّكي المقبض يمينًا ويسارًا لمقارنة الشعر قبل الاستعمال وبعده.</p>
+    </div>
+    <div class="bm-reveal" data-reveal id="revealBox">
+      <img src="assets/bubble-ba-before.webp" alt="شعر بجذور بيضاء ظاهرة عند المفرق قبل الاستعمال" loading="lazy">
+      <img class="bm-after" src="assets/bubble-ba-after.webp" alt="الشعر نفسه بلون أسود متجانس بعد الاستعمال" loading="lazy">
+      <span class="bm-reveal-tag r">قبل</span>
+      <span class="bm-reveal-tag l">بعد</span>
+      <span class="bm-reveal-bar" id="revealBar"><span class="bm-reveal-knob">⇄</span></span>
+      <input class="bm-range" id="revealRange" type="range" min="0" max="100" value="50" step="1"
+             aria-label="مقارنة قبل وبعد">
+    </div>
+    <p class="bm-illus">صورة توضيحية — النتيجة تختلف حسب نوع الشعر ونسبة الشيب.</p>
+  </div>
+</section>
+
+<!-- ============ ESSENCES ============ -->
+<section class="bm-essences bm-sec" id="essences">
+  <div class="bm-wrap">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">HERBAL ESSENCES</span>
+      <h2 class="bm-h2">أربع خلاصات نباتية</h2>
+      <div class="bm-rule"></div>
+      <p class="bm-lead">تركيبة نباتية خالية من الأمونيا، صُمّمت لتكون لطيفة على فروة الرأس أثناء التغطية.</p>
+    </div>
+    <div class="bm-ess-grid">
+      <div class="bm-ess" data-reveal><img src="assets/bubble-ing-ginseng.webp" alt="جذر الجنسنغ" loading="lazy"><b>الجنسنغ</b><span>خلاصة الجنسنغ المعروفة في العناية التقليدية بالشعر.</span></div>
+      <div class="bm-ess" data-reveal><img src="assets/bubble-ing-saponin.webp" alt="ثمار الصابون مصدر الصابونين" loading="lazy"><b>الصابونين</b><span>يمنح الرغوة قوامها الغني الذي ينساب على الخصلة.</span></div>
+      <div class="bm-ess" data-reveal><img src="assets/bubble-ing-foti.webp" alt="جذر الفو-تي" loading="lazy"><b>الفو-تي</b><span>عشبة آسيوية عريقة ترتبط بالعناية بلون الشعر الداكن.</span></div>
+      <div class="bm-ess" data-reveal><img src="assets/bubble-ing-sesame.webp" alt="بذور السمسم الأسود" loading="lazy"><b>السمسم الأسود</b><span>يُستعمل تقليديًا في وصفات العناية بالشعر الأسود.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BÉNÉFICES ============ -->
+<section class="bm-sec" id="benefits">
+  <div class="bm-wrap">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">المميزات</span>
+      <h2 class="bm-h2">ما الذي ستلاحظينه</h2>
+      <div class="bm-rule"></div>
+    </div>
+    <div class="bm-ben-grid">
+      <div class="bm-ben" data-reveal><i>✓</i><div><b>تغطية متساوية للشيب</b><span>من الجذور إلى الأطراف، بلون واضح ومتجانس.</span></div></div>
+      <div class="bm-ben" data-reveal><i>✓</i><div><b>لون يبقى حيويًا بعد الغسيل</b><span>يحافظ على حيويته لفترة أطول بدل أن يبهت سريعًا.</span></div></div>
+      <div class="bm-ben" data-reveal><i>✓</i><div><b>رائحة فواكه خفيفة</b><span>تدوم حتى ٩٦ ساعة على الشعر بدل رائحة الأمونيا.</span></div></div>
+      <div class="bm-ben" data-reveal><i>✓</i><div><b>لطيفة على الفروة الحساسة</b><span>تركيبة نباتية خالية من الأمونيا.</span></div></div>
+      <div class="bm-ben" data-reveal><i>✓</i><div><b>لمعة طبيعية ونعومة</b><span>تترك الشعر ناعمًا ومرنًا بعد الشطف.</span></div></div>
+      <div class="bm-ben" data-reveal><i>✓</i><div><b>لكل أنواع الشعر</b><span>الطبيعي والكثيف والمجعّد على حدٍ سواء.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="bm-foam" aria-hidden="true"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="#FBF9F3" d="M0,0 L0,28 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 a30,30 0 0 0 60,0 L1440,0 Z"/></svg></div>
+
+<!-- ============ ÉTAPES ============ -->
+<section class="bm-steps bm-sec" id="howto">
+  <div class="bm-wrap">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">طريقة الاستعمال</span>
+      <h2 class="bm-h2">ثلاث خطوات، كالشامبو تمامًا</h2>
+      <div class="bm-rule"></div>
+    </div>
+    <div class="bm-step-grid">
+      <div class="bm-step" data-reveal><figure><img src="assets/bubble-step1.webp" alt="وضع الرغوة على الشعر عند فروة الرأس" loading="lazy"><figcaption><span class="n">١</span><b>ضعي الرغوة</b><span>على الشعر بلطف، تمامًا كما تضعين الشامبو.</span></figcaption></figure></div>
+      <div class="bm-step" data-reveal><figure><img src="assets/bubble-step2.webp" alt="توزيع الرغوة بالتساوي على أطوال الشعر" loading="lazy"><figcaption><span class="n">٢</span><b>وزّعيها بالتساوي</b><span>حتى تغطية الشعر بالكامل من الجذور إلى الأطراف.</span></figcaption></figure></div>
+      <div class="bm-step" data-reveal><figure><img src="assets/bubble-step3.webp" alt="شطف الشعر بالماء الفاتر بعد انتهاء المدة" loading="lazy"><figcaption><span class="n">٣</span><b>اتركيها ثم اشطفي</b><span>٢٥ دقيقة، ثم شطف جيد بالماء الفاتر.</span></figcaption></figure></div>
+    </div>
+    <div class="bm-timer" data-reveal>⏱ النتيجة خلال ٢٥ دقيقة — بلا قفازات معقّدة ولا خطوات إضافية</div>
+  </div>
+</section>
+
+<!-- ============ CONTENU DU LOT ============ -->
+<section class="bm-sec" id="box">
+  <div class="bm-wrap bm-box">
+    <div data-reveal>
+      <span class="bm-eyebrow">محتويات العرض</span>
+      <h2 class="bm-h2" style="margin:10px 0 var(--s3)">ماذا يصلك في الطلب</h2>
+      <ul class="bm-box-list">
+        <li><i>٣</i><div><b>ثلاث عبوات ٥٠٠ مل</b><small>صبغة شعر رغوية نباتية — صلاحية ٣ سنوات.</small></div></li>
+        <li><i>★</i><div><b>زجاجة الزيت — هدية</b><small>زجاجة بمشط للتطبيق السهل والدقيق عند الجذور.</small></div></li>
+        <li><i>✓</i><div><b>لونك على اختيارك</b><small>تختارين اللون في نموذج الطلب أسفل الصفحة.</small></div></li>
+      </ul>
+      <div class="bm-colors">
+        <span class="bm-swatch"><span style="background:#14120E"></span>أسود طبيعي</span>
+        <span class="bm-swatch"><span style="background:#5B3A25"></span>بني كستنائي</span>
+        <span class="bm-swatch"><span style="background:#3E2A1E"></span>بني كوفي</span>
+        <span class="bm-swatch"><span style="background:#2B1D14"></span>بني داكن</span>
+      </div>
+    </div>
+    <div data-reveal><img src="assets/bubble-bottle.webp" width="574" height="1374" alt="عبوة صبغة الشعر الرغوية النباتية بابل موس ٥٠٠ مل" loading="lazy" style="max-width:300px;margin-inline:auto"></div>
+  </div>
+</section>
+
+<!-- ============ GARANTIE (remplace les avis tant qu'il n'y en a pas de réels) ============ -->
+<section class="bm-guarantee">
+  <div class="bm-wrap">
+    <h2 data-reveal>تطلبين اليوم، وتدفعين عند الاستلام</h2>
+    <p data-reveal>لا دفع مسبق ولا بطاقة بنكية. نتصل بكِ هاتفيًا لتأكيد الطلب واللون قبل الشحن، وتدفعين لمندوب التوصيل عند وصول الطلب إلى بابك.</p>
+    <div class="bm-gua-grid">
+      <div class="bm-gua" data-reveal><b>٠ ر.س</b><span>مقدمًا — الدفع عند الاستلام</span></div>
+      <div class="bm-gua" data-reveal><b>٢–٥</b><span>أيام للتوصيل داخل المملكة</span></div>
+      <div class="bm-gua" data-reveal><b>٥٠٠ مل</b><span>لكل عبوة — ٣ عبوات في العرض</span></div>
+      <div class="bm-gua" data-reveal><b>٤</b><span>ألوان متاحة للاختيار</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMMANDE ============ -->
+<section class="bm-order bm-sec" id="order">
+  <div class="bm-wrap">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">إتمام الطلب</span>
+      <h2 class="bm-h2">اطلبي بابل موس الآن</h2>
+      <div class="bm-rule"></div>
+    </div>
+    <div class="bm-order-grid">
+
+      <div class="bm-offer" data-reveal>
+        <h3>اختاري الكمية</h3>
+        <div class="bm-qty">
+          <label>
+            <input type="radio" name="qty" value="1" data-total="129">
+            <span class="t"><b>عبوة واحدة</b><small>٥٠٠ مل</small></span>
+            <span class="p"><span data-qp>129 ر.س</span></span>
+          </label>
+          <label>
+            <input type="radio" name="qty" value="2" data-total="218">
+            <span class="t"><b>عبوتان</b><small>وفّري 40 ر.س</small></span>
+            <span class="p"><span data-qp>218 ر.س</span><s>258 ر.س</s></span>
+          </label>
+          <label>
+            <span class="bm-tag">الأكثر طلبًا</span>
+            <input type="radio" name="qty" value="3" data-total="299" checked>
+            <span class="t"><b>ثلاث عبوات + الهدية</b><small>زجاجة الزيت هدية</small></span>
+            <span class="p"><span data-qp>299 ر.س</span><s>499 ر.س</s></span>
+          </label>
+        </div>
+        <div class="bm-total"><span>الإجمالي</span><b id="totalOut">299 ر.س</b></div>
+        <p class="bm-cta-note" style="text-align:start;margin-top:10px">التوصيل مجاني لجميع مدن المملكة.</p>
+      </div>
+
+      <div class="bm-form" data-reveal id="formWrap">
+        <!-- EasySell (COD) se monte ici : Form display → Embedded → Custom selector → #easysell-form-here -->
+        <div id="easysell-form-here"></div>
+
+        <!-- Formulaire de repli, masqué automatiquement si EasySell se monte -->
+        <form id="codForm" novalidate>
+          <div class="bm-field">
+            <label for="f-name">الاسم الكامل</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+            <span class="err">من فضلك اكتبي اسمك الكامل.</span>
+          </div>
+          <div class="bm-field">
+            <label for="f-phone">رقم الجوال</label>
+            <input id="f-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel"
+                   placeholder="05XXXXXXXX" required>
+            <span class="err">اكتبي رقم جوال سعودي صحيح، مثال: 0512345678</span>
+          </div>
+          <div class="bm-field">
+            <label for="f-city">المدينة</label>
+            <input id="f-city" name="city" type="text" autocomplete="address-level2" required>
+            <span class="err">من فضلك اكتبي مدينتك.</span>
+          </div>
+          <div class="bm-field">
+            <label for="f-address">العنوان بالتفصيل</label>
+            <textarea id="f-address" name="address" rows="2" autocomplete="street-address" required></textarea>
+            <span class="err">من فضلك اكتبي عنوان التوصيل.</span>
+          </div>
+          <div class="bm-field">
+            <label for="f-color">اللون</label>
+            <select id="f-color" name="color" required>
+              <option value="أسود طبيعي">أسود طبيعي</option>
+              <option value="بني كستنائي">بني كستنائي</option>
+              <option value="بني كوفي">بني كوفي</option>
+              <option value="بني داكن">بني داكن</option>
+            </select>
+            <span class="err">اختاري اللون.</span>
+          </div>
+          <input type="hidden" name="quantity" id="f-qty" value="3">
+          <input type="hidden" name="total" id="f-total" value="299">
+          <button type="submit" class="bm-cta" id="submitBtn">اطلبي الآن — الدفع عند الاستلام</button>
+          <p class="bm-form-note">لا دفع عبر الإنترنت — نتصل بكِ لتأكيد الطلب قبل الشحن.</p>
+        </form>
+
+        <div class="bm-ok" role="status">
+          <b>تم استلام طلبك</b>
+          <p>سيتصل بكِ فريقنا خلال ٢٤ ساعة لتأكيد الطلب واللون قبل الشحن.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="bm-sec" id="faq">
+  <div class="bm-wrap bm-faq">
+    <div class="bm-sec-head" data-reveal>
+      <span class="bm-eyebrow">أسئلة شائعة</span>
+      <h2 class="bm-h2">قبل أن تطلبي</h2>
+      <div class="bm-rule"></div>
+    </div>
+    <details data-reveal><summary>هل تحتوي على أمونيا؟</summary><p>لا. التركيبة نباتية وخالية من الأمونيا، ولذلك لا تحمل رائحتها النفّاذة. كما هو الحال مع أي منتج للشعر، ننصح باختبار بسيط على خصلة صغيرة قبل الاستعمال الأول.</p></details>
+    <details data-reveal><summary>كم من الوقت تستغرق؟</summary><p>٢٥ دقيقة من وضع الرغوة حتى الشطف. تُستعمل كالشامبو: توضع، تُوزّع، تُترك، ثم تُشطف بالماء الفاتر.</p></details>
+    <details data-reveal><summary>هل تغطي الشعر الأبيض فعلًا؟</summary><p>نعم، التغطية متساوية وواضحة من الجذور إلى الأطراف. تختلف درجة النتيجة حسب نوع الشعر ونسبة الشيب، ويمكن تكرار الاستعمال حسب الحاجة للحفاظ على اللون.</p></details>
+    <details data-reveal><summary>هل تناسب فروة الرأس الحساسة؟</summary><p>التركيبة نباتية ولطيفة وخالية من الأمونيا. إن كانت لديكِ حساسية معروفة أو مشكلة جلدية في فروة الرأس، استشيري مختصًا قبل الاستعمال وابدئي باختبار على مساحة صغيرة.</p></details>
+    <details data-reveal><summary>كيف أختار اللون المناسب؟</summary><p>تتوفر أربعة ألوان: أسود طبيعي، بني كستنائي، بني كوفي، وبني داكن. تختارين اللون في نموذج الطلب، ويؤكده معكِ فريقنا في مكالمة التأكيد قبل الشحن.</p></details>
+    <details data-reveal><summary>كيف يتم الدفع والتوصيل؟</summary><p>الدفع عند الاستلام نقدًا لمندوب التوصيل، دون أي دفع مسبق. التوصيل خلال ٢–٥ أيام لجميع مدن المملكة، ويسبقه اتصال هاتفي للتأكيد.</p></details>
+  </div>
+</section>
+</main>
+
+<section class="bm-final">
+  <h2>شعرٌ أسود متجانس، من بيتك</h2>
+  <p>عرض ٣ عبوات مع زجاجة الزيت هدية، والدفع عند الاستلام.</p>
+  <a href="#order" class="bm-cta">اطلبي الآن — الدفع عند الاستلام</a>
+</section>
+
+<footer class="bm-foot">
+  بابل موس — BEIROU · صبغة شعر رغوية نباتية ٥٠٠ مل<br>
+  المحتوى لأغراض تجميلية فقط ولا يُغني عن استشارة مختص.
+</footer>
+
+<a class="bm-wa" href="https://wa.me/966500000000" aria-label="تواصلي عبر واتساب" rel="noopener">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.6 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.7-1.2-4.5-4-4.6-4.2-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1.9 2 1.2 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.2.1.6-.1 1.1Z"/></svg>
+</a>
+
+<div class="bm-sticky" id="sticky">
+  <div class="pr"><b data-price-now>299 ر.س</b><s data-price-was>499 ر.س</s></div>
+  <a href="#order" class="bm-cta">اطلبي الآن</a>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Révélations ---- */
+  var items = document.querySelectorAll('[data-reveal]');
+  if (reduce || !('IntersectionObserver' in window)) {
+    items.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:.08});
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- Interaction signature : révélateur avant/après ---- */
+  var range = document.getElementById('revealRange'),
+      box   = document.getElementById('revealBox'),
+      bar   = document.getElementById('revealBar');
+  if (range && box) {
+    var apply = function(){
+      var v = range.value;
+      box.style.setProperty('--split', v + '%');
+      bar.style.left = v + '%';
+      range.setAttribute('aria-valuetext', 'العرض: ' + v + '٪ بعد');
+    };
+    range.addEventListener('input', apply);
+    apply();
+  }
+
+  /* ---- Sélecteur de quantité ---- */
+  var qtyInputs = document.querySelectorAll('input[name="qty"]'),
+      totalOut  = document.getElementById('totalOut'),
+      fQty      = document.getElementById('f-qty'),
+      fTotal    = document.getElementById('f-total');
+  function priceFor(input){ return Math.round(parseFloat(input.getAttribute('data-total'))); }
+  qtyInputs.forEach(function(input){
+    input.addEventListener('change', function(){
+      var t = priceFor(input);
+      if (totalOut) totalOut.textContent = t + ' ر.س';
+      if (fQty)   fQty.value = input.value;
+      if (fTotal) fTotal.value = t;
+    });
+  });
+
+  /* ---- Barre sticky : apparaît après le hero, disparaît sur le formulaire ---- */
+  var sticky = document.getElementById('sticky'),
+      hero   = document.querySelector('.bm-hero'),
+      order  = document.getElementById('order');
+  if (sticky && 'IntersectionObserver' in window) {
+    var heroOut = false, orderIn = false;
+    var sync = function(){ sticky.toggleAttribute('data-on', heroOut && !orderIn); };
+    new IntersectionObserver(function(e){ heroOut = !e[0].isIntersecting; sync(); }).observe(hero);
+    new IntersectionObserver(function(e){ orderIn = e[0].isIntersecting; sync(); }, {threshold:.12}).observe(order);
+  }
+
+  /* ---- Formulaire COD de repli ---- */
+  var es = document.getElementById('easysell-form-here'),
+      form = document.getElementById('codForm'),
+      wrap = document.getElementById('formWrap'),
+      btn  = document.getElementById('submitBtn');
+
+  // Si EasySell monte son formulaire dans l'ancre, on retire le repli.
+  if (es && form) {
+    setTimeout(function(){ if (es.children.length > 0) form.style.display = 'none'; }, 2500);
+  }
+
+  var PHONE = /^(?:\+?966|0)?5\d{8}$/;
+  function setInvalid(field, bad){ if (bad) field.setAttribute('data-invalid',''); else field.removeAttribute('data-invalid'); }
+
+  if (form) {
+    form.querySelectorAll('input,select,textarea').forEach(function(el){
+      el.addEventListener('blur', function(){ validate(el); });
+    });
+    function validate(el){
+      var field = el.closest('.bm-field'); if (!field) return true;
+      var v = (el.value || '').trim(), ok = v.length > 0;
+      if (el.type === 'tel') ok = PHONE.test(v.replace(/[\s-]/g, ''));
+      if (el.id === 'f-name') ok = v.length >= 3;
+      setInvalid(field, !ok);
+      return ok;
+    }
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      if (btn.disabled) return;                                  // verrou anti double envoi
+      var ok = true;
+      form.querySelectorAll('[required]').forEach(function(el){ if (!validate(el)) ok = false; });
+      if (!ok) { form.querySelector('[data-invalid] input,[data-invalid] select,[data-invalid] textarea').focus(); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'جارٍ الإرسال…';
+
+      /* CÂBLAGE À CHOISIR — une seule des trois options :
+         1) Shopify + EasySell : laisser EasySell gérer (ce formulaire de repli disparaît alors tout seul).
+         2) Google Sheets : fetch('<URL_APPS_SCRIPT>', {method:'POST', body:new FormData(form)})
+         3) Service de formulaire : action="https://formspree.io/f/<ID>" method="post"
+         Tant qu'aucun n'est branché, la commande n'est PAS enregistrée. */
+      var data = Object.fromEntries(new FormData(form).entries());
+      console.log('[COD] commande à envoyer :', data);
+
+      setTimeout(function(){
+        wrap.classList.add('bm-sent');
+        wrap.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'});
+        /* Événements de conversion — sur le succès, pas au clic :
+           if (window.fbq)   fbq('track','Purchase',{value:data.total,currency:'SAR'});
+           if (window.ttq)   ttq.track('PlaceAnOrder',{value:data.total,currency:'SAR'});
+           if (window.snaptr) snaptr('track','PURCHASE',{price:data.total,currency:'SAR'});
+           window.dataLayer = window.dataLayer || []; dataLayer.push({event:'cod_order', value:data.total}); */
+      }, 600);
+    });
+  }
+})();
+</script>
+</body>
+</html>

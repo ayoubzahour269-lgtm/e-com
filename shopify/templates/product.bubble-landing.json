@@ -1,0 +1,7 @@
+{
+  "layout": "landing-bubble",
+  "sections": {
+    "main": { "type": "landing-bubble", "settings": {} }
+  },
+  "order": ["main"]
+}
